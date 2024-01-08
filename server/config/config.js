@@ -18,6 +18,13 @@ const envVarsSchema = Joi.object()
     JWT_REFRESH_EXPIRATION_DAYS: Joi.number()
       .default(30)
       .description("days after which refresh tokens expire"),
+    GOOGLE_CLIENT_ID: Joi.string()
+      .required()
+      .description("Google Console Client ID"),
+    GOOGLE_CLIENT_SECRET: Joi.string()
+      .required()
+      .description("Google Console Client Secret"),
+    SECRET: Joi.string().required().description("Secret for session"),
   })
   .unknown();
 
@@ -47,4 +54,7 @@ export default {
     refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS,
     resetPasswordExpirationMinutes: 10,
   },
+  GOOGLE_CLIENT_ID: envVars.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: envVars.GOOGLE_CLIENT_SECRET,
+  SECRET: envVars.SECRET,
 };

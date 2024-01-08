@@ -10,12 +10,16 @@ import { apiLimiter } from "./middlewares/rateLimiter.js";
 import errorHandlerMiddleware from "./middlewares/error-handler.js";
 import routeNotFoundMiddleware from "./middlewares/route-not-found.js";
 import routes from "./routes/index.js";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import passport from "./config/passport.js";
 const app = express();
 
 if (config.env !== "production") {
   app.use(morgan("dev"));
 }
 
+app.use(cookieParser());
 app.use(helmet());
 app.use(xss());
 app.use(mongoSanitizer());
@@ -23,6 +27,15 @@ app.use(cors());
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: config.SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/api/auth/", apiLimiter);
 app.use("/api", routes);
