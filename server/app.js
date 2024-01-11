@@ -13,6 +13,8 @@ import routes from "./routes/index.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "./config/passport.js";
+import "express-async-errors";
+
 const app = express();
 
 if (config.env !== "production") {
