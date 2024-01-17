@@ -1,10 +1,13 @@
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+import config from "../config/config.js";
 
 const userSchema = new mongoose.Schema(
   {
-    googleId: {
+    email: {
       type: String,
       required: true,
+      unique: true,
     },
     displayName: {
       type: String,
@@ -19,6 +22,11 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+userSchema.methods.createJWT = function () {
+  return jwt.sign({ userId: this._id }, config.jwt.secret, {
+    expiresIn: config.jwt.refreshExpirationDays,
+  });
+};
 const User = mongoose.model("User", userSchema);
 
 export default User;

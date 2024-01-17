@@ -1,6 +1,7 @@
 import express from "express";
 import authRoutes from "./authRoutes.js";
 import workoutRoutes from "./workoutRoutes.js";
+
 const router = express.Router();
 
 const routes = [

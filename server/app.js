@@ -12,8 +12,7 @@ import routeNotFoundMiddleware from "./middlewares/route-not-found.js";
 import routes from "./routes/index.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
-import passport from "./config/passport.js";
-import "express-async-errors";
+import { OAuth2Client } from "google-auth-library";
 
 const app = express();
 
@@ -25,10 +24,22 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(xss());
 app.use(mongoSanitizer());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const oAuth2Client = new OAuth2Client(
+  config.GOOGLE_CLIENT_ID,
+  config.GOOGLE_CLIENT_SECRET,
+  "postmessage"
+);
+
 app.use(
   session({
     secret: config.SECRET,
@@ -36,13 +47,11 @@ app.use(
     saveUninitialized: true,
   })
 );
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.use("/api/auth/", apiLimiter);
 app.use("/api", routes);
 
-app.use(routeNotFoundMiddleware);
 app.use(errorHandlerMiddleware);
+app.use(routeNotFoundMiddleware);
 
 export default app;

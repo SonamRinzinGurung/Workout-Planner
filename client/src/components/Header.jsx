@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
-import logo from "../assets/logo.svg";
+import logo from "../assets/logo.png";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -18,9 +19,9 @@ const Header = () => {
   return (
     <nav className="p-2 shadow-sm">
       <div className="flex justify-between">
-        <div className="flex justify-center flex-grow">
-          <img src={logo} alt="logo" className="w-14" />
-        </div>
+        <Link to={"/"} className="flex justify-center flex-grow">
+          <img src={logo} alt="logo" className="w-20" />
+        </Link>
         <div>
           <div className="ml-auto">
             <DarkModeSwitch checked={darkMode} onChange={toggleDark} />

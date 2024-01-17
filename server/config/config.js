@@ -12,10 +12,10 @@ const envVarsSchema = Joi.object()
     PORT: Joi.number().default(3000),
     MONGODB_URL: Joi.string().required().description("Mongo DB url"),
     JWT_SECRET: Joi.string().required().description("JWT secret key"),
-    JWT_ACCESS_EXPIRATION_MINUTES: Joi.number()
+    JWT_ACCESS_EXPIRATION_MINUTES: Joi.string()
       .default(30)
       .description("minutes after which access tokens expire"),
-    JWT_REFRESH_EXPIRATION_DAYS: Joi.number()
+    JWT_REFRESH_EXPIRATION_DAYS: Joi.string()
       .default(30)
       .description("days after which refresh tokens expire"),
     GOOGLE_CLIENT_ID: Joi.string()
