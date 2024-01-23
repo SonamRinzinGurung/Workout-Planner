@@ -9,7 +9,6 @@ const isAuthenticated = (req, res, next) => {
     throw new UnAuthorizedError("User is not authorized");
   }
   const token = authHeader.split(" ")[1];
-  console.log(token);
   try {
     const payload = jwt.verify(token, config.jwt.secret);
     req.user = { userId: payload.userId };
