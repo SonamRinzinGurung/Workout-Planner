@@ -9,7 +9,7 @@ const createPlan = async (req, res) => {
     for (let j = 0; j < plan[i].exercises.length; j++) {
       const exercise = await Exercise.create(plan[i].exercises[j]);
       plan[i].exercises[j] = exercise._id;
-      //   plan[i].user = req.user._id;
+      plan[i].user = req.user.userId;
     }
     const workout = await Workout.create(plan[i]);
     plan[i] = workout._id;
@@ -18,7 +18,7 @@ const createPlan = async (req, res) => {
   const newPlan = await Plan.create({
     name,
     workouts: plan,
-    // user: req.user._id,
+    user: req.user.userId,
   });
 
   res.status(201).json(newPlan);

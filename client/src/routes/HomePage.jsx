@@ -1,7 +1,7 @@
 import useSetTitle from "../utils/useSetTitle";
 import { useQuery } from "@tanstack/react-query";
 import axiosFetch from "../utils/axiosInterceptor";
-import { Plan } from "../components";
+import { Plan, Empty } from "../components";
 
 const HomePage = () => {
   useSetTitle("Fit Plan");
@@ -18,6 +18,9 @@ const HomePage = () => {
   }
   if (error) {
     return <div>error!!</div>;
+  }
+  if (data.length == 0) {
+    return <Empty />;
   }
   return (
     <div className="p-2 mt-4 text-gray-900 dark:text-gray-100 flex flex-col">

@@ -3,5 +3,5 @@ import RouteProtector from "./RouteProtector";
 import Plan from "./Plan";
 import Workout from "./Workout";
 import Exercise from "./Exercise";
-
-export { Header, RouteProtector, Plan, Workout, Exercise };
+import Empty from "./Empty";
+export { Header, RouteProtector, Plan, Workout, Exercise, Empty };
