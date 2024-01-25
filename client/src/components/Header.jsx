@@ -57,8 +57,8 @@ const Header = () => {
                 >
                   <IoIosCloseCircleOutline className="text-red-700 w-6 h-6  hover:text-red-900 transition ease-in-out duration-300" />
                 </button>
-                <div className="mx-auto">{/* <Logo /> */}</div>
               </div>
+              <div className="modal-body relative p-4 flex flex-col h-3/4 gap-5"></div>
             </div>
           </div>
         </section>

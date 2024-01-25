@@ -3,21 +3,21 @@ import Workout from "../models/Workout.js";
 import Exercise from "../models/Exercise.js";
 
 const createPlan = async (req, res) => {
-  const { name, plan } = req.body;
+  const { name, workouts } = req.body;
 
-  for (let i = 0; i < plan.length; i++) {
-    for (let j = 0; j < plan[i].exercises.length; j++) {
-      const exercise = await Exercise.create(plan[i].exercises[j]);
-      plan[i].exercises[j] = exercise._id;
-      plan[i].user = req.user.userId;
+  for (let i = 0; i < workouts.length; i++) {
+    for (let j = 0; j < workouts[i].exercises.length; j++) {
+      const exercise = await Exercise.create(workouts[i].exercises[j]);
+      workouts[i].exercises[j] = exercise._id;
+      workouts[i].user = req.user.userId;
     }
-    const workout = await Workout.create(plan[i]);
-    plan[i] = workout._id;
+    const workout = await Workout.create(workouts[i]);
+    workouts[i] = workout._id;
   }
 
   const newPlan = await Plan.create({
     name,
-    workouts: plan,
+    workouts: workouts,
     user: req.user.userId,
   });
 

@@ -4,4 +4,20 @@ import Plan from "./Plan";
 import Workout from "./Workout";
 import Exercise from "./Exercise";
 import Empty from "./Empty";
-export { Header, RouteProtector, Plan, Workout, Exercise, Empty };
+import FirstForm from "./FirstForm";
+import SecondForm from "./SecondForm";
+import ConfirmationPage from "./ConfirmationPage";
+import InputText from "./InputText";
+
+export {
+  Header,
+  RouteProtector,
+  Plan,
+  Workout,
+  Exercise,
+  Empty,
+  FirstForm,
+  SecondForm,
+  ConfirmationPage,
+  InputText,
+};

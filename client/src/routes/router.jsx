@@ -1,4 +1,4 @@
-import { Root, Login, HomePage, PageNotFound } from "../routes";
+import { Root, Login, HomePage, PageNotFound, CreatePlan } from "../routes";
 import { RouteProtector } from "../components";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -19,6 +19,14 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/create",
+        element: (
+          <RouteProtector>
+            <CreatePlan />
+          </RouteProtector>
+        ),
       },
     ],
   },
