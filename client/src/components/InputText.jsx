@@ -4,12 +4,13 @@ import { capitalizeFirstLetter } from "../utils/capitalizeWord";
 const InputText = ({ name, value, handleChange }) => {
   return (
     <input
-      className="border"
+      className="border border-gray-500 p-2 rounded-md font-mono dark:bg-gray-900 text-center text-sm"
       type="text"
       name={name}
       placeholder={capitalizeFirstLetter(name)}
       value={value}
       onChange={handleChange}
+      autoFocus
     />
   );
 };

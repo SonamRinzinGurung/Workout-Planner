@@ -3,7 +3,7 @@ import { Header } from "../components";
 
 const Root = () => {
   return (
-    <div>
+    <div className="font-body">
       <Header />
       <div>
         <Outlet />

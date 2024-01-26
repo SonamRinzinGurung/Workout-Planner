@@ -5,7 +5,9 @@ const ConfirmationPage = ({ formData }) => {
   return (
     <div>
       <div>
-        <p>Confirmation Page</p>
+        <p className="font-heading font-semibold text-xl text-center">
+          Confirmation Page
+        </p>
       </div>
       <Plan {...formData} />
     </div>

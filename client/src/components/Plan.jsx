@@ -11,7 +11,7 @@ const Plan = ({ name, workouts }) => {
           {name}
         </p>
       </div>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-wrap gap-3 justify-center">
         {workouts?.map((workout, index) => {
           return <Workout key={index} {...workout} />;
         })}

@@ -8,6 +8,8 @@ import FirstForm from "./FirstForm";
 import SecondForm from "./SecondForm";
 import ConfirmationPage from "./ConfirmationPage";
 import InputText from "./InputText";
+import InputTextExercise from "./InputTextExercise";
+import Button from "./Button";
 
 export {
   Header,
@@ -20,4 +22,6 @@ export {
   SecondForm,
   ConfirmationPage,
   InputText,
+  InputTextExercise,
+  Button,
 };

@@ -9,18 +9,18 @@ const FirstForm = ({ formData, setFormData }) => {
     });
   };
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-2">
-        <div>
-          <p>Name the Workout Plan</p>
-        </div>
-        <div>
-          <InputText
-            name="name"
-            value={formData.name}
-            handleChange={handleChange}
-          />
-        </div>
+    <div className="flex flex-col items-center gap-1">
+      <div>
+        <p className="font-subHead font-semibold text-center">
+          Name the Workout Plan
+        </p>
+      </div>
+      <div>
+        <InputText
+          name="name"
+          value={formData.name}
+          handleChange={handleChange}
+        />
       </div>
     </div>
   );
