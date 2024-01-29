@@ -31,7 +31,6 @@ const ExerciseForm = ({
           handleChange={handleExerciseChange}
           workoutIndex={workoutIndex}
           exerciseIndex={exerciseIndex}
-          type="number"
         />
       </div>
       <div className="flex flex-col gap-2">
@@ -41,7 +40,6 @@ const ExerciseForm = ({
           handleChange={handleExerciseChange}
           workoutIndex={workoutIndex}
           exerciseIndex={exerciseIndex}
-          type="number"
         />
       </div>
       <div className="flex flex-col gap-2">
@@ -51,7 +49,6 @@ const ExerciseForm = ({
           handleChange={handleExerciseChange}
           workoutIndex={workoutIndex}
           exerciseIndex={exerciseIndex}
-          type="number"
           placeholder={"Weight (kg)"}
         />
       </div>

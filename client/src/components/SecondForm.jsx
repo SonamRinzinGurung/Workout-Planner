@@ -3,8 +3,18 @@ import { Button, ExerciseForm } from "../components";
 import { IoAddCircle } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 import { FaPlus } from "react-icons/fa";
+import { useRef, useEffect } from "react";
 
 const SecondForm = ({ formData, setFormData }) => {
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    //scrolls to the bottom of the page when changes in the workout array occurs
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [formData.workouts]);
+
   const handleChange = (workoutIndex, e) => {
     setFormData({
       ...formData,
@@ -96,9 +106,12 @@ const SecondForm = ({ formData, setFormData }) => {
             className="flex flex-col gap-2 items-center shadow-md mb-4 p-6 rounded-md dark:bg-gray-900"
           >
             <div className="flex flex-col gap-1">
-              <div className="flex flex-col items-center">
+              <div className="flex items-center justify-center gap-2">
                 <p className="font-subHead font-semibold text-center">
                   Name of the Workout
+                </p>
+                <p className="font-subHead font-medium text-sm text-center">
+                  -Day {workoutIndex + 1}
                 </p>
               </div>
               <input
@@ -149,7 +162,7 @@ const SecondForm = ({ formData, setFormData }) => {
           </div>
         ))}
       </div>
-      <div>
+      <div id="add-workout" ref={scrollRef}>
         <Button
           name="Workout"
           handleClick={handleAddWorkout}

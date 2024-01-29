@@ -7,19 +7,16 @@ const InputTextExercise = ({
   handleChange,
   workoutIndex,
   exerciseIndex,
-  type,
   placeholder,
 }) => {
   return (
     <div>
       <input
         className="border border-gray-500 p-2 rounded-md font-mono dark:bg-gray-900 text-sm"
-        type={type}
         name={name}
         placeholder={placeholder || capitalizeFirstLetter(name)}
         value={value}
         onChange={(event) => handleChange(workoutIndex, exerciseIndex, event)}
-        min="0"
       />
     </div>
   );

@@ -28,9 +28,9 @@ const Exercise = ({ name, reps, sets, weight }) => {
 
 Exercise.propTypes = {
   name: PropTypes.string.isRequired,
-  reps: PropTypes.string.isRequired,
-  sets: PropTypes.string.isRequired,
-  weight: PropTypes.string.isRequired,
+  reps: PropTypes.number.isRequired,
+  sets: PropTypes.number.isRequired,
+  weight: PropTypes.number,
 };
 
 export default Exercise;
