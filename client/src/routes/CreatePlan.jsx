@@ -1,12 +1,20 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import conditionalComponent from "../utils/conditionalComponent";
 import { Button } from "../components";
 import { GrNext } from "react-icons/gr";
 import { AiOutlineSend } from "react-icons/ai";
 import useSetTitle from "../utils/useSetTitle";
+import axiosFetch from "../utils/axiosInterceptor";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import ReactLoading from "react-loading";
+import { delay } from "../utils/delayFetch";
 
 const CreatePlan = () => {
   useSetTitle("Create Workout Plan");
+  const scrollRef = useRef(null);
+  const navigate = useNavigate();
 
   const [page, setPage] = useState(0);
   const [formData, setFormData] = useState({
@@ -18,6 +26,8 @@ const CreatePlan = () => {
       },
     ],
   });
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleNext = () => {
     setPage((prev) => prev + 1);
   };
@@ -25,16 +35,47 @@ const CreatePlan = () => {
     setPage((prev) => prev - 1);
   };
 
+  const { mutate: createPlanMutation } = useMutation({
+    mutationFn: async (formData) => {
+      setIsLoading(true);
+      await delay(500);
+      return axiosFetch.post("/workout-plan/", {
+        ...formData,
+      });
+    },
+    onSuccess: () => {
+      setIsLoading(false);
+      toast.success("Workout Plan saved successfully!");
+      navigate("/");
+    },
+    onError: (data) => {
+      setIsLoading(false);
+      toast.error(data.response.data.msg);
+    },
+  });
+
   const handleSubmit = () => {
-    console.log(formData);
+    createPlanMutation(formData);
+    scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <main className="my-10 dark:text-gray-100 text-gray-800">
-      <div className="mb-4">
+      <div
+        ref={scrollRef}
+        className="mb-4 flex justify-center items-center gap-2"
+      >
         <p className="text-center font-heading font-bold text-2xl text-green-500">
-          Create Workout Plan
+          {isLoading ? "Creating" : "Create"} Workout Plan
         </p>
+        {isLoading && (
+          <ReactLoading
+            height="32px"
+            width="32px"
+            type="balls"
+            color="#22c55e"
+          />
+        )}
       </div>
       <div className="flex flex-col items-center gap-4">
         {conditionalComponent({ page, formData, setFormData })}

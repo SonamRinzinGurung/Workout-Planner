@@ -9,7 +9,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     defaultError.statusCode = 400;
     defaultError.msg = Object.values(err.errors)
       .map((item) => item.message)
-      .join(",");
+      .join(" ");
   }
 
   //validation error from mongoose for unique fields
@@ -23,7 +23,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     defaultError.msg = `No item found with id ${err.value}`;
     defaultError.statusCode = 404;
   }
-
+  console.log(err);
   res.status(defaultError.statusCode).json({ msg: defaultError.msg });
 };
 

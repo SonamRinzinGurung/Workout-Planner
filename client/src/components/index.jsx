@@ -10,6 +10,8 @@ import ConfirmationPage from "./ConfirmationPage";
 import InputText from "./InputText";
 import InputTextExercise from "./InputTextExercise";
 import Button from "./Button";
+import ExerciseForm from "./ExerciseForm";
+import MenuLinks from "./MenuLinks";
 
 export {
   Header,
@@ -24,4 +26,6 @@ export {
   InputText,
   InputTextExercise,
   Button,
+  ExerciseForm,
+  MenuLinks,
 };

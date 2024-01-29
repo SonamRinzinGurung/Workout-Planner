@@ -2,19 +2,28 @@ import useSetTitle from "../utils/useSetTitle";
 import { useQuery } from "@tanstack/react-query";
 import axiosFetch from "../utils/axiosInterceptor";
 import { Plan, Empty } from "../components";
+import ReactLoading from "react-loading";
+import { delay } from "../utils/delayFetch";
 
 const HomePage = () => {
   useSetTitle("Fit Plan");
 
   const { isPending, error, data } = useQuery({
     queryKey: ["workout-plan"],
-    queryFn: () => {
+    queryFn: async () => {
+      await delay(1000);
       return axiosFetch.get(`/workout-plan/`).then((res) => res.data);
     },
   });
 
   if (isPending) {
-    return <div>Loading...</div>;
+    return (
+      <ReactLoading
+        type="spinningBubbles"
+        color="#D5B263"
+        className="mx-auto mt-16"
+      />
+    );
   }
   if (error) {
     return <div>error!!</div>;
