@@ -1,9 +1,14 @@
 import Plan from "../models/Plan.js";
 import Workout from "../models/Workout.js";
 import Exercise from "../models/Exercise.js";
+import { BadRequestError } from "../request-errors/index.js";
 
 const createPlan = async (req, res) => {
   const { name, workouts } = req.body;
+
+  if (!name) {
+    throw new BadRequestError("Please provide Workout Plan name");
+  }
 
   for (let i = 0; i < workouts.length; i++) {
     for (let j = 0; j < workouts[i].exercises.length; j++) {

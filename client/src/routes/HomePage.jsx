@@ -26,21 +26,29 @@ const HomePage = () => {
     );
   }
   if (error) {
-    return <div>error!!</div>;
+    return (
+      <div className="dark:text-gray-100 mt-10">
+        <p className="font-subHead font-semibold text-2xl text-center">
+          ERROR!! {error.message}
+        </p>
+      </div>
+    );
   }
   if (data.length == 0) {
     return <Empty />;
   }
   return (
-    <div className="p-2 mt-4 text-gray-900 dark:text-gray-100 flex flex-col">
+    <div className="p-2 my-4 text-gray-900 dark:text-gray-100 flex flex-col">
       <div className="self-center">
-        <p className="font-bold font-heading text-2xl text-gray-800 dark:text-gray-300">
+        <p className="font-bold font-heading text-2xl text-green-500">
           Workout Plan
         </p>
       </div>
-      {data?.map((item) => {
-        return <Plan key={item._id} {...item} />;
-      })}
+      <div className="flex flex-col gap-6 mt-4">
+        {data?.map((item) => {
+          return <Plan key={item._id} {...item} />;
+        })}
+      </div>
     </div>
   );
 };

@@ -10,7 +10,6 @@ const InputText = ({ name, value, handleChange }) => {
       placeholder={capitalizeFirstLetter(name)}
       value={value}
       onChange={handleChange}
-      autoFocus
     />
   );
 };

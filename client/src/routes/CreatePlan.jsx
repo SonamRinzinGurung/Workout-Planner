@@ -5,6 +5,7 @@ import { GrNext } from "react-icons/gr";
 import { AiOutlineSend } from "react-icons/ai";
 import useSetTitle from "../utils/useSetTitle";
 import axiosFetch from "../utils/axiosInterceptor";
+import { formValidation } from "../utils/formValidator";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -55,7 +56,15 @@ const CreatePlan = () => {
   });
 
   const handleSubmit = () => {
-    createPlanMutation(formData);
+    const { isValid, messages } = formValidation(formData);
+
+    if (!isValid) {
+      messages.forEach((message) => toast.error(message));
+      setPage(1);
+    }
+    if (isValid) {
+      createPlanMutation(formData);
+    }
     scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
   };
 

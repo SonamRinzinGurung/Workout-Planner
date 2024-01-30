@@ -9,11 +9,11 @@ const SecondForm = ({ formData, setFormData }) => {
   const scrollRef = useRef(null);
 
   useEffect(() => {
-    //scrolls to the bottom of the page when changes in the workout array occurs
+    //scrolls to the bottom of the page when changes in the length of workout array occurs
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [formData.workouts]);
+  }, [formData.workouts.length]);
 
   const handleChange = (workoutIndex, e) => {
     setFormData({
@@ -121,7 +121,6 @@ const SecondForm = ({ formData, setFormData }) => {
                 placeholder="Workout Name"
                 value={workoutItem.title}
                 onChange={(event) => handleChange(workoutIndex, event)}
-                autoFocus
               />
             </div>
             <div className="flex flex-col items-center gap-2 p-2 rounded-md">

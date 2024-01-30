@@ -28,7 +28,6 @@ InputTextExercise.propTypes = {
   handleChange: PropTypes.func.isRequired,
   workoutIndex: PropTypes.number.isRequired,
   exerciseIndex: PropTypes.number.isRequired,
-  type: PropTypes.string,
   placeholder: PropTypes.string,
 };
 export default InputTextExercise;

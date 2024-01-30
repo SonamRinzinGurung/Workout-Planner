@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 const RouteProtector = ({ children }) => {
   const token = localStorage.getItem("token");
 
-  if (!token) {
-    return <Navigate to={"/login"} />;
-  }
+  // if (!token) {
+  //   return <Navigate to={"/login"} />;
+  // }
   return children;
 };
 
