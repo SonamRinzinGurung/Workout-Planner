@@ -44,4 +44,62 @@ const getPlans = async (req, res) => {
   res.status(200).json(plans);
 };
 
-export { createPlan, getPlans };
+const patchPlans = async (req, res) => {
+  const { _id, name } = req.body;
+
+  let { workouts } = req.body;
+
+  const plan = await Plan.findById(_id);
+
+  if (!plan) {
+    throw new BadRequestError("Workout Plan not found");
+  }
+
+  for (const workout of workouts) {
+    for (const exercise of workout.exercises) {
+      await Exercise.findOneAndUpdate({ _id: exercise._id }, exercise, {
+        new: true,
+        runValidators: true,
+      });
+    }
+    await Workout.findOneAndUpdate(
+      { _id: workout._id },
+      { title: workout.title },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+  }
+
+  const updatedPlan = await Plan.findOneAndUpdate(
+    { _id },
+    {
+      name,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  res.status(200).json({ updatedPlan, message: "Workout Plan Updated" });
+};
+
+const getPlanDetails = async (req, res) => {
+  const { planId } = req.params;
+
+  const plans = await Plan.findOne({ _id: planId }).populate({
+    path: "workouts",
+    model: "Workout",
+    select: "-createdAt -updatedAt -__v -user",
+
+    populate: {
+      path: "exercises",
+      model: "Exercise",
+      select: "-createdAt -updatedAt -__v",
+    },
+  });
+  res.status(200).json(plans);
+};
+export { createPlan, getPlans, patchPlans, getPlanDetails };
