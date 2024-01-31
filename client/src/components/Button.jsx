@@ -5,7 +5,7 @@ const Button = ({ name, handleClick, className, icon, position }) => {
     <button onClick={handleClick}>
       <div
         className={
-          `flex p-2 gap-0.5 rounded-md items-center justify-center hover:shadow-md transition ease-in-out duration-300` +
+          `flex p-2 gap-0.5 rounded-md items-center justify-center hover:shadow-md dark:hover:shadow-gray-800 transition ease-in-out duration-300` +
           ` ` +
           className
         }
