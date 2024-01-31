@@ -1,7 +1,10 @@
 import PropTypes from "prop-types";
 import { Exercise, Button } from ".";
 import { useState } from "react";
-const Workout = ({ title, exercises }) => {
+import { useNavigate } from "react-router-dom";
+
+const Workout = ({ planId, title, exercises }) => {
+  const navigate = useNavigate();
   const [modalState, setModalState] = useState(false);
   return (
     <div
@@ -17,7 +20,7 @@ const Workout = ({ title, exercises }) => {
       })}
       <div
         className={`absolute top-0 left-0 w-full h-full flex justify-center items-center z-50 backdrop-filter backdrop-blur-sm ${
-          modalState ? `opacity-100` : `opacity-0`
+          modalState ? `opacity-100  visible` : `opacity-0 invisible`
         }`}
         style={{ transition: "opacity 0.4s" }}
       >
@@ -26,7 +29,7 @@ const Workout = ({ title, exercises }) => {
             <Button
               name="Edit"
               className={"text-blue-500 dark:text-blue-300 border"}
-              handleClick={() => console.log("edit page")}
+              handleClick={() => navigate(`/edit/${planId}`)}
             />
             <Button
               name="Delete"
@@ -43,6 +46,7 @@ const Workout = ({ title, exercises }) => {
 Workout.propTypes = {
   title: PropTypes.string.isRequired,
   exercises: PropTypes.array.isRequired,
+  planId: PropTypes.string.isRequired,
 };
 
 export default Workout;

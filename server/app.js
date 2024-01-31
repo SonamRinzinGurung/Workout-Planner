@@ -14,11 +14,17 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import { OAuth2Client } from "google-auth-library";
 
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
+
 const app = express();
 
 if (config.env !== "production") {
   app.use(morgan("dev"));
 }
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 app.use(cookieParser());
 app.use(helmet());
@@ -26,10 +32,14 @@ app.use(xss());
 app.use(mongoSanitizer());
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://192.168.1.67:5173"],
+    origin:
+      config.env === "development"
+        ? ["http://localhost:5173", "http://192.168.1.67:5173"]
+        : config.hosted_endpoint,
     credentials: true,
   })
 );
+
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -50,6 +60,10 @@ app.use(
 
 app.use("/api/auth/", apiLimiter);
 app.use("/api", routes);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+});
 
 app.use(errorHandlerMiddleware);
 app.use(routeNotFoundMiddleware);

@@ -25,6 +25,7 @@ const envVarsSchema = Joi.object()
       .required()
       .description("Google Console Client Secret"),
     SECRET: Joi.string().required().description("Secret for session"),
+    HOST_ENDPOINT: Joi.string().description("end point of hosted server"),
   })
   .unknown();
 
@@ -57,4 +58,5 @@ export default {
   GOOGLE_CLIENT_ID: envVars.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: envVars.GOOGLE_CLIENT_SECRET,
   SECRET: envVars.SECRET,
+  hosted_endpoint: envVars.HOST_ENDPOINT,
 };

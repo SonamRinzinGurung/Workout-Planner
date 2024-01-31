@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Empty = () => {
   return (
     <div className="text-gray-800 flex flex-col items-center gap-2 mt-10 dark:text-gray-100">
@@ -7,7 +9,9 @@ const Empty = () => {
         </p>
       </div>
       <div className="border rounded-md p-2 transition ease-in-out duration-200 hover:bg-primary hover:shadow-md">
-        <button className="font-subHead font-medium">Create One Here</button>
+        <Link to={"/create"}>
+          <button className="font-subHead font-medium">Create One Here</button>
+        </Link>
       </div>
     </div>
   );

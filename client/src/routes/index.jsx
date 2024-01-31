@@ -3,5 +3,6 @@ import HomePage from "./HomePage";
 import PageNotFound from "./PageNotFound";
 import Root from "./Root";
 import CreatePlan from "./CreatePlan";
+import EditPlan from "./EditPlan";
 
-export { Root, Login, HomePage, PageNotFound, CreatePlan };
+export { Root, Login, HomePage, PageNotFound, CreatePlan, EditPlan };

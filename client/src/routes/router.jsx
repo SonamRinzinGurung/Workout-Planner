@@ -1,4 +1,11 @@
-import { Root, Login, HomePage, PageNotFound, CreatePlan } from "../routes";
+import {
+  Root,
+  Login,
+  HomePage,
+  PageNotFound,
+  CreatePlan,
+  EditPlan,
+} from "../routes";
 import { RouteProtector } from "../components";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -25,6 +32,14 @@ const router = createBrowserRouter([
         element: (
           <RouteProtector>
             <CreatePlan />
+          </RouteProtector>
+        ),
+      },
+      {
+        path: "/edit/:id",
+        element: (
+          <RouteProtector>
+            <EditPlan />
           </RouteProtector>
         ),
       },
