@@ -11,7 +11,6 @@ import errorHandlerMiddleware from "./middlewares/error-handler.js";
 import routeNotFoundMiddleware from "./middlewares/route-not-found.js";
 import routes from "./routes/index.js";
 import cookieParser from "cookie-parser";
-import session from "express-session";
 import { OAuth2Client } from "google-auth-library";
 
 import path, { dirname } from "path";
@@ -24,7 +23,7 @@ if (config.env !== "production") {
 }
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-app.use(express.static(path.resolve(__dirname, "../client/build")));
+app.use(express.static(path.resolve(__dirname, "../client/dist")));
 
 app.use(cookieParser());
 app.use(helmet());
@@ -50,19 +49,11 @@ const oAuth2Client = new OAuth2Client(
   "postmessage"
 );
 
-app.use(
-  session({
-    secret: config.SECRET,
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-
 app.use("/api/auth/", apiLimiter);
 app.use("/api", routes);
 
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+  res.sendFile(path.resolve(__dirname, "../client/dist", "index.html"));
 });
 
 app.use(errorHandlerMiddleware);
