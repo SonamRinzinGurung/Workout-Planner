@@ -15,4 +15,24 @@ axiosFetch.interceptors.request.use(
   }
 );
 
+axiosFetch.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    console.log(error);
+    const originalRequest = error.config;
+    if (
+      error?.response.status === 401 &&
+      error?.response.data.msg === "Token is not valid" &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    }
+  }
+);
+
 export default axiosFetch;

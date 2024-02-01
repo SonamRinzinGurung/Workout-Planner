@@ -7,7 +7,7 @@ const ExerciseForm = ({
   exerciseIndex,
   workoutIndex,
   handleRemoveExercise,
-  handleExerciseChange,
+  setFormData,
 }) => {
   return (
     <div
@@ -18,44 +18,46 @@ const ExerciseForm = ({
         <InputTextExercise
           name="name"
           value={exerciseItem.name}
-          handleChange={handleExerciseChange}
           workoutIndex={workoutIndex}
           exerciseIndex={exerciseIndex}
           placeholder={"Exercise Name"}
+          setFormData={setFormData}
         />
       </div>
       <div className="flex flex-col gap-2">
         <InputTextExercise
           name="sets"
           value={exerciseItem.sets}
-          handleChange={handleExerciseChange}
           workoutIndex={workoutIndex}
           exerciseIndex={exerciseIndex}
+          setFormData={setFormData}
         />
       </div>
       <div className="flex flex-col gap-2">
         <InputTextExercise
           name="reps"
           value={exerciseItem.reps}
-          handleChange={handleExerciseChange}
           workoutIndex={workoutIndex}
           exerciseIndex={exerciseIndex}
+          setFormData={setFormData}
         />
       </div>
       <div className="flex flex-col gap-2">
         <InputTextExercise
           name="weight"
           value={exerciseItem.weight}
-          handleChange={handleExerciseChange}
           workoutIndex={workoutIndex}
           exerciseIndex={exerciseIndex}
           placeholder={"Weight (kg)"}
+          setFormData={setFormData}
         />
       </div>
       {handleRemoveExercise && (
         <div>
           <button
-            onClick={() => handleRemoveExercise(workoutIndex, exerciseIndex)}
+            onClick={() =>
+              handleRemoveExercise(setFormData, workoutIndex, exerciseIndex)
+            }
           >
             <FaTrashAlt className="text-red-400 hover:text-red-500 transition ease-in-out duration-300" />
           </button>
@@ -70,6 +72,6 @@ ExerciseForm.propTypes = {
   exerciseIndex: PropTypes.number.isRequired,
   workoutIndex: PropTypes.number.isRequired,
   handleRemoveExercise: PropTypes.func,
-  handleExerciseChange: PropTypes.func.isRequired,
+  setFormData: PropTypes.func.isRequired,
 };
 export default ExerciseForm;

@@ -48,7 +48,7 @@ const getPlans = async (req, res) => {
 };
 
 const patchWorkout = async (req, res) => {
-  const { _id, name } = req.body;
+  const { _id } = req.body;
 
   let { workouts } = req.body;
 

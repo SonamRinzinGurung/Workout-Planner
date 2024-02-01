@@ -1,19 +1,20 @@
 import { useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useSetTitle from "../utils/useSetTitle";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import ReactLoading from "react-loading";
 import axiosFetch from "../utils/axiosInterceptor";
 import { Button, ExerciseForm } from "../components";
 import { MdEdit } from "react-icons/md";
-import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { delay } from "../utils/delayFetch";
+import { handleWorkoutChange } from "../utils/formHandlers";
 
 const EditWorkout = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   useSetTitle("Edit Workout");
+  const scrollRef = useRef(null);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,38 +36,6 @@ const EditWorkout = () => {
       return data;
     },
   });
-
-  const scrollRef = useRef(null);
-
-  const handleChange = (workoutIndex, e) => {
-    setFormData({
-      ...formData,
-      workouts: formData.workouts.map((item, i) =>
-        i === workoutIndex ? { ...item, [e.target.name]: e.target.value } : item
-      ),
-    });
-  };
-
-  const handleExerciseChange = (workoutIndex, exerciseIndex, e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      workouts: prevState.workouts.map((workoutItem, i) =>
-        i === workoutIndex
-          ? {
-              ...workoutItem,
-              exercises: workoutItem.exercises.map((exerciseItem, j) =>
-                j === exerciseIndex
-                  ? {
-                      ...exerciseItem,
-                      [e.target.name]: e.target.value,
-                    }
-                  : exerciseItem
-              ),
-            }
-          : workoutItem
-      ),
-    }));
-  };
 
   const { mutate: editWorkout } = useMutation({
     mutationFn: async (formData) => {
@@ -150,7 +119,14 @@ const EditWorkout = () => {
                 name="title"
                 placeholder="Workout Name"
                 value={workoutItem.title}
-                onChange={(event) => handleChange(workoutIndex, event)}
+                onChange={(event) =>
+                  handleWorkoutChange(
+                    formData,
+                    setFormData,
+                    workoutIndex,
+                    event
+                  )
+                }
               />
             </div>
             <div className="flex flex-col items-center gap-2 p-2 rounded-md">
@@ -166,7 +142,7 @@ const EditWorkout = () => {
                     exerciseItem={exerciseItem}
                     exerciseIndex={exerciseIndex}
                     workoutIndex={workoutIndex}
-                    handleExerciseChange={handleExerciseChange}
+                    setFormData={setFormData}
                   />
                 ))}
               </div>

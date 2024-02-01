@@ -1,13 +1,14 @@
 import PropTypes from "prop-types";
 import { capitalizeFirstLetter } from "../utils/capitalizeWord";
+import { handleExerciseChange } from "../utils/formHandlers";
 
 const InputTextExercise = ({
   name,
   value,
-  handleChange,
   workoutIndex,
   exerciseIndex,
   placeholder,
+  setFormData,
 }) => {
   return (
     <div>
@@ -16,7 +17,9 @@ const InputTextExercise = ({
         name={name}
         placeholder={placeholder || capitalizeFirstLetter(name)}
         value={value}
-        onChange={(event) => handleChange(workoutIndex, exerciseIndex, event)}
+        onChange={(event) =>
+          handleExerciseChange(setFormData, workoutIndex, exerciseIndex, event)
+        }
       />
     </div>
   );
@@ -25,9 +28,9 @@ const InputTextExercise = ({
 InputTextExercise.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  handleChange: PropTypes.func.isRequired,
   workoutIndex: PropTypes.number.isRequired,
   exerciseIndex: PropTypes.number.isRequired,
   placeholder: PropTypes.string,
+  setFormData: PropTypes.func.isRequired,
 };
 export default InputTextExercise;
