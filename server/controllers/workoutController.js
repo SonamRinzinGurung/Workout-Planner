@@ -30,7 +30,10 @@ const createPlan = async (req, res) => {
 };
 
 const getPlans = async (req, res) => {
-  const plans = await Plan.find({ isDeleted: false }).populate({
+  const plans = await Plan.find({
+    isDeleted: false,
+    user: req.user.userId,
+  }).populate({
     path: "workouts",
     model: "Workout",
     select: "-createdAt -updatedAt -__v",
@@ -44,7 +47,7 @@ const getPlans = async (req, res) => {
   res.status(200).json(plans);
 };
 
-const patchPlans = async (req, res) => {
+const patchWorkout = async (req, res) => {
   const { _id, name } = req.body;
 
   let { workouts } = req.body;
@@ -71,19 +74,7 @@ const patchPlans = async (req, res) => {
       }
     );
   }
-
-  const updatedPlan = await Plan.findOneAndUpdate(
-    { _id },
-    {
-      name,
-    },
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
-
-  res.status(200).json({ updatedPlan, message: "Workout Plan Updated" });
+  res.status(200).json({ message: "Workout Plan Updated" });
 };
 
 const getPlanDetails = async (req, res) => {
@@ -102,4 +93,4 @@ const getPlanDetails = async (req, res) => {
   });
   res.status(200).json(plans);
 };
-export { createPlan, getPlans, patchPlans, getPlanDetails };
+export { createPlan, getPlans, patchWorkout, getPlanDetails };

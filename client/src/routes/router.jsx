@@ -4,7 +4,7 @@ import {
   HomePage,
   PageNotFound,
   CreatePlan,
-  EditPlan,
+  EditWorkout,
 } from "../routes";
 import { RouteProtector } from "../components";
 import { createBrowserRouter } from "react-router-dom";
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
         path: "/edit/:id",
         element: (
           <RouteProtector>
-            <EditPlan />
+            <EditWorkout />
           </RouteProtector>
         ),
       },

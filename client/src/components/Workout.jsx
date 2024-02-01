@@ -3,13 +3,15 @@ import { Exercise, Button } from ".";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Workout = ({ planId, title, exercises }) => {
+const Workout = ({ planId, title, exercises, source }) => {
   const navigate = useNavigate();
   const [modalState, setModalState] = useState(false);
   return (
     <div
       className="p-4 relative border hover:shadow-xl transition ease-in-out duration-300 hover:-translate-y-1 rounded-sm w-60 lg:w-72 cursor-pointer"
-      onClick={() => setModalState((prev) => !prev)}
+      onClick={() => {
+        source === "home" && setModalState((prev) => !prev);
+      }}
     >
       <div>
         <p className="font-subHead font-bold text-primary">{title}</p>
@@ -47,6 +49,7 @@ Workout.propTypes = {
   title: PropTypes.string.isRequired,
   exercises: PropTypes.array.isRequired,
   planId: PropTypes.string.isRequired,
+  source: PropTypes.string,
 };
 
 export default Workout;

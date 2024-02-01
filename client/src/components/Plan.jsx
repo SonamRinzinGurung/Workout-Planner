@@ -3,7 +3,7 @@ import { Workout } from ".";
 import vine from "../assets/vine.png";
 import sakura from "../assets/sakura.png";
 
-const Plan = ({ _id, name, workouts }) => {
+const Plan = ({ _id, name, workouts, source }) => {
   return (
     <div className="p-2 flex flex-col gap-2">
       <div className="flex self-center justify-center">
@@ -15,7 +15,9 @@ const Plan = ({ _id, name, workouts }) => {
       </div>
       <div className="flex flex-wrap gap-3 justify-center">
         {workouts?.map((workout, index) => {
-          return <Workout key={index} {...workout} planId={_id} />;
+          return (
+            <Workout key={index} {...workout} planId={_id} source={source} />
+          );
         })}
       </div>
     </div>
@@ -26,6 +28,7 @@ Plan.propTypes = {
   name: PropTypes.string.isRequired,
   workouts: PropTypes.array.isRequired,
   _id: PropTypes.string.isRequired,
+  source: PropTypes.string,
 };
 
 export default Plan;

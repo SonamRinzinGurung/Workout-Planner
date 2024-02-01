@@ -46,7 +46,7 @@ const HomePage = () => {
       </div>
       <div className="flex flex-col gap-6 mt-4">
         {data?.map((item) => {
-          return <Plan key={item._id} {...item} />;
+          return <Plan key={item._id} {...item} source={"home"} />;
         })}
       </div>
     </div>

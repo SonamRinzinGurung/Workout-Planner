@@ -52,13 +52,15 @@ const ExerciseForm = ({
           placeholder={"Weight (kg)"}
         />
       </div>
-      <div>
-        <button
-          onClick={() => handleRemoveExercise(workoutIndex, exerciseIndex)}
-        >
-          <FaTrashAlt className="text-red-400 hover:text-red-500 transition ease-in-out duration-300" />
-        </button>
-      </div>
+      {handleRemoveExercise && (
+        <div>
+          <button
+            onClick={() => handleRemoveExercise(workoutIndex, exerciseIndex)}
+          >
+            <FaTrashAlt className="text-red-400 hover:text-red-500 transition ease-in-out duration-300" />
+          </button>
+        </div>
+      )}
     </div>
   );
 };
@@ -67,7 +69,7 @@ ExerciseForm.propTypes = {
   exerciseItem: PropTypes.object.isRequired,
   exerciseIndex: PropTypes.number.isRequired,
   workoutIndex: PropTypes.number.isRequired,
-  handleRemoveExercise: PropTypes.func.isRequired,
+  handleRemoveExercise: PropTypes.func,
   handleExerciseChange: PropTypes.func.isRequired,
 };
 export default ExerciseForm;
