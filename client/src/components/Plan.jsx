@@ -27,7 +27,7 @@ const Plan = ({ _id, name, workouts, source }) => {
 Plan.propTypes = {
   name: PropTypes.string.isRequired,
   workouts: PropTypes.array.isRequired,
-  _id: PropTypes.string.isRequired,
+  _id: PropTypes.string,
   source: PropTypes.string,
 };
 

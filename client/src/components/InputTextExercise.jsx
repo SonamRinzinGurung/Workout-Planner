@@ -27,7 +27,7 @@ const InputTextExercise = ({
 
 InputTextExercise.propTypes = {
   name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   workoutIndex: PropTypes.number.isRequired,
   exerciseIndex: PropTypes.number.isRequired,
   placeholder: PropTypes.string,
