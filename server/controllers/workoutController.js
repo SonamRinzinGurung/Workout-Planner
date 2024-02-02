@@ -93,4 +93,89 @@ const getPlanDetails = async (req, res) => {
   });
   res.status(200).json(plans);
 };
-export { createPlan, getPlans, patchWorkout, getPlanDetails };
+
+const toggleRemovePlan = async (req, res) => {
+  const { planId } = req.params;
+
+  const plan = await Plan.findOne({ _id: planId, user: req.user.userId });
+
+  if (!plan) {
+    throw new BadRequestError(`Workout plan with id ${planId} not found.`);
+  }
+
+  await plan.updateOne({ isDeleted: !plan.isDeleted });
+
+  res.status(200).json({
+    message: `Plan ${plan.isDeleted ? "unremoved" : "removed"} successfully!`,
+  });
+};
+
+const deletePlan = async (req, res) => {
+  const { planId } = req.params;
+
+  const plan = await Plan.findOne({
+    _id: planId,
+    user: req.user.userId,
+    isDeleted: true,
+  });
+
+  if (!plan) {
+    throw new BadRequestError(`Workout plan with id ${planId} not found.`);
+  }
+
+  let workoutIds = plan.workouts;
+  let exerciseIds = [];
+
+  for (const workoutId of workoutIds) {
+    const workout = await Workout.findById(workoutId);
+
+    exerciseIds.push(workout.exercises);
+  }
+
+  exerciseIds = exerciseIds.flat();
+
+  // delete all the exercises
+  for (const exerciseId of exerciseIds) {
+    await Exercise.deleteOne({ _id: exerciseId });
+  }
+
+  // delete all the workouts
+  for (const workoutId of workoutIds) {
+    await Workout.deleteOne({ _id: workoutId });
+  }
+
+  //delete the plan
+  await Plan.deleteOne({ _id: planId });
+
+  res.status(200).json({
+    message: "Plan with its workouts and exercises deleted successfully",
+  });
+};
+
+const getRemovedPlans = async (req, res) => {
+  const plans = await Plan.find({
+    isDeleted: true,
+    user: req.user.userId,
+  }).populate({
+    path: "workouts",
+    model: "Workout",
+    select: "-createdAt -updatedAt -__v",
+
+    populate: {
+      path: "exercises",
+      model: "Exercise",
+      select: "-createdAt -updatedAt -__v",
+    },
+  });
+  res.status(200).json(plans);
+};
+
+export {
+  createPlan,
+  getPlans,
+  patchWorkout,
+  getPlanDetails,
+  toggleRemovePlan,
+  deletePlan,
+  getRemovedPlans,
+};
