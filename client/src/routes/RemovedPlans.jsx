@@ -4,9 +4,12 @@ import axiosFetch from "../utils/axiosInterceptor";
 import { Plan } from "../components";
 import ReactLoading from "react-loading";
 import { delay } from "../utils/delayFetch";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 const RemovedPlans = () => {
   useSetTitle("Removed Plans");
+  const queryClient = useQueryClient();
 
   const { isPending, error, data } = useQuery({
     queryKey: ["removed-plan"],
@@ -15,6 +18,36 @@ const RemovedPlans = () => {
       return axiosFetch
         .get(`/workout-plan/getRemovedPlans/`)
         .then((res) => res.data);
+    },
+  });
+
+  const { mutate: restorePlan } = useMutation({
+    mutationFn: async (id) => {
+      const { data } = await axiosFetch.delete(`/workout-plan/${id}`);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Workout plan restored successfully");
+      queryClient.invalidateQueries("removed-plan");
+    },
+    onError: (data) => {
+      toast.error(data.response.data.msg);
+    },
+  });
+
+  const { mutate: deletePlan } = useMutation({
+    mutationFn: async (id) => {
+      const { data } = await axiosFetch.delete(
+        `/workout-plan/deletePlan/${id}`
+      );
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Workout plan deleted permanently.");
+      queryClient.invalidateQueries("removed-plan");
+    },
+    onError: (data) => {
+      toast.error(data.response.data.msg);
     },
   });
 
@@ -56,7 +89,15 @@ const RemovedPlans = () => {
       </div>
       <div className="flex flex-col gap-6 mt-4">
         {data?.map((item) => {
-          return <Plan key={item._id} {...item} source={"removed"} />;
+          return (
+            <Plan
+              key={item._id}
+              {...item}
+              source={"removed"}
+              handleRestore={restorePlan}
+              handleDelete={deletePlan}
+            />
+          );
         })}
       </div>
     </div>

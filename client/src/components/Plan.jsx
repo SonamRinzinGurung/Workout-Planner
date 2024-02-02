@@ -4,13 +4,7 @@ import vine from "../assets/vine.png";
 import sakura from "../assets/sakura.png";
 import { MdDeleteOutline } from "react-icons/md";
 
-const Plan = ({ _id, name, workouts, source }) => {
-  const handleRestore = (id) => {
-    console.log("Restore", id);
-  };
-  const handleDelete = (id) => {
-    console.log("Delete", id);
-  };
+const Plan = ({ _id, name, workouts, source, handleDelete, handleRestore }) => {
   return (
     <div className="p-2 flex flex-col gap-2">
       <div className="flex self-center justify-center">
@@ -54,6 +48,8 @@ Plan.propTypes = {
   workouts: PropTypes.array.isRequired,
   _id: PropTypes.string,
   source: PropTypes.string,
+  handleDelete: PropTypes.func,
+  handleRestore: PropTypes.func,
 };
 
 export default Plan;
