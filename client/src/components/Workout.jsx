@@ -18,7 +18,7 @@ const Workout = ({ planId, title, exercises, source }) => {
       return data;
     },
     onSuccess: () => {
-      toast.success("Workout plan removed successfully.");
+      toast.success("Workout plan moved to removed list.");
       queryClient.invalidateQueries("workout-plan");
     },
     onError: (data) => {

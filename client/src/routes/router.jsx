@@ -5,6 +5,7 @@ import {
   PageNotFound,
   CreatePlan,
   EditWorkout,
+  RemovedPlans,
 } from "../routes";
 import { RouteProtector } from "../components";
 import { createBrowserRouter } from "react-router-dom";
@@ -40,6 +41,14 @@ const router = createBrowserRouter([
         element: (
           <RouteProtector>
             <EditWorkout />
+          </RouteProtector>
+        ),
+      },
+      {
+        path: "/removed-plans",
+        element: (
+          <RouteProtector>
+            <RemovedPlans />
           </RouteProtector>
         ),
       },
