@@ -2,11 +2,29 @@ import PropTypes from "prop-types";
 import { Exercise, Button } from ".";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import axiosFetch from "../utils/axiosInterceptor";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 const Workout = ({ planId, title, exercises, source }) => {
   const navigate = useNavigate();
   const [modalState, setModalState] = useState(false);
   const modalRef = useRef(null);
+  const queryClient = useQueryClient();
+
+  const { mutate: removePlan } = useMutation({
+    mutationFn: async (id) => {
+      const { data } = await axiosFetch.delete(`/workout-plan/${id}`);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Workout plan removed successfully.");
+      queryClient.invalidateQueries("workout-plan");
+    },
+    onError: (data) => {
+      toast.error(data.response.data.msg);
+    },
+  });
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -53,7 +71,7 @@ const Workout = ({ planId, title, exercises, source }) => {
             <Button
               name="Delete"
               className={"text-red-500 dark:text-red-300 border"}
-              handleClick={() => console.log("delete")}
+              handleClick={() => removePlan(planId)}
             />
           </div>
         </div>
