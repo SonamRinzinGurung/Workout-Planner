@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoIosMenu, IoIosCloseCircleOutline } from "react-icons/io";
 import { MenuLinks, Button } from ".";
 import { ToastContainer } from "react-toastify";
+import { CiLogout } from "react-icons/ci";
 
 const Header = () => {
   const modalRef = useRef();
@@ -65,13 +66,15 @@ const Header = () => {
                     onClick={toggleMenu}
                     className="cursor-pointer"
                   >
-                    <IoIosCloseCircleOutline className="text-red-700 w-6 h-6  hover:text-red-900 transition ease-in-out duration-300" />
+                    <IoIosCloseCircleOutline className="text-red-700 w-8 h-8  hover:text-red-900 transition ease-in-out duration-300" />
                   </button>
                   <div>
                     <Button
-                      name="Logout"
+                      name="Log out"
                       className="border hover:bg-slate-500 hover:shadow-md hover:text-gray-100 transition duration-300"
                       handleClick={handleLogout}
+                      icon={<CiLogout className="w-6 h-6" />}
+                      position={2}
                     />
                   </div>
                 </div>

@@ -33,17 +33,19 @@ const getPlans = async (req, res) => {
   const plans = await Plan.find({
     isDeleted: false,
     user: req.user.userId,
-  }).populate({
-    path: "workouts",
-    model: "Workout",
-    select: "-createdAt -updatedAt -__v",
-
-    populate: {
-      path: "exercises",
-      model: "Exercise",
+  })
+    .populate({
+      path: "workouts",
+      model: "Workout",
       select: "-createdAt -updatedAt -__v",
-    },
-  });
+
+      populate: {
+        path: "exercises",
+        model: "Exercise",
+        select: "-createdAt -updatedAt -__v",
+      },
+    })
+    .sort("-createdAt");
   res.status(200).json(plans);
 };
 
@@ -156,17 +158,19 @@ const getRemovedPlans = async (req, res) => {
   const plans = await Plan.find({
     isDeleted: true,
     user: req.user.userId,
-  }).populate({
-    path: "workouts",
-    model: "Workout",
-    select: "-createdAt -updatedAt -__v",
-
-    populate: {
-      path: "exercises",
-      model: "Exercise",
+  })
+    .populate({
+      path: "workouts",
+      model: "Workout",
       select: "-createdAt -updatedAt -__v",
-    },
-  });
+
+      populate: {
+        path: "exercises",
+        model: "Exercise",
+        select: "-createdAt -updatedAt -__v",
+      },
+    })
+    .sort("-updatedAt");
   res.status(200).json(plans);
 };
 
