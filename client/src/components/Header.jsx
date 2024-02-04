@@ -4,7 +4,7 @@ import logo from "../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosMenu, IoIosCloseCircleOutline } from "react-icons/io";
 import { MenuLinks, Button } from ".";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Slide } from "react-toastify";
 import { CiLogout } from "react-icons/ci";
 
 const Header = () => {
@@ -104,15 +104,15 @@ const Header = () => {
       <ToastContainer
         theme={darkMode ? "dark" : "light"}
         position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
+        autoClose={3500}
+        hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        transition:Bounce
+        transition={Slide}
       />
     </>
   );

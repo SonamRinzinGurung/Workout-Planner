@@ -1,10 +1,9 @@
 import useSetTitle from "../utils/useSetTitle";
-import { useQuery } from "@tanstack/react-query";
 import axiosFetch from "../utils/axiosInterceptor";
 import { Plan } from "../components";
 import ReactLoading from "react-loading";
 import { delay } from "../utils/delayFetch";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 const RemovedPlans = () => {
