@@ -174,6 +174,52 @@ const getRemovedPlans = async (req, res) => {
   res.status(200).json(plans);
 };
 
+const addExercise = async (req, res) => {
+  let { workouts } = req.body;
+
+  for (let i = 0; i < workouts.length; i++) {
+    for (let j = 0; j < workouts[i].exercises.length; j++) {
+      const exercise = await Exercise.create(workouts[i].exercises[j]);
+      workouts[i].exercises[j] = exercise._id;
+      workouts[i].user = req.user.userId;
+    }
+    const workout = await Workout.findOneAndUpdate(
+      { _id: workouts[i]._id },
+      {
+        $push: { exercises: workouts[i].exercises },
+      },
+      { new: true, runValidators: true }
+    );
+    workouts[i] = workout._id;
+  }
+
+  res.status(200).json({ message: "Workout Plan Updated" });
+};
+
+const addWorkout = async (req, res) => {
+  let { _id, workouts } = req.body;
+
+  for (let i = 0; i < workouts.length; i++) {
+    for (let j = 0; j < workouts[i].exercises.length; j++) {
+      const exercise = await Exercise.create(workouts[i].exercises[j]);
+      workouts[i].exercises[j] = exercise._id;
+      workouts[i].user = req.user.userId;
+    }
+    const workout = await Workout.create(workouts[i]);
+    workouts[i] = workout._id;
+  }
+
+  const plan = await Plan.findOneAndUpdate(
+    { _id },
+    {
+      $push: { workouts },
+    },
+    { new: true, runValidators: true }
+  );
+
+  res.status(200).json({ message: "New Workout added.", plan });
+};
+
 export {
   createPlan,
   getPlans,
@@ -182,4 +228,6 @@ export {
   toggleRemovePlan,
   deletePlan,
   getRemovedPlans,
+  addExercise,
+  addWorkout,
 };
