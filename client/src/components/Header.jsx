@@ -8,10 +8,13 @@ import { ToastContainer, Slide } from "react-toastify";
 import { CiLogout } from "react-icons/ci";
 
 const Header = () => {
-  const modalRef = useRef();
-  const [darkMode, setDarkMode] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  let darkModeLocal = localStorage.getItem("darkMode");
+  darkModeLocal = darkModeLocal?.toLowerCase() === "true";
+
+  const modalRef = useRef();
+  const [darkMode, setDarkMode] = useState(darkModeLocal || false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = useCallback(() => {
     setMenuOpen((prev) => !prev);
@@ -41,6 +44,7 @@ const Header = () => {
 
   const toggleDark = () => {
     setDarkMode(!darkMode);
+    localStorage.setItem("darkMode", !darkMode);
   };
 
   const handleLogout = () => {
