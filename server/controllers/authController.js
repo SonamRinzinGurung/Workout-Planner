@@ -32,4 +32,36 @@ const signup = async (req, res) => {
   const token = newUser.createJWT();
   res.status(201).json({ user: newUser, token });
 };
-export { login, signup };
+
+const loginTraditional = async (req, res) => {
+  const userData = req.body;
+  const user = await User.findOne({ email: userData.email }).select(
+    "+password"
+  );
+
+  if (!user) {
+    throw new UnAuthorizedError("Invalid email");
+  }
+
+  if (!(await user.matchPassword(userData.password))) {
+    throw new UnAuthorizedError("Invalid password");
+  }
+
+  user.password = undefined;
+  const token = user.createJWT();
+  res.json({ user, token });
+};
+
+const registerTraditional = async (req, res) => {
+  const userData = req.body;
+  const user = await User.findOne({ email: userData.email });
+  if (user) {
+    throw new BadRequestError("User already exists");
+  }
+  const newUser = await User.create(userData);
+  newUser.password = undefined;
+  const token = newUser.createJWT();
+  res.status(201).json({ user: newUser, token });
+};
+
+export { login, signup, loginTraditional, registerTraditional };
