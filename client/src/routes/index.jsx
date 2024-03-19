@@ -1,4 +1,5 @@
 import Login from "./Login";
+import Register from "./Register";
 import HomePage from "./HomePage";
 import PageNotFound from "./PageNotFound";
 import Root from "./Root";
@@ -9,6 +10,7 @@ import RemovedPlans from "./RemovedPlans";
 export {
   Root,
   Login,
+  Register,
   HomePage,
   PageNotFound,
   CreatePlan,
