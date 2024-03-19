@@ -65,10 +65,14 @@ function Login() {
   }
   return (
     <main className="flex flex-col items-center mt-24 dark:text-white gap-2">
+      <div className="my-4">
+        <h1 className="font-heading font-semibold text-xl">Login</h1>
+      </div>
       <form>
         <div className="flex flex-col gap-4">
           <InputText
             name="email"
+            type={"email"}
             value={values?.email}
             handleChange={handleChange}
           />

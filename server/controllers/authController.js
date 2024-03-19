@@ -54,6 +54,8 @@ const loginTraditional = async (req, res) => {
 
 const registerTraditional = async (req, res) => {
   const userData = req.body;
+  const displayName = userData.email.split("@")[0];
+  userData.displayName = displayName;
   const user = await User.findOne({ email: userData.email });
   if (user) {
     throw new BadRequestError("User already exists");
