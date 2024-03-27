@@ -35,8 +35,16 @@ function Login() {
       });
     },
     onSuccess: ({ data }) => {
-      localStorage.setItem("token", data.token);
-      navigate("/");
+      if (data?.accountStatus === false) {
+        localStorage.setItem("email", data.email);
+        toast.success(data.message);
+        navigate("/verify-notice");
+      }
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.removeItem("email");
+        navigate("/");
+      }
     },
     onError: (data) => {
       toast.error(data.response.data.msg);

@@ -11,7 +11,7 @@ const Header = () => {
   const navigate = useNavigate();
   let darkModeLocal = localStorage.getItem("darkMode");
   darkModeLocal = darkModeLocal?.toLowerCase() === "true";
-
+  const token = localStorage.getItem("token");
   const modalRef = useRef();
   const [darkMode, setDarkMode] = useState(darkModeLocal || false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -56,7 +56,7 @@ const Header = () => {
   return (
     <>
       <nav className="p-2 shadow-sm flex justify-center items-center">
-        {menuOpen && (
+        {menuOpen && token ? (
           <section className="modal-container bg-[rgb(0,0,0,0.7)] fixed inset-0 outline-none overflow-x-hidden overflow-y-auto z-10">
             <div className="modal-dialog relative w-11/12 h-5/6 mx-auto mt-10 pointer-events-none">
               <div
@@ -88,14 +88,18 @@ const Header = () => {
               </div>
             </div>
           </section>
+        ) : (
+          ""
         )}
-        <div className="cursor-pointer">
-          <IoIosMenu
-            onClick={toggleMenu}
-            className="dark:text-white w-8 h-8"
-            size=""
-          />
-        </div>
+        {token && (
+          <div className="cursor-pointer">
+            <IoIosMenu
+              onClick={toggleMenu}
+              className="dark:text-white w-8 h-8"
+              size=""
+            />
+          </div>
+        )}
         <div className="mx-auto">
           <Link to={"/"}>
             <img src={logo} alt="logo" className="w-20" />
@@ -105,6 +109,7 @@ const Header = () => {
           <DarkModeSwitch checked={darkMode} onChange={toggleDark} />
         </div>
       </nav>
+
       <ToastContainer
         theme={darkMode ? "dark" : "light"}
         position="bottom-right"

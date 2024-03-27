@@ -7,6 +7,7 @@ import {
   EditWorkout,
   RemovedPlans,
   Register,
+  VerifyEmailNotice,
 } from "../routes";
 import { RouteProtector } from "../components";
 import { createBrowserRouter } from "react-router-dom";
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register />,
+      },
+      {
+        path: "/verify-notice",
+        element: <VerifyEmailNotice />,
       },
       {
         path: "/create",

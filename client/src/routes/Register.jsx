@@ -43,10 +43,9 @@ const Register = () => {
       );
     },
     onSuccess: ({ data }) => {
-      toast.success("User Successfully Registered");
-
-      localStorage.setItem("token", data.token);
-      navigate("/");
+      toast.success(data.message);
+      localStorage.setItem("email", data.email);
+      navigate("/verify-notice");
     },
     onError: (data) => {
       toast.error(data.response.data.msg);

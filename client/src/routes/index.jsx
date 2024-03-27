@@ -6,6 +6,7 @@ import Root from "./Root";
 import CreatePlan from "./CreatePlan";
 import EditWorkout from "./EditWorkout";
 import RemovedPlans from "./RemovedPlans";
+import VerifyEmailNotice from "./VerifyEmailNotice";
 
 export {
   Root,
@@ -16,4 +17,5 @@ export {
   CreatePlan,
   EditWorkout,
   RemovedPlans,
+  VerifyEmailNotice,
 };
