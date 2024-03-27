@@ -1,6 +1,9 @@
 import { getProfileInfo } from "../utils/googleAuth.js";
 import User from "../models/User.js";
 import { UnAuthorizedError, BadRequestError } from "../request-errors/index.js";
+import jwt from "jsonwebtoken";
+import config from "../config/config.js";
+import { sendEmail } from "../utils/emailSender.js";
 
 const login = async (req, res) => {
   const code = req.body.code;
@@ -23,6 +26,7 @@ const signup = async (req, res) => {
     firstName: profile.given_name,
     lastName: profile?.family_name,
     image: profile.picture,
+    verified: true,
   };
   const user = await User.findOne({ email: profile.email });
   if (user) {
@@ -43,6 +47,13 @@ const loginTraditional = async (req, res) => {
     throw new UnAuthorizedError("Invalid email");
   }
 
+  if (!user.verified) {
+    res.json({
+      message: "User is not verified",
+      email: user.email,
+      accountStatus: user.verified,
+    });
+  }
   if (!(await user.matchPassword(userData.password))) {
     throw new UnAuthorizedError("Invalid password");
   }
@@ -60,10 +71,37 @@ const registerTraditional = async (req, res) => {
   if (user) {
     throw new BadRequestError("User already exists");
   }
+
+  const verificationCode = jwt.sign(
+    { email: userData.email },
+    config.verification_secret,
+    {
+      expiresIn: "30m",
+    }
+  );
+
+  userData.verificationCode = verificationCode;
+
   const newUser = await User.create(userData);
   newUser.password = undefined;
-  const token = newUser.createJWT();
-  res.status(201).json({ user: newUser, token });
+
+  const body = `<p> Hello ${newUser.firstName} ${newUser.lastName},</p>
+    <p>Please click on the link below to verify your account on Workout Planner</p>
+    <a href="${config.client_url}/verify-account/${verificationCode}">Verify Account</a>
+    <br><br>
+
+    <p>Regards,</p>
+    <p>Workout Planner</p>`;
+
+  const from = config.email.email_user;
+  const to = newUser.email;
+  await sendEmail(from, to, "Email Verification", body);
+
+  res.status(201).json({
+    message: "User Registered. Need to verify email",
+    email: newUser.email,
+    accountStatus: newUser.verified,
+  });
 };
 
 export { login, signup, loginTraditional, registerTraditional };
