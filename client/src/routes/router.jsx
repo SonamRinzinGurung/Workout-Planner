@@ -8,6 +8,7 @@ import {
   RemovedPlans,
   Register,
   VerifyEmailNotice,
+  EmailVerification,
 } from "../routes";
 import { RouteProtector } from "../components";
 import { createBrowserRouter } from "react-router-dom";
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/verify-notice",
         element: <VerifyEmailNotice />,
+      },
+      {
+        path: "/verify-account/:token",
+        element: <EmailVerification />,
       },
       {
         path: "/create",

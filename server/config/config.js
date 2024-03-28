@@ -29,7 +29,6 @@ const envVarsSchema = Joi.object()
     VERIFICATION_SECRET: Joi.string()
       .required()
       .description("Secret for email verification"),
-    CLIENT_URL: Joi.string().required().description("Endpoint of Client Side"),
     EMAIL_HOST: Joi.string().required(),
     EMAIL_USER: Joi.string().required(),
     EMAIL_PASS: Joi.string().required(),
@@ -67,7 +66,6 @@ export default {
   SECRET: envVars.SECRET,
   hosted_endpoint: envVars.HOST_ENDPOINT,
   verification_secret: envVars.VERIFICATION_SECRET,
-  client_url: envVars.CLIENT_URL,
   email: {
     email_host: envVars.EMAIL_HOST,
     email_user: envVars.EMAIL_USER,

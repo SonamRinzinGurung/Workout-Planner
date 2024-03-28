@@ -87,7 +87,7 @@ const registerTraditional = async (req, res) => {
 
   const body = `<p> Hello ${newUser.firstName} ${newUser.lastName},</p>
     <p>Please click on the link below to verify your account on Workout Planner</p>
-    <a href="${config.client_url}verify-account/${verificationCode}">Verify Account</a>
+    <a href="${config.hosted_endpoint}verify-account/${verificationCode}">Verify Account</a>
     <br><br>
 
     <p>Regards,</p>
@@ -125,7 +125,7 @@ const resendVerificationEmail = async (req, res) => {
 
   const body = `<p> Hello ${user.firstName} ${user.lastName},</p>
     <p>Please click on the link below to verify your account on Workout Planner</p>
-    <a href="${config.client_url}verify-account/${verificationCode}">Verify Account</a>
+    <a href="${config.hosted_endpoint}verify-account/${verificationCode}">Verify Account</a>
     <br><br>
 
     <p>Regards,</p>

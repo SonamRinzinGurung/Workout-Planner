@@ -7,7 +7,7 @@ import CreatePlan from "./CreatePlan";
 import EditWorkout from "./EditWorkout";
 import RemovedPlans from "./RemovedPlans";
 import VerifyEmailNotice from "./VerifyEmailNotice";
-
+import EmailVerification from "./EmailVerification";
 export {
   Root,
   Login,
@@ -18,4 +18,5 @@ export {
   EditWorkout,
   RemovedPlans,
   VerifyEmailNotice,
+  EmailVerification,
 };
