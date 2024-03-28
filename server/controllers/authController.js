@@ -105,9 +105,9 @@ const registerTraditional = async (req, res) => {
 };
 
 const resendVerificationEmail = async (req, res) => {
-  const email = req.body;
+  const { email } = req.body;
 
-  const user = await User.findOne(email);
+  const user = await User.findOne({ email });
 
   if (!user) {
     throw new BadRequestError("User does not exist");
@@ -136,7 +136,37 @@ const resendVerificationEmail = async (req, res) => {
   await sendEmail(from, to, "Email Verification", body);
   res.json({
     message: "Verification Code successfully reset and sent",
-    email: email.email,
+    email,
+  });
+};
+
+const verifyEmail = async (req, res) => {
+  const { token } = req.body;
+
+  jwt.verify(token, config.verification_secret, async (error, payload) => {
+    if (error) {
+      return res
+        .status(400)
+        .json({ msg: "Invalid or expired verification token" });
+    }
+    const user = await User.findOne({
+      verificationCode: token,
+      email: payload.email,
+    });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ msg: "The provided token was not issued for the user" });
+    }
+
+    user.verificationCode = "";
+    user.verified = true;
+    try {
+      await user.save();
+      return res.json({ message: "User successfully verified." });
+    } catch (error) {
+      throw new BadRequestError("Error occurred while verifying user.");
+    }
   });
 };
 
@@ -146,4 +176,5 @@ export {
   loginTraditional,
   registerTraditional,
   resendVerificationEmail,
+  verifyEmail,
 };
