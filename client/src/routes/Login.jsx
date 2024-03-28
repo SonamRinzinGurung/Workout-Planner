@@ -28,7 +28,7 @@ function Login() {
     },
   });
 
-  const { mutate: traditionalLogin } = useMutation({
+  const { mutate: traditionalLogin, isPending } = useMutation({
     mutationFn: (values) => {
       return axios.post(`${import.meta.env.VITE_API}/auth/loginTraditional`, {
         ...values,
@@ -96,6 +96,7 @@ function Login() {
               "border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
             }
             handleClick={handleLogin}
+            isPending={isPending}
           />
         </div>
       </form>

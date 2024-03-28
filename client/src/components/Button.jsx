@@ -1,13 +1,21 @@
 import PropTypes from "prop-types";
 
-const Button = ({ name, handleClick, className, icon, position }) => {
+const Button = ({
+  name,
+  handleClick,
+  className,
+  icon,
+  position,
+  isPending,
+}) => {
   return (
-    <button onClick={handleClick}>
+    <button onClick={handleClick} disabled={isPending}>
       <div
         className={
           `flex p-2 gap-2 rounded-md items-center justify-center hover:shadow-md dark:hover:shadow-gray-800 transition ease-in-out duration-300` +
           ` ` +
-          className
+          className +
+          `${isPending && " opacity-30"}`
         }
       >
         {position === 1 && icon}
@@ -24,6 +32,7 @@ Button.propTypes = {
   className: PropTypes.string,
   icon: PropTypes.element,
   position: PropTypes.number,
+  isPending: PropTypes.bool,
 };
 
 export default Button;

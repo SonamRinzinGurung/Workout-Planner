@@ -87,7 +87,7 @@ const registerTraditional = async (req, res) => {
 
   const body = `<p> Hello ${newUser.firstName} ${newUser.lastName},</p>
     <p>Please click on the link below to verify your account on Workout Planner</p>
-    <a href="${config.client_url}/verify-account/${verificationCode}">Verify Account</a>
+    <a href="${config.client_url}verify-account/${verificationCode}">Verify Account</a>
     <br><br>
 
     <p>Regards,</p>
@@ -104,4 +104,46 @@ const registerTraditional = async (req, res) => {
   });
 };
 
-export { login, signup, loginTraditional, registerTraditional };
+const resendVerificationEmail = async (req, res) => {
+  const email = req.body;
+
+  const user = await User.findOne(email);
+
+  if (!user) {
+    throw new BadRequestError("User does not exist");
+  }
+  if (user.verified) {
+    throw new BadRequestError("This user is already verified");
+  }
+
+  const verificationCode = jwt.sign({ email }, config.verification_secret, {
+    expiresIn: "30m",
+  });
+
+  user.verificationCode = verificationCode;
+  user.save();
+
+  const body = `<p> Hello ${user.firstName} ${user.lastName},</p>
+    <p>Please click on the link below to verify your account on Workout Planner</p>
+    <a href="${config.client_url}verify-account/${verificationCode}">Verify Account</a>
+    <br><br>
+
+    <p>Regards,</p>
+    <p>Workout Planner</p>`;
+
+  const from = config.email.email_user;
+  const to = user.email;
+  await sendEmail(from, to, "Email Verification", body);
+  res.json({
+    message: "Verification Code successfully reset and sent",
+    email: email.email,
+  });
+};
+
+export {
+  login,
+  signup,
+  loginTraditional,
+  registerTraditional,
+  resendVerificationEmail,
+};

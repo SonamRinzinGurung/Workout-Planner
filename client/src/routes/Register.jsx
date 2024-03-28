@@ -33,7 +33,7 @@ const Register = () => {
     },
   });
 
-  const { mutate: traditionalRegister } = useMutation({
+  const { mutate: traditionalRegister, isPending } = useMutation({
     mutationFn: (data) => {
       return axios.post(
         `${import.meta.env.VITE_API}/auth/registerTraditional`,
@@ -110,6 +110,7 @@ const Register = () => {
                 "border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
               }
               handleClick={handleRegister}
+              isPending={isPending}
             />
           </div>
         </form>
