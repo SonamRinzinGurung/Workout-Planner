@@ -9,14 +9,14 @@ const Button = ({
   isPending,
 }) => {
   return (
-    <button onClick={handleClick} disabled={isPending}>
+    <button onClick={handleClick} disabled={isPending} className={
+      `rounded-md hover:shadow-md dark:hover:shadow-gray-800 transition-colors ease-in-out duration-300` +
+      ` ` +
+      className + ` ` +
+      `${isPending && "opacity-30"}`
+    }>
       <div
-        className={
-          `flex p-2 gap-2 rounded-md items-center justify-center hover:shadow-md dark:hover:shadow-gray-800 transition ease-in-out duration-300` +
-          ` ` +
-          className +
-          `${isPending && " opacity-30"}`
-        }
+        className="flex p-2 gap-1 items-center justify-center"
       >
         {position === 1 && icon}
         <p className="font-medium">{name}</p>

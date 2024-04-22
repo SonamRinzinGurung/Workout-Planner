@@ -2,15 +2,9 @@ import { ExerciseForm } from "./index";
 import PropTypes from "prop-types";
 import { handleRemoveExercise } from "../utils/formHandlers";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
+import { reorderList } from "../utils/reorderList";
 
 const ExerciseGroupForm = ({ workoutItem, workoutIndex, setFormData }) => {
-    const reorder = (list, startIndex, endIndex) => {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
-
-        return result;
-    };
 
     const onDragEnd = (result) => {
         if (!result.destination) {
@@ -20,7 +14,7 @@ const ExerciseGroupForm = ({ workoutItem, workoutIndex, setFormData }) => {
             return;
         }
 
-        const reorderedList = reorder(
+        const reorderedList = reorderList(
             workoutItem.exercises,
             result.source.index,
             result.destination.index

@@ -75,9 +75,9 @@ const CreatePlan = () => {
         ref={scrollRef}
         className="mb-4 flex justify-center items-center gap-2"
       >
-        <p className="text-center font-heading font-bold text-2xl text-green-500">
+        <h1 className="text-center font-heading font-bold text-2xl text-green-500">
           {isLoading ? "Creating" : "Create"} Workout Plan
-        </p>
+        </h1>
         {isLoading && (
           <ReactLoading
             height="32px"

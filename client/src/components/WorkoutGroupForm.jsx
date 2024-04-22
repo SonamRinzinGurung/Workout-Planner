@@ -1,27 +1,11 @@
 import PropTypes from "prop-types";
 import { Button, WorkoutForm } from ".";
 import { IoAddCircle } from "react-icons/io5";
-import { useRef, useEffect } from "react";
 import { handleAddWorkout } from "../utils/formHandlers";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
+import { reorderList } from "../utils/reorderList";
 
 const WorkoutGroupForm = ({ workouts, setFormData }) => {
-  const scrollRef = useRef(null);
-
-  useEffect(() => {
-    //scrolls to the bottom of the page when changes in the length of workout array occurs
-    if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [workouts.length]);
-
-  const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-
-    return result;
-  };
 
   const onDragEnd = (result) => {
     if (!result.destination) {
@@ -31,7 +15,7 @@ const WorkoutGroupForm = ({ workouts, setFormData }) => {
       return;
     }
 
-    const reorderedList = reorder(
+    const reorderedList = reorderList(
       workouts,
       result.source.index,
       result.destination.index
@@ -71,7 +55,7 @@ const WorkoutGroupForm = ({ workouts, setFormData }) => {
         </Droppable>
       </DragDropContext>
 
-      <div id="add-workout" ref={scrollRef}>
+      <div id="add-workout">
         <Button
           name="Workout"
           handleClick={() => handleAddWorkout(setFormData)}

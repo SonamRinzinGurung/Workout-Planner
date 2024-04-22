@@ -57,15 +57,15 @@ const Plan = ({ _id, name, workouts, source, handleDelete, handleRestore, setFor
         className="relative flex justify-center items-center gap-4"
       >
         {source === "create" && (
-          <div className="flex flex-col items-center gap-1">
+          <div className="flex flex-col items-center gap-1 mb-4">
             <div>
-              <p className="font-subHead font-semibold text-center">
+              <p className="font-subHead text-center">
                 Name the Workout Plan
               </p>
             </div>
             <div>
               <InputText
-                name="name"
+                name="plan name"
                 value={name}
                 handleChange={handleNameChange}
               />

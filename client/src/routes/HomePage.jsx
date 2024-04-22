@@ -40,9 +40,9 @@ const HomePage = () => {
   return (
     <div className="p-2 my-10 text-gray-900 dark:text-gray-100 flex flex-col">
       <div className="self-center">
-        <p className="font-bold font-heading text-2xl text-green-500">
+        <h1 className="font-bold font-heading text-2xl text-green-500">
           Workout Plan
-        </p>
+        </h1>
       </div>
       <div className="flex flex-col gap-8 mt-4">
         {data?.map((item) => {
