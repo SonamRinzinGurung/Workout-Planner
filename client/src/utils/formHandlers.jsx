@@ -4,14 +4,14 @@ export const handleWorkoutChange = (
   workoutIndex,
   event
 ) => {
-  setFormData({
-    ...formData,
-    workouts: formData.workouts.map((item, i) =>
+  setFormData((prevState) => ({
+    ...prevState,
+    workouts: formData.map((item, i) =>
       i === workoutIndex
         ? { ...item, [event.target.name]: event.target.value }
         : item
     ),
-  });
+  }));
 };
 
 export const handleExerciseChange = (
@@ -47,7 +47,8 @@ export const handleAddWorkout = (setFormData) => {
       ...prevState.workouts,
       {
         title: "",
-        exercises: [{ name: "", sets: "", reps: "", weight: "" }],
+        exercises: [{ name: "", sets: "", reps: "", weight: "", order: 0 }],
+        order: prevState.workouts.length, //index of the new workout
       },
     ], // Add a new item to the workouts array
   }));
@@ -62,7 +63,7 @@ export const handleAddExercise = (setFormData, workoutIndex) => {
             ...item,
             exercises: [
               ...item.exercises,
-              { name: "", sets: "", reps: "", weight: "" },
+              { name: "", sets: "", reps: "", weight: "", order: item.exercises.length },
             ],
           }
         : item
@@ -73,7 +74,10 @@ export const handleAddExercise = (setFormData, workoutIndex) => {
 export const handleRemoveWorkout = (setFormData, workoutIndex) => {
   setFormData((prevState) => ({
     ...prevState,
-    workouts: prevState.workouts.filter((_, i) => i !== workoutIndex),
+    workouts: prevState.workouts.filter((_, i) => i !== workoutIndex).map((item, i) => ({
+      ...item,
+      order: i,
+    })),
   }));
 };
 
@@ -90,7 +94,10 @@ export const handleRemoveExercise = (
             ...workoutItem,
             exercises: workoutItem.exercises.filter(
               (_, j) => j !== exerciseIndex
-            ),
+          ).map((exerciseItem, j) => ({
+            ...exerciseItem,
+            order: j,
+          })),
           }
         : workoutItem
     ),

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import { Workout, Button } from ".";
+import { Workout, Button, InputText } from ".";
 import { useNavigate } from "react-router-dom";
 import vine from "../assets/vine.png";
 import sakura from "../assets/sakura.png";
@@ -9,7 +9,7 @@ import axiosFetch from "../utils/axiosInterceptor";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-const Plan = ({ _id, name, workouts, source, handleDelete, handleRestore }) => {
+const Plan = ({ _id, name, workouts, source, handleDelete, handleRestore, setFormData }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -44,20 +44,44 @@ const Plan = ({ _id, name, workouts, source, handleDelete, handleRestore }) => {
     },
   });
 
+  const handleNameChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      name: e.target.value
+    }))
+  }
   return (
     <div className="p-2 flex flex-col gap-2">
       <div
         ref={modalRef}
         className="relative flex justify-center items-center gap-4"
       >
-        <div className="flex ">
+        {source === "create" && (
+          <div className="flex flex-col items-center gap-1">
+            <div>
+              <p className="font-subHead font-semibold text-center">
+                Name the Workout Plan
+              </p>
+            </div>
+            <div>
+              <InputText
+                name="name"
+                value={name}
+                handleChange={handleNameChange}
+              />
+            </div>
+          </div>)}
+        {source !== "create" && (
+
+          <div className="flex ">
           <img src={vine} alt="vine" className="w-8 h-8" />
           <p className="font-subHead font-semibold italic -ml-1 self-center">
             {name}
           </p>
           <img src={sakura} alt="sakura" className="w-10 h-10" />
         </div>
-        {source && (
+        )}
+        {source !== "create" && (
           <button
             className="relative rounded-full p-1 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-800"
             onClick={() => setModalState((prev) => !prev)}
@@ -128,6 +152,7 @@ Plan.propTypes = {
   source: PropTypes.string,
   handleDelete: PropTypes.func,
   handleRestore: PropTypes.func,
+  setFormData: PropTypes.func,
 };
 
 export default Plan;

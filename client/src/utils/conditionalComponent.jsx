@@ -1,15 +1,13 @@
-import { FirstForm, SecondForm, ConfirmationPage } from "../components";
+import { WorkoutGroupForm, ConfirmationPage } from "../components";
 
 const conditionalComponent = ({ page, formData, setFormData }) => {
   switch (page) {
     case 0:
-      return <FirstForm formData={formData} setFormData={setFormData} />;
+      return <WorkoutGroupForm workouts={formData.workouts} setFormData={setFormData} />
     case 1:
-      return <SecondForm formData={formData} setFormData={setFormData} />;
-    case 2:
-      return <ConfirmationPage formData={formData} />;
+      return <ConfirmationPage formData={formData} setFormData={setFormData} />;
     default:
-      return <FirstForm formData={formData} setFormData={setFormData} />;
+      return <WorkoutGroupForm workouts={formData.workouts} setFormData={setFormData} />;
   }
 };
 

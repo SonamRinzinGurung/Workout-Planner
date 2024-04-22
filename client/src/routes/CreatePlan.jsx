@@ -23,7 +23,8 @@ const CreatePlan = () => {
     workouts: [
       {
         title: "",
-        exercises: [{ name: "", sets: "", reps: "", weight: "" }],
+        exercises: [{ name: "", sets: "", reps: "", weight: "", order: 0 }],
+        order: 0,
       },
     ],
   });
@@ -60,7 +61,7 @@ const CreatePlan = () => {
 
     if (!isValid) {
       messages.forEach((message) => toast.error(message));
-      setPage(1);
+      setPage(0);
     }
     if (isValid) {
       createPlanMutation(formData);
@@ -98,7 +99,7 @@ const CreatePlan = () => {
               position={1}
             />
           )}
-          {page >= 0 && page < 2 ? (
+          {page === 0 && (
             <Button
               name="Next"
               handleClick={handleNext}
@@ -106,8 +107,8 @@ const CreatePlan = () => {
               icon={<GrNext className="" />}
               position={2}
             />
-          ) : null}
-          {page > 1 && (
+          )}
+          {page === 1 && (
             <Button
               name="Submit"
               handleClick={handleSubmit}

@@ -18,7 +18,11 @@ const exerciseSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    order: {
+      type: Number,
+    },
   },
+
   {
     timestamps: true,
   }

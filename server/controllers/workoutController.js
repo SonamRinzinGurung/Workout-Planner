@@ -38,7 +38,6 @@ const getPlans = async (req, res) => {
       path: "workouts",
       model: "Workout",
       select: "-createdAt -updatedAt -__v",
-
       populate: {
         path: "exercises",
         model: "Exercise",
@@ -46,6 +45,17 @@ const getPlans = async (req, res) => {
       },
     })
     .sort("-createdAt");
+
+  plans.forEach((plan) => {
+    plan.workouts.sort((a, b) => a.order - b.order);
+  });
+
+  plans.forEach((plan) => {
+    plan.workouts.forEach((workout) => {
+      workout.exercises.sort((a, b) => a.order - b.order);
+    });
+  });
+
   res.status(200).json(plans);
 };
 
@@ -93,6 +103,13 @@ const getPlanDetails = async (req, res) => {
       select: "-createdAt -updatedAt -__v",
     },
   });
+
+  plans.workouts.sort((a, b) => a.order - b.order);
+
+  plans.workouts.forEach((workout) => {
+    workout.exercises.sort((a, b) => a.order - b.order);
+  });
+
   res.status(200).json(plans);
 };
 
@@ -171,6 +188,17 @@ const getRemovedPlans = async (req, res) => {
       },
     })
     .sort("-updatedAt");
+
+  plans.forEach((plan) => {
+    plan.workouts.sort((a, b) => a.order - b.order);
+  });
+
+  plans.forEach((plan) => {
+    plan.workouts.forEach((workout) => {
+      workout.exercises.sort((a, b) => a.order - b.order);
+    });
+  });
+
   res.status(200).json(plans);
 };
 

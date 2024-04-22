@@ -20,6 +20,9 @@ const workoutSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    order: {
+      type: Number,
+    },
   },
   {
     timestamps: true,

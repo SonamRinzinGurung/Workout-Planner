@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Plan } from "../components";
 
-const ConfirmationPage = ({ formData }) => {
+const ConfirmationPage = ({ formData, setFormData }) => {
   return (
     <div>
       <div>
@@ -9,12 +9,13 @@ const ConfirmationPage = ({ formData }) => {
           Confirmation Page
         </p>
       </div>
-      <Plan {...formData} />
+      <Plan {...formData} source="create" setFormData={setFormData} />
     </div>
   );
 };
 
 ConfirmationPage.propTypes = {
   formData: PropTypes.object.isRequired,
+  setFormData: PropTypes.func.isRequired,
 };
 export default ConfirmationPage;
