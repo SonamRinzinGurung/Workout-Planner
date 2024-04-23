@@ -1,6 +1,6 @@
 ## Fit Plan
 
-A simple app where you can create your own workout plan and exercises to keep track of which exercises you will be hitting for the day.
+A simple app where you can create your own workout plans. Allows drag and drop to freely customize your workout and exercise sequences as well.
 
 Live Site - [FitPlan](https://fitplan.onrender.com/)
 
