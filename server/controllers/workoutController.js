@@ -62,30 +62,78 @@ const getPlans = async (req, res) => {
 const patchWorkout = async (req, res) => {
   const { _id } = req.body;
 
-  let { workouts } = req.body;
-
+  let { workouts, name, deletedExercises, deletedWorkouts } = req.body;
   const plan = await Plan.findById(_id);
 
   if (!plan) {
     throw new BadRequestError("Workout Plan not found");
   }
 
-  for (const workout of workouts) {
-    for (const exercise of workout.exercises) {
-      await Exercise.findOneAndUpdate({ _id: exercise._id }, exercise, {
+  for (let i = 0; i < workouts.length; i++) {
+    for (let j = 0; j < workouts[i].exercises.length; j++) {
+      if (workouts[i].exercises[j]._id) {
+        // if exercise already exists
+        await Exercise.findOneAndUpdate(
+          { _id: workouts[i].exercises[j]._id },
+          workouts[i].exercises[j],
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+      } else {
+        // if exercise is new
+        const exercise = await Exercise.create(workouts[i].exercises[j]);
+        workouts[i].exercises[j] = exercise._id;
+        workouts[i].user = req.user.userId;
+      }
+    }
+    if (workouts[i]._id) {
+      // if workout already exists
+      await Workout.findOneAndUpdate({ _id: workouts[i]._id }, workouts[i], {
         new: true,
         runValidators: true,
       });
+    } else {
+      // if new workout
+      const workout = await Workout.create(workouts[i]);
+      workouts[i] = workout._id;
     }
-    await Workout.findOneAndUpdate(
-      { _id: workout._id },
-      { title: workout.title },
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
   }
+
+  // update the plan
+  try {
+    plan.name = name;
+    plan.workouts = workouts;
+    await plan.save();
+  } catch (error) {
+    throw new BadRequestError("Error updating workout plan");
+  }
+
+  // delete the workouts and exercises that are removed
+  if (deletedWorkouts.length > 0) {
+    for (const workoutId of deletedWorkouts) {
+      const workout = await Workout.findById(workoutId);
+      deletedExercises.push(...workout.exercises.toString().split(","));
+
+      //remove duplicate ids from deletedExercises
+      deletedExercises = [...new Set(deletedExercises)];
+
+      await Workout.deleteOne({
+        _id: workoutId,
+      });
+    }
+  }
+
+  if (deletedExercises.length > 0) {
+    for (const exerciseId of deletedExercises) {
+      await Exercise.deleteOne({
+        _id: exerciseId,
+      });
+    }
+  }
+  // end of delete
+
   res.status(200).json({ message: "Workout Plan Updated" });
 };
 

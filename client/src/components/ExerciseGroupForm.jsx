@@ -4,7 +4,7 @@ import { handleRemoveExercise } from "../utils/formHandlers";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { reorderList } from "../utils/reorderList";
 
-const ExerciseGroupForm = ({ workoutItem, workoutIndex, setFormData }) => {
+const ExerciseGroupForm = ({ workoutItem, workoutIndex, setFormData, setDeletedExercises }) => {
 
     const onDragEnd = (result) => {
         if (!result.destination) {
@@ -50,6 +50,7 @@ const ExerciseGroupForm = ({ workoutItem, workoutIndex, setFormData }) => {
                                 workoutIndex={workoutIndex}
                                 handleRemoveExercise={handleRemoveExercise}
                                 setFormData={setFormData}
+                                setDeletedExercises={setDeletedExercises}
                             />
                         ))}
                         {provided.placeholder}
@@ -66,4 +67,5 @@ ExerciseGroupForm.propTypes = {
     workoutItem: PropTypes.object.isRequired,
     workoutIndex: PropTypes.number.isRequired,
     setFormData: PropTypes.func.isRequired,
+    setDeletedExercises: PropTypes.func,
 };

@@ -4,7 +4,7 @@ import useSetTitle from "../utils/useSetTitle";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import ReactLoading from "react-loading";
 import axiosFetch from "../utils/axiosInterceptor";
-import { Button, WorkoutForm } from "../components";
+import { Button, WorkoutForm, InputText } from "../components";
 import { MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
 import { delay } from "../utils/delayFetch";
@@ -31,6 +31,9 @@ const EditWorkout = () => {
     ],
   });
 
+  const [deletedWorkouts, setDeletedWorkouts] = useState([]);
+  const [deletedExercises, setDeletedExercises] = useState([]);
+
   const { isPending, error } = useQuery({
     queryKey: ["workout-plan-detail"],
     queryFn: async () => {
@@ -47,6 +50,8 @@ const EditWorkout = () => {
       await delay(500);
       const { data } = await axiosFetch.patch("/workout-plan/edit-workout/", {
         ...formData,
+        deletedWorkouts,
+        deletedExercises,
       });
       return data;
     },
@@ -80,6 +85,13 @@ const EditWorkout = () => {
       </div>
     );
   }
+
+  const handleNameChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      name: e.target.value,
+    }));
+  };
 
   const handleSubmit = () => {
     const { isValid, messages } = formValidation(formData);
@@ -123,15 +135,32 @@ const EditWorkout = () => {
               {...provided.droppableProps}
               className="mt-10 text-gray-900 dark:text-gray-100 flex flex-col items-center"
             >
-              <div className="mb-4 flex justify-center items-center gap-2">
+              <div className="mb-4">
                 <p className="text-center font-heading font-bold text-2xl text-green-500">
                   Edit Workout
                 </p>
               </div>
 
-              <div className="dark:text-gray-100 justify-center">
+              <div className="flex flex-col items-center gap-1 mb-4">
+                <div>
+                  <p className="font-subHead text-center">
+                    Name of the Workout Plan
+                  </p>
+                </div>
+                <div>
+                  <InputText
+                    name="plan name"
+                    value={formData?.name}
+                    handleChange={handleNameChange}
+                  />
+                </div>
+              </div>
+
+              <div className="dark:text-gray-100">
                 {formData.workouts.map((workoutItem, workoutIndex) => (
                   <WorkoutForm
+                    setDeletedExercises={setDeletedExercises}
+                    setDeletedWorkouts={setDeletedWorkouts}
                     key={workoutIndex}
                     workoutIndex={workoutIndex}
                     workoutItem={workoutItem}

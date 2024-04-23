@@ -10,7 +10,16 @@ import { MdDeleteOutline } from "react-icons/md";
 import { Draggable } from "@hello-pangea/dnd";
 import { TbDragDrop2 } from "react-icons/tb";
 
-const WorkoutForm = ({ workoutIndex, workoutItem, workouts, setFormData }) => {
+const WorkoutForm = ({ workoutIndex, workoutItem, workouts, setFormData, setDeletedExercises, setDeletedWorkouts }) => {
+
+    const handleWorkoutRemoval = (setFormData, workoutIndex) => {
+
+        if (workoutItem._id) {
+            setDeletedWorkouts((prevState) => [...prevState, workoutItem._id]);
+        }
+
+        handleRemoveWorkout(setFormData, workoutIndex)
+    }
     return (
         <Draggable draggableId={workoutIndex.toString()} index={workoutIndex}>
             {(provided) => (
@@ -51,6 +60,7 @@ const WorkoutForm = ({ workoutIndex, workoutItem, workouts, setFormData }) => {
                             workoutItem={workoutItem}
                             workoutIndex={workoutIndex}
                             setFormData={setFormData}
+                            setDeletedExercises={setDeletedExercises}
                         />
 
                         <button
@@ -63,7 +73,7 @@ const WorkoutForm = ({ workoutIndex, workoutItem, workouts, setFormData }) => {
                     </div>
 
                     <button
-                        onClick={() => handleRemoveWorkout(setFormData, workoutIndex)}
+                        onClick={() => handleWorkoutRemoval(setFormData, workoutIndex)}
                         className="flex justify-center p-2 rounded-md bg-red-400 hover:bg-red-500 hover:shadow-md transition ease-in-out duration-300 text-gray-100 hover:text-gray-200 dark:text-gray-900 dark:hover:text-gray-800"
                     >
                         <MdDeleteOutline className="text-center" />
@@ -82,4 +92,6 @@ WorkoutForm.propTypes = {
     setFormData: PropTypes.func.isRequired,
     workoutIndex: PropTypes.number.isRequired,
     workoutItem: PropTypes.object.isRequired,
+    setDeletedExercises: PropTypes.func,
+    setDeletedWorkouts: PropTypes.func,
 };
