@@ -12,6 +12,7 @@ import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { handleAddWorkout } from "../utils/formHandlers";
 import { IoAddCircle } from "react-icons/io5";
 import { reorderList } from "../utils/reorderList";
+import { formValidation } from "../utils/formValidator";
 
 const EditWorkout = () => {
   const { id } = useParams();
@@ -81,7 +82,13 @@ const EditWorkout = () => {
   }
 
   const handleSubmit = () => {
-    editWorkout(formData);
+    const { isValid, messages } = formValidation(formData);
+    if (!isValid) {
+      messages.forEach((message) => toast.error(message));
+    }
+    if (isValid) {
+      editWorkout(formData);
+    }
   };
   const onDragEnd = (result) => {
     if (!result.destination) {

@@ -8,7 +8,7 @@ const Empty = () => {
           You have no workout plans yet!
         </p>
       </div>
-      <div className="border rounded-md p-2 transition ease-in-out duration-200 hover:bg-primary hover:shadow-md">
+      <div className="border rounded-md p-2 transition ease-in-out duration-200 hover:bg-primary hover:shadow-md hover:text-gray-100">
         <Link to={"/create"}>
           <button className="font-subHead font-medium">Create One Here</button>
         </Link>

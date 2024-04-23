@@ -1,3 +1,4 @@
+import { useState } from "react";
 import useSetTitle from "../utils/useSetTitle";
 import axiosFetch from "../utils/axiosInterceptor";
 import { Plan } from "../components";
@@ -9,6 +10,7 @@ import { toast } from "react-toastify";
 const RemovedPlans = () => {
   useSetTitle("Removed Plans");
   const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { isPending, error, data } = useQuery({
     queryKey: ["removed-plan"],
@@ -22,30 +24,36 @@ const RemovedPlans = () => {
 
   const { mutate: restorePlan } = useMutation({
     mutationFn: async (id) => {
+      setIsLoading(true);
       const { data } = await axiosFetch.delete(`/workout-plan/${id}`);
       return data;
     },
     onSuccess: () => {
+      setIsLoading(false);
       toast.success("Workout plan restored successfully");
       queryClient.invalidateQueries("removed-plan");
     },
     onError: (data) => {
+      setIsLoading(false);
       toast.error(data.response.data.msg);
     },
   });
 
   const { mutate: deletePlan } = useMutation({
     mutationFn: async (id) => {
+      setIsLoading(true);
       const { data } = await axiosFetch.delete(
         `/workout-plan/deletePlan/${id}`
       );
       return data;
     },
     onSuccess: () => {
+      setIsLoading(false);
       toast.success("Workout plan deleted permanently.");
       queryClient.invalidateQueries("removed-plan");
     },
     onError: (data) => {
+      setIsLoading(false);
       toast.error(data.response.data.msg);
     },
   });
@@ -95,6 +103,7 @@ const RemovedPlans = () => {
               source={"removed"}
               handleRestore={restorePlan}
               handleDelete={deletePlan}
+              removeLoading={isLoading}
             />
           );
         })}

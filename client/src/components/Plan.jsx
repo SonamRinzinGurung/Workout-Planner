@@ -8,8 +8,18 @@ import { BsThreeDots } from "react-icons/bs";
 import axiosFetch from "../utils/axiosInterceptor";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import ReactLoading from "react-loading";
 
-const Plan = ({ _id, name, workouts, source, handleDelete, handleRestore, setFormData }) => {
+const Plan = ({
+  _id,
+  name,
+  workouts,
+  source,
+  handleDelete,
+  handleRestore,
+  setFormData,
+  removeLoading,
+}) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -30,8 +40,9 @@ const Plan = ({ _id, name, workouts, source, handleDelete, handleRestore, setFor
     };
   }, [setModalState]);
 
-  const { mutate: removePlan } = useMutation({
+  const { mutate: removePlan, isPending } = useMutation({
     mutationFn: async (id) => {
+      setModalState(false);
       const { data } = await axiosFetch.delete(`/workout-plan/${id}`);
       return data;
     },
@@ -47,9 +58,9 @@ const Plan = ({ _id, name, workouts, source, handleDelete, handleRestore, setFor
   const handleNameChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
-      name: e.target.value
-    }))
-  }
+      name: e.target.value,
+    }));
+  };
   return (
     <div className="p-2 flex flex-col gap-2">
       <div
@@ -59,9 +70,7 @@ const Plan = ({ _id, name, workouts, source, handleDelete, handleRestore, setFor
         {source === "create" && (
           <div className="flex flex-col items-center gap-1 mb-4">
             <div>
-              <p className="font-subHead text-center">
-                Name the Workout Plan
-              </p>
+              <p className="font-subHead text-center">Name the Workout Plan</p>
             </div>
             <div>
               <InputText
@@ -70,23 +79,32 @@ const Plan = ({ _id, name, workouts, source, handleDelete, handleRestore, setFor
                 handleChange={handleNameChange}
               />
             </div>
-          </div>)}
+          </div>
+        )}
         {source !== "create" && (
-
           <div className="flex ">
-          <img src={vine} alt="vine" className="w-8 h-8" />
-          <p className="font-subHead font-semibold italic -ml-1 self-center">
-            {name}
-          </p>
-          <img src={sakura} alt="sakura" className="w-10 h-10" />
-        </div>
+            <img src={vine} alt="vine" className="w-8 h-8" />
+            <p className="font-subHead font-semibold italic -ml-1 self-center">
+              {name}
+            </p>
+            <img src={sakura} alt="sakura" className="w-10 h-10" />
+          </div>
         )}
         {source !== "create" && (
           <button
             className="relative rounded-full p-1 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-800"
             onClick={() => setModalState((prev) => !prev)}
           >
-            <BsThreeDots size="25" />
+            {isPending || removeLoading ? (
+              <ReactLoading
+                height="28px"
+                width="28px"
+                type="balls"
+                color="#ffffff"
+              />
+            ) : (
+                <BsThreeDots size="25" />
+            )}
           </button>
         )}
         <div
@@ -110,6 +128,7 @@ const Plan = ({ _id, name, workouts, source, handleDelete, handleRestore, setFor
                     name="Delete"
                     className={"bg-red-600 text-gray-50 hover:bg-red-700"}
                     handleClick={() => removePlan(_id)}
+                    isPending={isPending}
                   />
                 </>
               )}
@@ -120,12 +139,20 @@ const Plan = ({ _id, name, workouts, source, handleDelete, handleRestore, setFor
                     name="Restore"
                     className="border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
                     position={2}
-                    handleClick={() => handleRestore(_id)}
+                    handleClick={() => {
+                      handleRestore(_id);
+                      setModalState(false);
+                    }}
+                    isPending={removeLoading}
                   />
                   <Button
                     name="Delete"
                     className="bg-red-600 text-gray-50 hover:bg-red-700"
-                    handleClick={() => handleDelete(_id)}
+                    handleClick={() => {
+                      handleDelete(_id);
+                      setModalState(false);
+                    }}
+                    isPending={removeLoading}
                   />
                 </>
               )}
@@ -153,6 +180,7 @@ Plan.propTypes = {
   handleDelete: PropTypes.func,
   handleRestore: PropTypes.func,
   setFormData: PropTypes.func,
+  removeLoading: PropTypes.bool,
 };
 
 export default Plan;
