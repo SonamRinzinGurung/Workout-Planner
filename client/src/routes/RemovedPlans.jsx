@@ -94,7 +94,7 @@ const RemovedPlans = () => {
           Removed Workout Plan
         </h1>
       </div>
-      <div className="flex flex-col gap-8 mt-4">
+      <div className="flex flex-col gap-8 mt-4 lg:w-2/3 lg:mx-auto">
         {data?.map((item) => {
           return (
             <Plan

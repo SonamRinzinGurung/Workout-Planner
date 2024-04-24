@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { Workout, Button, InputText } from ".";
 import { useNavigate } from "react-router-dom";
-import vine from "../assets/vine.png";
-import sakura from "../assets/sakura.png";
 import { BsThreeDots } from "react-icons/bs";
 import axiosFetch from "../utils/axiosInterceptor";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -62,13 +60,13 @@ const Plan = ({
     }));
   };
   return (
-    <div className="p-2 flex flex-col gap-2">
+    <div className="flex flex-col rounded-sm"> 
       <div
         ref={modalRef}
-        className="relative flex justify-center items-center gap-4"
+        className="relative flex flex-col items-center"
       >
         {source === "create" && (
-          <div className="flex flex-col items-center gap-1 mb-4">
+          <div className="flex flex-col items-center gap-1 my-4">
             <div>
               <p className="font-subHead text-center">Name the Workout Plan</p>
             </div>
@@ -82,15 +80,14 @@ const Plan = ({
           </div>
         )}
         {source !== "create" && (
-          <div className="flex ">
-            <img src={vine} alt="vine" className="w-8 h-8" />
-            <p className="font-subHead font-semibold italic -ml-1 self-center">
+          <div className="flex justify-center items-center gap-4 bg-emerald-400 dark:bg-emerald-800 rounded-sm rounded-b-none w-full py-2">
+
+            <div>
+              <p className="font-subHead font-semibold text-lg italic self-center">
               {name}
-            </p>
-            <img src={sakura} alt="sakura" className="w-10 h-10" />
+              </p>
           </div>
-        )}
-        {source !== "create" && (
+
           <button
             className="relative rounded-full p-1 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-800"
             onClick={() => setModalState((prev) => !prev)}
@@ -106,6 +103,8 @@ const Plan = ({
                 <BsThreeDots size="25" />
             )}
           </button>
+          </div>
+
         )}
         <div
           className={`absolute top-full min-w-48  h-full flex justify-center items-center z-50 ${
@@ -113,7 +112,7 @@ const Plan = ({
           }`}
           style={{ transition: "opacity 0.4s" }}
         >
-          <div className="absolute p-4 w-full bg-gray-50 shadow-md border rounded-lg  flex flex-col items-center top-6 dark:bg-gray-900">
+          <div className="absolute p-4 w-full bg-gray-200 shadow-md border border-gray-400 rounded-lg  flex flex-col items-center top-1 dark:bg-gray-900">
             <div className="flex flex-col w-10/12 gap-4">
               {source === "home" && (
                 <>
@@ -161,7 +160,7 @@ const Plan = ({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-3 justify-center">
+      <div className={`flex flex-wrap gap-3 justify-center mb-2 px-2 py-6 ${source !== 'create' && 'border border-t-0 border-emerald-400 dark:border-emerald-800 border-x-2 rounded-sm rounded-t-none bg-emerald-50 dark:bg-black'}`}>
         {workouts?.map((workout, index) => {
           return (
             <Workout key={index} {...workout} planId={_id} source={source} />
