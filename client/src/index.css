@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.modalMenuLinks {
+  @apply w-full text-center hover:bg-gray-200 hover:shadow-md transition ease-in-out duration-300 dark:hover:bg-gray-800 py-3 border-b-2;
+}
+
+.navLinks {
+  @apply p-4 hover:bg-primary hover:text-gray-100 hidden lg:block;
+}
