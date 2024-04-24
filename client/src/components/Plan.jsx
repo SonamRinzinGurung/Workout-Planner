@@ -60,7 +60,7 @@ const Plan = ({
     }));
   };
   return (
-    <div className="flex flex-col rounded-sm"> 
+    <div className="flex flex-col rounded-md"> 
       <div
         ref={modalRef}
         className="relative flex flex-col items-center"
@@ -80,7 +80,7 @@ const Plan = ({
           </div>
         )}
         {source !== "create" && (
-          <div className="flex justify-center items-center gap-4 bg-emerald-400 dark:bg-emerald-800 rounded-sm rounded-b-none w-full py-2">
+          <div className="flex justify-center items-center gap-4 bg-emerald-400 dark:bg-emerald-800 rounded-md rounded-b-none w-full py-2">
 
             <div>
               <p className="font-subHead font-semibold text-lg italic self-center">
@@ -160,7 +160,7 @@ const Plan = ({
         </div>
       </div>
 
-      <div className={`flex flex-wrap gap-3 justify-center mb-2 px-2 py-6 ${source !== 'create' && 'border border-t-0 border-emerald-400 dark:border-emerald-800 border-x-2 rounded-sm rounded-t-none bg-emerald-50 dark:bg-black'}`}>
+      <div className={`flex flex-wrap gap-3 justify-center mb-2 px-2 py-6 ${source !== 'create' && 'border border-t-0 border-emerald-400 dark:border-emerald-800 border-x-2 rounded-md rounded-t-none bg-emerald-50 dark:bg-black'}`}>
         {workouts?.map((workout, index) => {
           return (
             <Workout key={index} {...workout} planId={_id} source={source} />
