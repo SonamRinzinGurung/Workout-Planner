@@ -38,14 +38,14 @@ const Plan = ({
     };
   }, [setModalState]);
 
-  const { mutate: removePlan, isPending } = useMutation({
+  const { mutate: archivePlan, isPending } = useMutation({
     mutationFn: async (id) => {
       setModalState(false);
-      const { data } = await axiosFetch.delete(`/workout-plan/${id}`);
+      const { data } = await axiosFetch.delete(`/workout-plan/archive-plan/${id}`);
       return data;
     },
     onSuccess: () => {
-      toast.success("Workout plan moved to removed .");
+      toast.success("Workout plan moved to archives");
       queryClient.invalidateQueries("workout-plan");
     },
     onError: (data) => {
@@ -112,7 +112,7 @@ const Plan = ({
           }`}
           style={{ transition: "opacity 0.4s" }}
         >
-          <div className="absolute p-4 w-full bg-gray-200 shadow-md border border-gray-400 rounded-lg  flex flex-col items-center top-1 dark:bg-gray-900">
+          <div className="absolute p-4 w-full bg-gray-200 shadow-md border border-gray-400 rounded-lg  flex flex-col items-center top-1 dark:bg-gray-800">
             <div className="flex flex-col w-10/12 gap-4">
               {source === "home" && (
                 <>
@@ -124,15 +124,15 @@ const Plan = ({
                     handleClick={() => navigate(`/edit/${_id}`)}
                   />
                   <Button
-                    name="Delete"
+                    name="Archive"
                     className={"bg-red-600 text-gray-50 hover:bg-red-700"}
-                    handleClick={() => removePlan(_id)}
+                    handleClick={() => archivePlan(_id)}
                     isPending={isPending}
                   />
                 </>
               )}
 
-              {source === "removed" && (
+              {source === "archived" && (
                 <>
                   <Button
                     name="Restore"
@@ -160,7 +160,7 @@ const Plan = ({
         </div>
       </div>
 
-      <div className={`flex flex-wrap gap-3 justify-center mb-2 px-2 py-6 ${source !== 'create' && 'border border-t-0 border-emerald-400 dark:border-emerald-800 border-x-2 rounded-md rounded-t-none bg-emerald-50 dark:bg-black'}`}>
+      <div className={`flex flex-wrap gap-3 justify-center mb-2 px-2 py-6 ${source !== 'create' && 'border border-t-0 border-emerald-400 dark:border-emerald-800 border-x-2 rounded-md rounded-t-none bg-emerald-50 dark:bg-emerald-900'}`}>
         {workouts?.map((workout, index) => {
           return (
             <Workout key={index} {...workout} planId={_id} source={source} />

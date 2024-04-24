@@ -161,7 +161,7 @@ const getPlanDetails = async (req, res) => {
   res.status(200).json(plans);
 };
 
-const toggleRemovePlan = async (req, res) => {
+const toggleArchivePlan = async (req, res) => {
   const { planId } = req.params;
 
   const plan = await Plan.findOne({ _id: planId, user: req.user.userId });
@@ -219,7 +219,7 @@ const deletePlan = async (req, res) => {
   });
 };
 
-const getRemovedPlans = async (req, res) => {
+const getArchivedPlans = async (req, res) => {
   const plans = await Plan.find({
     isDeleted: true,
     user: req.user.userId,
@@ -301,9 +301,9 @@ export {
   getPlans,
   patchWorkout,
   getPlanDetails,
-  toggleRemovePlan,
+  toggleArchivePlan,
   deletePlan,
-  getRemovedPlans,
+  getArchivedPlans,
   addExercise,
   addWorkout,
 };

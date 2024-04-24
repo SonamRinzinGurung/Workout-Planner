@@ -23,10 +23,10 @@ const MenuLinks = ({ handleClick }) => {
       </Link>
       <Link
         className="modalMenuLinks"
-        to="/removed-plans"
+        to="/archived-plans"
         onClick={handleClick}
       >
-        <p className="font-subHead font-medium py-1 text-lg">Removed Plans</p>
+        <p className="font-subHead font-medium py-1 text-lg">Archives</p>
       </Link>
     </>
   );

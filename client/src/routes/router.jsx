@@ -60,7 +60,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/removed-plans",
+        path: "/archived-plans",
         element: (
           <RouteProtector>
             <RemovedPlans />

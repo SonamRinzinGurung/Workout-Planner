@@ -113,10 +113,10 @@ const Header = () => {
                   Create Plan
                 </Link>
                 <Link
-                  to="/removed-plans"
+                  to="/archived-plans"
                   className="navLinks"
                 >
-                  Removed Plans
+                  Archives
                 </Link>
                 <button onClick={toggleMenu}>
                   <div className="p-4 hover:bg-primary hover:text-gray-100 lg:hidden">

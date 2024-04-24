@@ -17,7 +17,7 @@ const RemovedPlans = () => {
     queryFn: async () => {
       await delay(1000);
       return axiosFetch
-        .get(`/workout-plan/getRemovedPlans/`)
+        .get(`/workout-plan/getArchivedPlans/`)
         .then((res) => res.data);
     },
   });
@@ -25,7 +25,7 @@ const RemovedPlans = () => {
   const { mutate: restorePlan } = useMutation({
     mutationFn: async (id) => {
       setIsLoading(true);
-      const { data } = await axiosFetch.delete(`/workout-plan/${id}`);
+      const { data } = await axiosFetch.delete(`/workout-plan/archive-plan/${id}`);
       return data;
     },
     onSuccess: () => {
@@ -81,7 +81,7 @@ const RemovedPlans = () => {
       <div className="text-gray-800 flexitems-center gap-2 mt-10 dark:text-gray-100">
         <div className="p-2">
           <p className="font-heading font-bold text-2xl text-center">
-            You haven&apos;t removed any Plans yet
+            You haven&apos;t archived any Plans yet
           </p>
         </div>
       </div>
@@ -91,7 +91,7 @@ const RemovedPlans = () => {
     <div className="p-2 my-10 text-gray-900 dark:text-gray-100 flex flex-col">
       <div className="self-center">
         <h1 className="font-bold font-heading text-2xl text-green-500">
-          Removed Workout Plan
+          Archived Workout Plan
         </h1>
       </div>
       <div className="flex flex-col gap-8 mt-4 lg:w-2/3 lg:mx-auto">
@@ -100,7 +100,7 @@ const RemovedPlans = () => {
             <Plan
               key={item._id}
               {...item}
-              source={"removed"}
+              source={"archived"}
               handleRestore={restorePlan}
               handleDelete={deletePlan}
               removeLoading={isLoading}
