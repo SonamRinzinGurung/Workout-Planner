@@ -14,11 +14,13 @@ import { IoAddCircle } from "react-icons/io5";
 import { reorderList } from "../utils/reorderList";
 import { formValidation } from "../utils/formValidator";
 import { AppContext } from "../context/appContext";
+import useScrollToTop from "../utils/useScrollToTop";
 
 const EditWorkout = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   useSetTitle("Edit Workout");
+  useScrollToTop();
 
   const [isLoading, setIsLoading] = useState(false);
 

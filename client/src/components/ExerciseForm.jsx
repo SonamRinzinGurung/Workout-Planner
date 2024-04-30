@@ -21,7 +21,7 @@ const ExerciseForm = ({ exerciseItem, exerciseIndex, workoutIndex }) => {
     <Draggable draggableId={exerciseIndex.toString()} index={exerciseIndex}>
       {(provided) => (
         <div
-          className="flex flex-col gap-2 p-4 rounded-md items-center shadow-md bg-gray-100 dark:bg-gray-800 mb-2"
+          className="flex flex-col gap-2 p-4 rounded-md items-center shadow-md bg-emerald-50 dark:bg-gray-800 mb-2"
           key={exerciseIndex}
           ref={provided.innerRef}
           {...provided.draggableProps}

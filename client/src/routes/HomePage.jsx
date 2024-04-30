@@ -4,9 +4,11 @@ import axiosFetch from "../utils/axiosInterceptor";
 import { Plan, Empty } from "../components";
 import ReactLoading from "react-loading";
 import { delay } from "../utils/delayFetch";
+import useScrollToTop from "../utils/useScrollToTop";
 
 const HomePage = () => {
   useSetTitle("Fit Plan");
+  useScrollToTop();
 
   const { isPending, error, data } = useQuery({
     queryKey: ["workout-plan"],

@@ -28,7 +28,7 @@ const WorkoutForm = ({ workoutIndex, workoutItem }) => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     key={workoutIndex}
-                    className="flex flex-col gap-2 items-center shadow-md mb-4 p-6 rounded-md bg-gray-200 dark:bg-gray-900"
+                    className="flex flex-col gap-2 items-center shadow-md mb-4 p-6 rounded-md bg-emerald-100 dark:bg-gray-900"
                 >
                   <div
                       {...provided.dragHandleProps}
