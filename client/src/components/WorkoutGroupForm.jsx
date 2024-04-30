@@ -1,11 +1,13 @@
-import PropTypes from "prop-types";
 import { Button, WorkoutForm } from ".";
 import { IoAddCircle } from "react-icons/io5";
 import { handleAddWorkout } from "../utils/formHandlers";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { reorderList } from "../utils/reorderList";
+import { useAppContext } from "../context/appContext";
 
-const WorkoutGroupForm = ({ workouts, setFormData }) => {
+const WorkoutGroupForm = () => {
+
+  const { formData, setFormData } = useAppContext();
 
   const onDragEnd = (result) => {
     if (!result.destination) {
@@ -16,7 +18,7 @@ const WorkoutGroupForm = ({ workouts, setFormData }) => {
     }
 
     const reorderedList = reorderList(
-      workouts,
+      formData?.workouts,
       result.source.index,
       result.destination.index
     );
@@ -40,13 +42,11 @@ const WorkoutGroupForm = ({ workouts, setFormData }) => {
               {...provided.droppableProps}
               className="dark:text-gray-100 justify-center"
             >
-              {workouts.map((workoutItem, workoutIndex) => (
+              {formData?.workouts.map((workoutItem, workoutIndex) => (
                 <WorkoutForm
                   key={workoutIndex}
                   workoutIndex={workoutIndex}
                   workoutItem={workoutItem}
-                  workouts={workouts}
-                  setFormData={setFormData}
                 />
               ))}
               {provided.placeholder}
@@ -68,8 +68,4 @@ const WorkoutGroupForm = ({ workouts, setFormData }) => {
   );
 };
 
-WorkoutGroupForm.propTypes = {
-  workouts: PropTypes.array.isRequired,
-  setFormData: PropTypes.func.isRequired,
-};
 export default WorkoutGroupForm;

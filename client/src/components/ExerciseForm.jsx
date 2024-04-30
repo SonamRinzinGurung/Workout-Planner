@@ -4,14 +4,11 @@ import { FaTrashAlt } from "react-icons/fa";
 import { Draggable } from "@hello-pangea/dnd";
 import { TbDragDrop2 } from "react-icons/tb";
 import { handleRemoveExercise } from "../utils/formHandlers";
+import { useAppContext } from "../context/appContext";
 
-const ExerciseForm = ({
-  exerciseItem,
-  exerciseIndex,
-  workoutIndex,
-  setFormData,
-  setDeletedExercises,
-}) => {
+const ExerciseForm = ({ exerciseItem, exerciseIndex, workoutIndex }) => {
+  const { setFormData, setDeletedExercises } = useAppContext();
+
   const handleExerciseRemoval = (setFormData, workoutIndex, exerciseIndex) => {
     if (exerciseItem._id) {
       setDeletedExercises((prevState) => [...prevState, exerciseItem._id]);
@@ -43,7 +40,6 @@ const ExerciseForm = ({
               workoutIndex={workoutIndex}
               exerciseIndex={exerciseIndex}
               placeholder={"Exercise Name"}
-              setFormData={setFormData}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -52,7 +48,6 @@ const ExerciseForm = ({
               value={exerciseItem.sets}
               workoutIndex={workoutIndex}
               exerciseIndex={exerciseIndex}
-              setFormData={setFormData}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -61,7 +56,6 @@ const ExerciseForm = ({
               value={exerciseItem.reps}
               workoutIndex={workoutIndex}
               exerciseIndex={exerciseIndex}
-              setFormData={setFormData}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -71,7 +65,6 @@ const ExerciseForm = ({
               workoutIndex={workoutIndex}
               exerciseIndex={exerciseIndex}
               placeholder={"Weight (optional)"}
-              setFormData={setFormData}
             />
           </div>
           <div>
@@ -93,7 +86,5 @@ ExerciseForm.propTypes = {
   exerciseItem: PropTypes.object.isRequired,
   exerciseIndex: PropTypes.number.isRequired,
   workoutIndex: PropTypes.number.isRequired,
-  setFormData: PropTypes.func.isRequired,
-  setDeletedExercises: PropTypes.func
 };
 export default ExerciseForm;

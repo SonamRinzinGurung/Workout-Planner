@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import conditionalComponent from "../utils/conditionalComponent";
 import { Button } from "../components";
 import { GrNext } from "react-icons/gr";
@@ -10,6 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { delay } from "../utils/delayFetch";
+import { AppContext } from "../context/appContext"
 
 const CreatePlan = () => {
   useSetTitle("Create Workout Plan");
@@ -66,6 +67,8 @@ const CreatePlan = () => {
     }
   };
 
+  const memoizedValue = useMemo(() => ({ formData, setFormData }), [formData, setFormData])
+
   return (
     <main className="my-10 dark:text-gray-100 text-gray-800">
       <div className="mb-4 flex justify-center items-center gap-2">
@@ -74,7 +77,9 @@ const CreatePlan = () => {
         </h1>
       </div>
       <div className="flex flex-col items-center gap-4">
-        {conditionalComponent({ page, formData, setFormData })}
+        <AppContext.Provider value={memoizedValue}>
+          {conditionalComponent({ page })}
+        </AppContext.Provider>
         <div className="flex gap-10 mt-2">
           {page > 0 && (
             <Button

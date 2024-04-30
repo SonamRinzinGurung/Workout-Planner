@@ -7,7 +7,7 @@ import { delay } from "../utils/delayFetch";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-const RemovedPlans = () => {
+const ArchivedPlans = () => {
   useSetTitle("Removed Plans");
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
@@ -112,4 +112,4 @@ const RemovedPlans = () => {
   );
 };
 
-export default RemovedPlans;
+export default ArchivedPlans;

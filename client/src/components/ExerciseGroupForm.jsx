@@ -1,10 +1,11 @@
 import { ExerciseForm } from "./index";
 import PropTypes from "prop-types";
-import { handleRemoveExercise } from "../utils/formHandlers";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { reorderList } from "../utils/reorderList";
+import { useAppContext } from "../context/appContext";
 
-const ExerciseGroupForm = ({ workoutItem, workoutIndex, setFormData, setDeletedExercises }) => {
+const ExerciseGroupForm = ({ workoutItem, workoutIndex }) => {
+    const { setFormData } = useAppContext();
 
     const onDragEnd = (result) => {
         if (!result.destination) {
@@ -14,16 +15,16 @@ const ExerciseGroupForm = ({ workoutItem, workoutIndex, setFormData, setDeletedE
             return;
         }
 
-        const reorderedList = reorderList(
-            workoutItem.exercises,
-            result.source.index,
-            result.destination.index
-        );
+      const reorderedList = reorderList(
+          workoutItem.exercises,
+          result.source.index,
+          result.destination.index
+      );
 
-        const updateExerciseOrder = (exercise, index) => ({
-            ...exercise,
-            order: index,
-        });
+      const updateExerciseOrder = (exercise, index) => ({
+          ...exercise,
+          order: index,
+      });
 
         setFormData((prevState) => ({
             ...prevState,
@@ -48,17 +49,14 @@ const ExerciseGroupForm = ({ workoutItem, workoutIndex, setFormData, setDeletedE
                                 exerciseItem={exerciseItem}
                                 exerciseIndex={exerciseIndex}
                                 workoutIndex={workoutIndex}
-                                handleRemoveExercise={handleRemoveExercise}
-                                setFormData={setFormData}
-                                setDeletedExercises={setDeletedExercises}
-                            />
-                        ))}
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable>
-        </DragDropContext>
-    );
+                />
+            ))}
+                      {provided.placeholder}
+                  </div>
+              )}
+          </Droppable>
+      </DragDropContext>
+  );
 };
 
 export default ExerciseGroupForm;
@@ -66,6 +64,4 @@ export default ExerciseGroupForm;
 ExerciseGroupForm.propTypes = {
     workoutItem: PropTypes.object.isRequired,
     workoutIndex: PropTypes.number.isRequired,
-    setFormData: PropTypes.func.isRequired,
-    setDeletedExercises: PropTypes.func,
 };

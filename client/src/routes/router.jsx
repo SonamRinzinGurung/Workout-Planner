@@ -5,7 +5,7 @@ import {
   PageNotFound,
   CreatePlan,
   EditWorkout,
-  RemovedPlans,
+  ArchivedPlans,
   Register,
   VerifyEmailNotice,
   EmailVerification,
@@ -63,7 +63,7 @@ const router = createBrowserRouter([
         path: "/archived-plans",
         element: (
           <RouteProtector>
-            <RemovedPlans />
+            <ArchivedPlans />
           </RouteProtector>
         ),
       },

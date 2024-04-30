@@ -1,7 +1,8 @@
-import PropTypes from "prop-types";
 import { Plan } from "../components";
+import { useAppContext } from "../context/appContext";
 
-const ConfirmationPage = ({ formData, setFormData }) => {
+const ConfirmationPage = () => {
+  const { formData, setFormData } = useAppContext();
   return (
     <div>
       <div>
@@ -14,8 +15,4 @@ const ConfirmationPage = ({ formData, setFormData }) => {
   );
 };
 
-ConfirmationPage.propTypes = {
-  formData: PropTypes.object.isRequired,
-  setFormData: PropTypes.func.isRequired,
-};
 export default ConfirmationPage;

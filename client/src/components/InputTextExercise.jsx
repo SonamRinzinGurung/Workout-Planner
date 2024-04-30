@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { capitalizeFirstLetter } from "../utils/capitalizeWord";
 import { handleExerciseChange } from "../utils/formHandlers";
+import { useAppContext } from "../context/appContext";
 
 const InputTextExercise = ({
   name,
@@ -8,8 +9,10 @@ const InputTextExercise = ({
   workoutIndex,
   exerciseIndex,
   placeholder,
-  setFormData,
 }) => {
+
+  const { setFormData } = useAppContext();
+
   return (
     <div>
       <input
@@ -31,6 +34,5 @@ InputTextExercise.propTypes = {
   workoutIndex: PropTypes.number.isRequired,
   exerciseIndex: PropTypes.number.isRequired,
   placeholder: PropTypes.string,
-  setFormData: PropTypes.func.isRequired,
 };
 export default InputTextExercise;
