@@ -51,7 +51,7 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
-    toggleMenu();
+    setMenuOpen(false);
   };
 
   return (

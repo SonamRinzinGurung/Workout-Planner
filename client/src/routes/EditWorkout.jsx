@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useSetTitle from "../utils/useSetTitle";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -13,6 +13,7 @@ import { handleAddWorkout } from "../utils/formHandlers";
 import { IoAddCircle } from "react-icons/io5";
 import { reorderList } from "../utils/reorderList";
 import { formValidation } from "../utils/formValidator";
+import { AppContext } from "../context/appContext";
 
 const EditWorkout = () => {
   const { id } = useParams();
@@ -33,6 +34,11 @@ const EditWorkout = () => {
 
   const [deletedWorkouts, setDeletedWorkouts] = useState([]);
   const [deletedExercises, setDeletedExercises] = useState([]);
+
+  const memoizedValue = useMemo(
+    () => ({ formData, setFormData, setDeletedExercises, setDeletedWorkouts }),
+    [formData, setFormData, setDeletedExercises, setDeletedWorkouts]
+  );
 
   const { isPending, error } = useQuery({
     queryKey: ["workout-plan-detail"],
@@ -67,25 +73,6 @@ const EditWorkout = () => {
     },
   });
 
-  if (isPending) {
-    return (
-      <ReactLoading
-        type="spinningBubbles"
-        color="#D5B263"
-        className="mx-auto mt-16"
-      />
-    );
-  }
-  if (error) {
-    return (
-      <div className="dark:text-gray-100 mt-10">
-        <p className="font-subHead font-semibold text-2xl text-center">
-          ERROR!! {error.message}
-        </p>
-      </div>
-    );
-  }
-
   const handleNameChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -102,6 +89,7 @@ const EditWorkout = () => {
       editWorkout(formData);
     }
   };
+
   const onDragEnd = (result) => {
     if (!result.destination) {
       return;
@@ -124,6 +112,26 @@ const EditWorkout = () => {
       })),
     }));
   };
+
+  if (isPending) {
+    return (
+      <ReactLoading
+        type="spinningBubbles"
+        color="#D5B263"
+        className="mx-auto mt-16"
+      />
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="dark:text-gray-100 mt-10">
+        <p className="font-subHead font-semibold text-2xl text-center">
+          ERROR!! {error.message}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -155,21 +163,18 @@ const EditWorkout = () => {
                   />
                 </div>
               </div>
-
-              <div className="dark:text-gray-100">
-                {formData.workouts.map((workoutItem, workoutIndex) => (
-                  <WorkoutForm
-                    setDeletedExercises={setDeletedExercises}
-                    setDeletedWorkouts={setDeletedWorkouts}
-                    key={workoutIndex}
-                    workoutIndex={workoutIndex}
-                    workoutItem={workoutItem}
-                    setFormData={setFormData}
-                    workouts={formData.workouts}
-                  />
-                ))}
-                {provided.placeholder}
-              </div>
+              <AppContext.Provider value={memoizedValue}>
+                <div className="dark:text-gray-100">
+                  {formData.workouts.map((workoutItem, workoutIndex) => (
+                    <WorkoutForm
+                      key={workoutIndex}
+                      workoutIndex={workoutIndex}
+                      workoutItem={workoutItem}
+                    />
+                  ))}
+                  {provided.placeholder}
+                </div>
+              </AppContext.Provider>
               <div id="add-workout">
                 <Button
                   name="Workout"

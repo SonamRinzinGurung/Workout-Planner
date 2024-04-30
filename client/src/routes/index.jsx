@@ -5,7 +5,7 @@ import PageNotFound from "./PageNotFound";
 import Root from "./Root";
 import CreatePlan from "./CreatePlan";
 import EditWorkout from "./EditWorkout";
-import RemovedPlans from "./RemovedPlans";
+import ArchivedPlans from "./ArchivedPlans";
 import VerifyEmailNotice from "./VerifyEmailNotice";
 import EmailVerification from "./EmailVerification";
 export {
@@ -16,7 +16,7 @@ export {
   PageNotFound,
   CreatePlan,
   EditWorkout,
-  RemovedPlans,
+  ArchivedPlans,
   VerifyEmailNotice,
   EmailVerification,
 };
