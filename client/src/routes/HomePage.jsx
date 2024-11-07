@@ -10,13 +10,17 @@ const HomePage = () => {
   useSetTitle("Fit Plan");
   useScrollToTop();
 
-  const { isPending, error, data } = useQuery({
-    queryKey: ["workout-plan"],
-    queryFn: async () => {
-      await delay(1000);
-      return axiosFetch.get(`/workout-plan/`).then((res) => res.data);
-    },
-  });
+  const data = [];
+  const isPending = false;
+  const error = null;
+
+  // const { isPending, error, data } = useQuery({
+  //   queryKey: ["workout-plan"],
+  //   queryFn: async () => {
+  //     await delay(1000);
+  //     return axiosFetch.get(`/workout-plan/`).then((res) => res.data);
+  //   },
+  // });
 
   if (isPending) {
     return (
@@ -47,9 +51,9 @@ const HomePage = () => {
         </h1>
       </div>
       <div className="flex flex-col gap-8 mt-4 lg:w-2/3 lg:mx-auto">
-        {data?.map((item) => {
+        {/* {data?.map((item) => {
           return <Plan key={item._id} {...item} source={"home"} />;
-        })}
+        })} */}
       </div>
     </div>
   );

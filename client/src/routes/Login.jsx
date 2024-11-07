@@ -8,13 +8,17 @@ import useSetTitle from "../utils/useSetTitle";
 import { InputText, Button } from "../components";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase-config";
+import useAuth from "../hooks/useAuth";
 
 function Login() {
   useSetTitle("Login");
-  const token = localStorage.getItem("token");
   const [values, setFormValues] = useState({ email: "", password: "" });
-
+  const [isPending, setIsPending] = useState(false);
   const navigate = useNavigate();
+
+  const { user, loading } = useAuth();
 
   const loginMutation = useMutation({
     mutationFn: ({ code }) => {
@@ -23,28 +27,8 @@ function Login() {
       });
     },
     onSuccess: ({ data }) => {
-      localStorage.setItem("token", data.token);
-      navigate("/");
-    },
-  });
+      navigate("/verify-notice");
 
-  const { mutate: traditionalLogin, isPending } = useMutation({
-    mutationFn: (values) => {
-      return axios.post(`${import.meta.env.VITE_API}/auth/loginTraditional`, {
-        ...values,
-      });
-    },
-    onSuccess: ({ data }) => {
-      if (data?.accountStatus === false) {
-        localStorage.setItem("email", data.email);
-        toast.success(data.message);
-        navigate("/verify-notice");
-      }
-      if (data?.token) {
-        localStorage.setItem("token", data.token);
-        localStorage.removeItem("email");
-        navigate("/");
-      }
     },
     onError: (data) => {
       toast.error(data.response.data.msg);
@@ -64,11 +48,25 @@ function Login() {
       [e.target.name]: e.target.value,
     });
   };
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    traditionalLogin(values);
+    setIsPending(true);
+    try {
+      await signInWithEmailAndPassword(auth, values?.email, values?.password);
+      navigate("/");
+
+    } catch (error) {
+      const errorMessage = error.message;
+      toast.error(errorMessage);
+    } finally {
+      setIsPending(false);
+    }
+
   };
-  if (token) {
+
+  if (loading) return null;
+
+  if (user) {
     return <Navigate to={"/"} />;
   }
   return (

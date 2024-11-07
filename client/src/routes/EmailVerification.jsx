@@ -1,33 +1,50 @@
-import { useParams } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import { useSearchParams, Navigate } from "react-router-dom";
 import { Button } from "../components";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
+import { applyActionCode, signOut } from "firebase/auth";
+import { auth } from "../firebase-config";
+import useAuth from "../hooks/useAuth";
 
 const EmailVerification = () => {
-  const param = useParams();
+  const [searchParams] = useSearchParams();
+  const [isPending, setIsPending] = useState(false);
+  const actionCode = searchParams.get("oobCode")
   const navigate = useNavigate();
-  const { mutate: verifyEmail, isPending } = useMutation({
-    mutationFn: (token) => {
-      return axios.patch(`${import.meta.env.VITE_API}/auth/verify-email/`, {
-        token,
-      });
-    },
-    onSuccess: ({ data }) => {
-      toast.success(data.message);
-      localStorage.removeItem("email");
-      navigate("/login");
-    },
-    onError: (data) => {
-      toast.error(data.response.data.msg);
-    },
-  });
 
-  const handleSubmit = (e) => {
+  const { user, loading } = useAuth()
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    verifyEmail(param.token);
+    try {
+      setIsPending(true)
+      await applyActionCode(auth, actionCode)
+      toast.success("Email verified successfully");
+      navigate("/");
+
+    } catch (error) {
+      toast.error("Email verification failed");
+    } finally {
+      setIsPending(false)
+    }
+
   };
+
+  const handleLogout = () => {
+    try {
+      signOut(auth)
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+
+    }
+  };
+
+  if (user?.emailVerified) {
+    return <Navigate to="/" />
+  }
+
 
   return (
     <div>
@@ -61,7 +78,7 @@ const EmailVerification = () => {
             <div className="mt-8">
               <p className="">
                 Go back to{" "}
-                <Link className="font-medium text-blue-500" to={"/login"}>
+                <Link className="font-medium text-blue-500" onClick={handleLogout}>
                   Login
                 </Link>
               </p>

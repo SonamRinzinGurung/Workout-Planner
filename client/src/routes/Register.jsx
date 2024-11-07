@@ -8,11 +8,19 @@ import useSetTitle from "../utils/useSetTitle";
 import { InputText, Button } from "../components";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { auth, db } from "../firebase-config";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+} from "firebase/firestore";
+import useAuth from "../hooks/useAuth";
 
 const Register = () => {
   useSetTitle("Register");
-  const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const { user, loading } = useAuth()
 
   const [values, setFormValues] = useState({
     firstName: "",
@@ -21,6 +29,8 @@ const Register = () => {
     password: "",
   });
 
+  const [isPending, setIsPending] = useState(false);
+
   const registerMutation = useMutation({
     mutationFn: ({ code }) => {
       return axios.post(`${import.meta.env.VITE_API}/auth/signup`, {
@@ -28,27 +38,7 @@ const Register = () => {
       });
     },
     onSuccess: ({ data }) => {
-      localStorage.setItem("token", data.token);
       navigate("/");
-    },
-  });
-
-  const { mutate: traditionalRegister, isPending } = useMutation({
-    mutationFn: (data) => {
-      return axios.post(
-        `${import.meta.env.VITE_API}/auth/registerTraditional`,
-        {
-          ...data,
-        }
-      );
-    },
-    onSuccess: ({ data }) => {
-      toast.success(data.message);
-      localStorage.setItem("email", data.email);
-      navigate("/verify-notice");
-    },
-    onError: (data) => {
-      toast.error(data.response.data.msg);
     },
   });
 
@@ -66,14 +56,46 @@ const Register = () => {
     });
   };
 
-  const handleRegister = (e) => {
+  const { mutate: addUserData } = useMutation({
+    mutationFn: async (data) => {
+      const usersRef = collection(db, "users");
+      await addDoc(usersRef, {
+        ...data,
+        createdAt: serverTimestamp(),
+      });
+    },
+    onSuccess: () => {
+      toast.success("User added successfully");
+      navigate("/verify-notice");
+    },
+    onError: (error) => {
+      toast.error(error.message
+      );
+    }
+  })
+
+  const handleRegister = async (e) => {
     e.preventDefault();
-    traditionalRegister(values);
+    // traditionalRegister(values);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      await sendEmailVerification(userCredential.user);
+      delete values.password
+      addUserData({ ...values, uid: userCredential.user.uid });
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsPending(false);
+    }
+
   };
 
-  if (token) {
+  if (loading) return null;
+
+  if (user) {
     return <Navigate to={"/"} />;
   }
+
   return (
     <main className="flex flex-col items-center mt-24 dark:text-white gap-2">
       <div className="my-4">
