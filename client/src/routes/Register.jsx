@@ -1,15 +1,13 @@
 import { useState } from "react";
 import GoogleButton from "react-google-button";
 import { useMutation } from "@tanstack/react-query";
-import { useGoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 import useSetTitle from "../utils/useSetTitle";
 import { InputText, Button } from "../components";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
-import { auth, db } from "../firebase-config";
+import { createUserWithEmailAndPassword, sendEmailVerification, signInWithPopup, getAdditionalUserInfo } from "firebase/auth";
+import { auth, db, googleProvider } from "../firebase-config";
 import {
   addDoc,
   collection,
@@ -30,24 +28,6 @@ const Register = () => {
   });
 
   const [isPending, setIsPending] = useState(false);
-
-  const registerMutation = useMutation({
-    mutationFn: ({ code }) => {
-      return axios.post(`${import.meta.env.VITE_API}/auth/signup`, {
-        code,
-      });
-    },
-    onSuccess: ({ data }) => {
-      navigate("/");
-    },
-  });
-
-  const handleGoogleRegister = useGoogleLogin({
-    flow: "auth-code",
-    onSuccess: (res) => {
-      registerMutation.mutate(res);
-    },
-  });
 
   const handleChange = (e) => {
     setFormValues({
@@ -76,7 +56,6 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    // traditionalRegister(values);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       await sendEmailVerification(userCredential.user);
@@ -87,8 +66,29 @@ const Register = () => {
     } finally {
       setIsPending(false);
     }
-
   };
+
+  const handleGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider)
+      const user = result?.user
+      const additionalUserInfo = getAdditionalUserInfo(result)
+      if (additionalUserInfo?.isNewUser) {
+        addUserData({
+          email: user.email,
+          firstName: user.displayName,
+          lastName: "",
+          uid: user.uid,
+          profileImg: user.photoURL
+        })
+
+      } else {
+        navigate("/")
+      }
+    } catch (error) {
+      toast.error("Failed to login with Google")
+    }
+  }
 
   if (loading) return null;
 
@@ -151,8 +151,8 @@ const Register = () => {
       <div className="">
         <div className="mt-2">
           <GoogleButton
-            label="Register with google"
-            onClick={handleGoogleRegister}
+            label="Continue with Google"
+            onClick={handleGoogle}
           />
         </div>
       </div>

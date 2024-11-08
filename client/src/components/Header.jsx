@@ -7,12 +7,18 @@ import { MenuLinks, Button } from ".";
 import { ToastContainer, Slide } from "react-toastify";
 import { CiLogout } from "react-icons/ci";
 import '../index.css'
+import useAuth from "../hooks/useAuth";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase-config";
+
 
 const Header = () => {
   const navigate = useNavigate();
   let darkModeLocal = localStorage.getItem("darkMode");
   darkModeLocal = darkModeLocal?.toLowerCase() === "true";
-  const token = localStorage.getItem("token");
+
+  const { user, loading } = useAuth()
+
   const modalRef = useRef();
   const [darkMode, setDarkMode] = useState(darkModeLocal || false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -49,15 +55,20 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-    setMenuOpen(false);
+    try {
+      signOut(auth);
+      navigate("/login");
+      setMenuOpen(false);
+    } catch (error) {
+      console.log(error)
+    }
   };
 
+  if (loading) return null;
   return (
     <>
       <nav className="flex justify-between items-center dark:text-gray-100">
-        {menuOpen && token ? (
+        {menuOpen && user?.emailVerified ? (
           <section className="modal-container bg-[rgb(0,0,0,0.7)] fixed inset-0 outline-none overflow-x-hidden overflow-y-auto z-10">
             <div className="modal-dialog relative w-11/12 h-5/6 mx-auto mt-10 pointer-events-none">
               <div
@@ -97,7 +108,7 @@ const Header = () => {
               <img src={logo} alt="logo" className="w-20" />
             </Link>
           </div>
-        {token && (
+          {user?.emailVerified && (
             <div className="flex flex-col md:flex-row font-subHead text-lg tracking-wide">
               <>
                 <Link
@@ -129,7 +140,7 @@ const Header = () => {
         </div>
 
         <div className="flex ml-auto mr-4 mt-1 items-center gap-8 ">
-          {token && (
+          {user?.emailVerified && (
             <button onClick={handleLogout} className="hidden lg:block">
               <CiLogout size={25} />
             </button>

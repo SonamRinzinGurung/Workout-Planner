@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSetTitle from "../utils/useSetTitle";
 import { Button } from "../components";
 import { toast } from "react-toastify";
 import useAuth from "../hooks/useAuth"
 import { sendEmailVerification, signOut } from "firebase/auth";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase-config";
 
 const VerifyEmailNotice = () => {
@@ -38,12 +38,14 @@ const VerifyEmailNotice = () => {
   };
 
 
+  useEffect(() => {
+    if (user?.emailVerified) {
+      navigate("/")
+    }
+  }, [user, navigate])
+
   if (loading) {
     return null
-  }
-
-  if (user?.emailVerified) {
-    return <Navigate to="/" />
   }
 
   return (
