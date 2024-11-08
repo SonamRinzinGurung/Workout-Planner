@@ -1,18 +1,24 @@
 import { useState, useMemo } from "react";
+import PropTypes from "prop-types";
 import conditionalComponent from "../utils/conditionalComponent";
 import { Button } from "../components";
 import { GrNext } from "react-icons/gr";
 import { AiOutlineSend } from "react-icons/ai";
 import useSetTitle from "../utils/useSetTitle";
-import axiosFetch from "../utils/axiosInterceptor";
 import { formValidation } from "../utils/formValidator";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { delay } from "../utils/delayFetch";
 import { AppContext } from "../context/appContext"
+import { db } from "../firebase-config";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+} from "firebase/firestore";
 
-const CreatePlan = () => {
+const CreatePlan = ({ user }) => {
   useSetTitle("Create Workout Plan");
   const navigate = useNavigate();
 
@@ -40,9 +46,27 @@ const CreatePlan = () => {
     mutationFn: async (formData) => {
       setIsLoading(true);
       await delay(500);
-      return axiosFetch.post("/workout-plan/", {
-        ...formData,
+      const plansRef = await addDoc(collection(db, "workoutPlans"), {
+        name: formData?.name,
+        uid: user?.uid,
+        createdAt: serverTimestamp(),
+
       });
+
+      for (const workout of formData.workouts) {
+        const workoutRef = await addDoc(collection(plansRef, "workouts"), {
+          title: workout?.title,
+          order: workout?.order,
+          createdAt: serverTimestamp(),
+        })
+
+        for (const exercise of workout.exercises) {
+          await addDoc(collection(workoutRef, "exercises"), {
+            ...exercise,
+          })
+        }
+      }
+
     },
     onSuccess: () => {
       setIsLoading(false);
@@ -114,5 +138,9 @@ const CreatePlan = () => {
     </main>
   );
 };
+
+CreatePlan.propTypes = {
+  user: PropTypes.object.isRequired,
+}
 
 export default CreatePlan;
