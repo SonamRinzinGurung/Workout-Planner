@@ -1,26 +1,49 @@
+import PropTypes from "prop-types";
 import useSetTitle from "../utils/useSetTitle";
 import { useQuery } from "@tanstack/react-query";
-import axiosFetch from "../utils/axiosInterceptor";
 import { Plan, Empty } from "../components";
 import ReactLoading from "react-loading";
-import { delay } from "../utils/delayFetch";
 import useScrollToTop from "../utils/useScrollToTop";
+import { db } from "../firebase-config";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 
-const HomePage = () => {
+const HomePage = ({ user }) => {
   useSetTitle("Fit Plan");
   useScrollToTop();
 
-  const data = [];
-  const isPending = false;
-  const error = null;
+  const { isPending, error, data } = useQuery({
+    queryKey: ["workout-plan"],
+    queryFn: async () => {
+      const q = query(
+        collection(db, "workoutPlans"),
+        where("uid", "==", user?.uid),
+        orderBy("createdAt", "desc")
+      )
+      const plansSnapshot = await getDocs(q)
+      const plans = []
 
-  // const { isPending, error, data } = useQuery({
-  //   queryKey: ["workout-plan"],
-  //   queryFn: async () => {
-  //     await delay(1000);
-  //     return axiosFetch.get(`/workout-plan/`).then((res) => res.data);
-  //   },
-  // });
+      // get all plans of current user
+      for (const planDoc of plansSnapshot.docs) {
+        const planData = { id: planDoc.id, ...planDoc.data(), workouts: [] }
+
+        // get workouts from workouts subcollection
+        const workoutsSnapshot = await getDocs(collection(planDoc.ref, "workouts"))
+
+        for (const workoutDoc of workoutsSnapshot.docs) {
+          const workoutData = { id: workoutDoc.id, ...workoutDoc.data(), exercises: [] }
+
+          const exercisesSnapshot = await getDocs(collection(workoutDoc.ref, "exercises"))
+          workoutData.exercises = exercisesSnapshot.docs.map(exerciseDoc => ({
+            id: exerciseDoc.id,
+            ...exerciseDoc.data()
+          }))
+          planData.workouts.push(workoutData)
+        }
+        plans.push(planData)
+      }
+      return plans
+    },
+  });
 
   if (isPending) {
     return (
@@ -51,12 +74,15 @@ const HomePage = () => {
         </h1>
       </div>
       <div className="flex flex-col gap-8 mt-4 lg:w-2/3 lg:mx-auto">
-        {/* {data?.map((item) => {
+        {data?.map((item) => {
           return <Plan key={item._id} {...item} source={"home"} />;
-        })} */}
+        })}
       </div>
     </div>
   );
 };
 
+HomePage.propTypes = {
+  user: PropTypes.object.isRequired
+}
 export default HomePage;
