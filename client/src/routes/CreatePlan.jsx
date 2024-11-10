@@ -50,7 +50,8 @@ const CreatePlan = ({ user }) => {
         name: formData?.name,
         uid: user?.uid,
         createdAt: serverTimestamp(),
-
+        updatedAt: serverTimestamp(),
+        isArchived: false,
       });
 
       for (const workout of formData.workouts) {

@@ -3,13 +3,14 @@ import PropTypes from "prop-types";
 import { Workout, Button, InputText } from ".";
 import { useNavigate } from "react-router-dom";
 import { BsThreeDots } from "react-icons/bs";
-import axiosFetch from "../utils/axiosInterceptor";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import ReactLoading from "react-loading";
+import { doc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase-config";
 
 const Plan = ({
-  _id,
+  id,
   name,
   workouts,
   source,
@@ -41,8 +42,8 @@ const Plan = ({
   const { mutate: archivePlan, isPending } = useMutation({
     mutationFn: async (id) => {
       setModalState(false);
-      const { data } = await axiosFetch.delete(`/workout-plan/archive-plan/${id}`);
-      return data;
+      const docRef = doc(db, "workoutPlans", id)
+      return await updateDoc(docRef, { isArchived: true, updatedAt: serverTimestamp() });
     },
     onSuccess: () => {
       toast.success("Workout plan moved to archives");
@@ -121,12 +122,12 @@ const Plan = ({
                     className={
                       "border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
                     }
-                    handleClick={() => navigate(`/edit/${_id}`)}
+                    handleClick={() => navigate(`/edit/${id}`)}
                   />
                   <Button
                     name="Archive"
                     className={"bg-red-600 text-gray-50 hover:bg-red-700"}
-                    handleClick={() => archivePlan(_id)}
+                    handleClick={() => archivePlan(id)}
                     isPending={isPending}
                   />
                 </>
@@ -139,7 +140,7 @@ const Plan = ({
                     className="border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
                     position={2}
                     handleClick={() => {
-                      handleRestore(_id);
+                      handleRestore(id);
                       setModalState(false);
                     }}
                     isPending={removeLoading}
@@ -148,7 +149,7 @@ const Plan = ({
                     name="Delete"
                     className="bg-red-600 text-gray-50 hover:bg-red-700"
                     handleClick={() => {
-                      handleDelete(_id);
+                      handleDelete(id);
                       setModalState(false);
                     }}
                     isPending={removeLoading}
@@ -163,7 +164,7 @@ const Plan = ({
       <div className={`flex flex-wrap gap-3 justify-center mb-2 px-2 py-6 ${source !== 'create' && 'border border-t-0 border-emerald-400 dark:border-emerald-800 border-x-2 rounded-md rounded-t-none bg-emerald-50 dark:bg-emerald-900'}`}>
         {workouts?.map((workout, index) => {
           return (
-            <Workout key={index} {...workout} planId={_id} source={source} />
+            <Workout key={index} {...workout} planId={id} source={source} />
           );
         })}
       </div>
@@ -174,7 +175,7 @@ const Plan = ({
 Plan.propTypes = {
   name: PropTypes.string.isRequired,
   workouts: PropTypes.array.isRequired,
-  _id: PropTypes.string,
+  id: PropTypes.string,
   source: PropTypes.string,
   handleDelete: PropTypes.func,
   handleRestore: PropTypes.func,

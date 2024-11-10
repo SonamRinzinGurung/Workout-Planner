@@ -17,6 +17,7 @@ const HomePage = ({ user }) => {
       const q = query(
         collection(db, "workoutPlans"),
         where("uid", "==", user?.uid),
+        where("isArchived", "==", false),
         orderBy("createdAt", "desc")
       )
       const plansSnapshot = await getDocs(q)
@@ -75,7 +76,7 @@ const HomePage = ({ user }) => {
       </div>
       <div className="flex flex-col gap-8 mt-4 lg:w-2/3 lg:mx-auto">
         {data?.map((item) => {
-          return <Plan key={item._id} {...item} source={"home"} />;
+          return <Plan key={item.id} {...item} source={"home"} />;
         })}
       </div>
     </div>
