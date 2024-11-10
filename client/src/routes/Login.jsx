@@ -1,62 +1,27 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import GoogleButton from "react-google-button";
-import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
-import { useGoogleLogin } from "@react-oauth/google";
 import useSetTitle from "../utils/useSetTitle";
 import { InputText, Button } from "../components";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { signInWithEmailAndPassword, signInWithPopup, getAdditionalUserInfo } from "firebase/auth";
+import { auth, googleProvider, db } from "../firebase-config";
+import useAuth from "../hooks/useAuth";
+import { useMutation } from "@tanstack/react-query";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+} from "firebase/firestore";
 
 function Login() {
   useSetTitle("Login");
-  const token = localStorage.getItem("token");
   const [values, setFormValues] = useState({ email: "", password: "" });
-
+  const [isPending, setIsPending] = useState(false);
   const navigate = useNavigate();
 
-  const loginMutation = useMutation({
-    mutationFn: ({ code }) => {
-      return axios.post(`${import.meta.env.VITE_API}/auth/login`, {
-        code,
-      });
-    },
-    onSuccess: ({ data }) => {
-      localStorage.setItem("token", data.token);
-      navigate("/");
-    },
-  });
-
-  const { mutate: traditionalLogin, isPending } = useMutation({
-    mutationFn: (values) => {
-      return axios.post(`${import.meta.env.VITE_API}/auth/loginTraditional`, {
-        ...values,
-      });
-    },
-    onSuccess: ({ data }) => {
-      if (data?.accountStatus === false) {
-        localStorage.setItem("email", data.email);
-        toast.success(data.message);
-        navigate("/verify-notice");
-      }
-      if (data?.token) {
-        localStorage.setItem("token", data.token);
-        localStorage.removeItem("email");
-        navigate("/");
-      }
-    },
-    onError: (data) => {
-      toast.error(data.response.data.msg);
-    },
-  });
-
-  const handleSubmit = useGoogleLogin({
-    flow: "auth-code",
-    onSuccess: (res) => {
-      loginMutation.mutate(res);
-    },
-  });
+  const { user, loading } = useAuth();
 
   const handleChange = (e) => {
     setFormValues({
@@ -64,11 +29,64 @@ function Login() {
       [e.target.name]: e.target.value,
     });
   };
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    traditionalLogin(values);
+    setIsPending(true);
+    try {
+      await signInWithEmailAndPassword(auth, values?.email, values?.password);
+      navigate("/");
+
+    } catch (error) {
+      const errorMessage = error.message;
+      toast.error(errorMessage);
+    } finally {
+      setIsPending(false);
+    }
+
   };
-  if (token) {
+
+  const { mutate: addUserData } = useMutation({
+    mutationFn: async (data) => {
+      const usersRef = collection(db, "users");
+      await addDoc(usersRef, {
+        ...data,
+        createdAt: serverTimestamp(),
+      });
+    },
+    onSuccess: () => {
+      toast.success("Account created successfully")
+      navigate("/")
+    },
+    onError: (error) => {
+      toast.error(error.message
+      );
+    }
+  })
+
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider)
+      const user = result?.user
+      const additionalUserInfo = getAdditionalUserInfo(result)
+      if (additionalUserInfo?.isNewUser) {
+        addUserData({
+          email: user.email,
+          firstName: user.displayName,
+          lastName: "",
+          uid: user.uid,
+          profileImg: user.photoURL
+        })
+
+      } else {
+        navigate("/")
+      }
+    } catch (error) {
+      toast.error("Failed to login with Google")
+    }
+  }
+  if (loading) return null;
+
+  if (user) {
     return <Navigate to={"/"} />;
   }
   return (
@@ -112,7 +130,7 @@ function Login() {
         <hr className="h-6 p-2" />
       </div>
       <div className="">
-        <GoogleButton onClick={handleSubmit} />
+        <GoogleButton label="Continue with Google" onClick={handleGoogleLogin} />
       </div>
     </main>
   );

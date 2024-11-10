@@ -40,7 +40,7 @@ const router = createBrowserRouter([
         element: <VerifyEmailNotice />,
       },
       {
-        path: "/verify-account/:token",
+        path: "/verify-account",
         element: <EmailVerification />,
       },
       {

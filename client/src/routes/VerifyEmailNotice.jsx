@@ -1,32 +1,53 @@
+import { useEffect, useState } from "react";
 import useSetTitle from "../utils/useSetTitle";
 import { Button } from "../components";
-import { Link } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { toast } from "react-toastify";
+import useAuth from "../hooks/useAuth"
+import { sendEmailVerification, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase-config";
+
 const VerifyEmailNotice = () => {
   useSetTitle("Verify Email");
-  const email = localStorage.getItem("email");
-  const { mutate: reSendVerification, isPending } = useMutation({
-    mutationFn: (email) => {
-      return axios.post(
-        `${import.meta.env.VITE_API}/auth/resend-verification-email`,
-        {
-          email,
-        }
-      );
-    },
-    onSuccess: ({ data }) => {
-      toast.success(data.message);
-    },
-    onError: (data) => {
-      toast.error(data.response.data.msg);
-    },
-  });
+  const navigate = useNavigate();
+  const { user, loading } = useAuth()
 
-  const handleResend = () => {
-    reSendVerification(email);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleResend = async () => {
+    try {
+      setIsLoading(true)
+      await sendEmailVerification(user)
+      toast.success("Verification link sent successfully")
+    } catch (error) {
+      toast.error("Failed to send verification link")
+      console.log(error)
+    } finally {
+      setIsLoading(false)
+    }
   };
+
+  const handleLogout = () => {
+    try {
+      signOut(auth)
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+
+    }
+  };
+
+
+  useEffect(() => {
+    if (user?.emailVerified) {
+      navigate("/")
+    }
+  }, [user, navigate])
+
+  if (loading) {
+    return null
+  }
+
   return (
     <main className="flex flex-col items-center mt-24 p-4 dark:text-white gap-2 text-center">
       <h1 className="font-heading font-bold text-2xl">Verify Your Email</h1>
@@ -36,7 +57,7 @@ const VerifyEmailNotice = () => {
       <div className="flex flex-col my-4 gap-2">
         <p>Didn&apos;t receive an email?</p>
         <Button
-          isPending={isPending}
+          isPending={isLoading}
           name="Resend Link"
           className={
             "mx-auto border text-lime-600 dark:text-lime-300 dark:hover:text-lime-400"
@@ -50,9 +71,9 @@ const VerifyEmailNotice = () => {
       <div className="mt-8">
         <p className="">
           Go back to{" "}
-          <Link className="font-medium text-blue-500" to={"/login"}>
+          <button className="font-medium text-blue-500" onClick={handleLogout}>
             Login
-          </Link>
+          </button>
         </p>
       </div>
     </main>
