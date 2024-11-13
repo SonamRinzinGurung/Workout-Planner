@@ -1,9 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import PropTypes from "prop-types";
 import { useParams, useNavigate } from "react-router-dom";
 import useSetTitle from "../utils/useSetTitle";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import ReactLoading from "react-loading";
-import axiosFetch from "../utils/axiosInterceptor";
 import { Button, WorkoutForm, InputText } from "../components";
 import { MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -15,8 +15,22 @@ import { reorderList } from "../utils/reorderList";
 import { formValidation } from "../utils/formValidator";
 import { AppContext } from "../context/appContext";
 import useScrollToTop from "../utils/useScrollToTop";
+import { db } from "../firebase-config";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  updateDoc,
+  addDoc,
+  serverTimestamp,
+  orderBy,
+  deleteDoc,
+  setDoc,
+} from "firebase/firestore";
 
-const EditWorkout = () => {
+const EditWorkout = ({ user }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   useSetTitle("Edit Workout");
@@ -33,7 +47,6 @@ const EditWorkout = () => {
       },
     ],
   });
-
   const [deletedWorkouts, setDeletedWorkouts] = useState([]);
   const [deletedExercises, setDeletedExercises] = useState([]);
 
@@ -45,9 +58,40 @@ const EditWorkout = () => {
   const { isPending, error } = useQuery({
     queryKey: ["workout-plan-detail"],
     queryFn: async () => {
-      const { data } = await axiosFetch.get(`/workout-plan/${id}`);
-      setFormData(data);
-      return data;
+      const q = query(
+        collection(db, "workoutPlans"),
+        where("uid", "==", user?.uid)
+      );
+      const planSnapshot = await getDocs(q);
+      const planDoc = planSnapshot.docs.find((doc) => doc.id === id);
+      const planData = { ...planDoc.data(), workouts: [] };
+
+      // get workouts from workouts subcollection
+      const workoutsSnapshot = await getDocs(
+        query(collection(planDoc.ref, "workouts"), orderBy("order", "asc"))
+      );
+
+      for (const workoutDoc of workoutsSnapshot.docs) {
+        const workoutData = {
+          id: workoutDoc.id,
+          ...workoutDoc.data(),
+          exercises: [],
+        };
+
+        const exercisesSnapshot = await getDocs(
+          query(
+            collection(workoutDoc.ref, "exercises"),
+            orderBy("order", "asc")
+          )
+        );
+        workoutData.exercises = exercisesSnapshot.docs.map((exerciseDoc) => ({
+          id: exerciseDoc.id,
+          ...exerciseDoc.data(),
+        }));
+        planData.workouts.push(workoutData);
+      }
+      setFormData(planData);
+      return planData;
     },
     refetchOnWindowFocus: false,
   });
@@ -56,16 +100,85 @@ const EditWorkout = () => {
     mutationFn: async (formData) => {
       setIsLoading(true);
       await delay(500);
-      const { data } = await axiosFetch.patch("/workout-plan/edit-workout/", {
-        ...formData,
-        deletedWorkouts,
-        deletedExercises,
+
+      const planRef = doc(db, "workoutPlans", id);
+
+      await updateDoc(planRef, {
+        name: formData.name,
+        updatedAt: serverTimestamp(),
       });
-      return data;
+
+      for (const workout of formData.workouts) {
+        let workoutRef;
+
+        if (workout.id) {
+          // Existing workout: Reference the document directly
+          workoutRef = doc(collection(planRef, "workouts"), workout.id);
+
+          await setDoc(
+            workoutRef,
+            {
+              title: workout.title,
+              order: workout.order,
+            },
+            { merge: true }
+          );
+        } else {
+          // New workout: Use addDoc() to create a new document and get its reference
+          workoutRef = await addDoc(collection(planRef, "workouts"), {
+            title: workout.title,
+            order: workout.order,
+            createdAt: serverTimestamp(),
+          });
+
+          workout.id = workoutRef.id;
+        }
+
+        // Step 3: Loop through each exercise in the current workout
+        for (const exercise of workout.exercises) {
+          let exerciseRef;
+
+          if (exercise.id) {
+            // Existing exercise: Reference the document directly
+            exerciseRef = doc(collection(workoutRef, "exercises"), exercise.id);
+
+            await setDoc(
+              exerciseRef,
+              {
+                ...exercise,
+              },
+              { merge: true }
+            );
+          } else {
+            // New exercise: Use addDoc() to create a new document
+            const exerciseRef = await addDoc(
+              collection(workoutRef, "exercises"),
+              {
+                ...exercise,
+              }
+            );
+            exercise.id = exerciseRef.id;
+          }
+        }
+      }
+
+      for (const { workoutId, exerciseId } of deletedExercises) {
+        await deleteDoc(
+          doc(planRef, "workouts", workoutId, "exercises", exerciseId)
+        );
+      }
+
+      for (const workoutId of deletedWorkouts) {
+        await deleteDoc(doc(planRef, "workouts", workoutId));
+      }
+
+      setDeletedExercises([]);
+      setDeletedWorkouts([]);
+
+      return formData;
     },
     onSuccess: () => {
       setIsLoading(false);
-
       toast.success("Workout Edited Successfully!");
       navigate("/");
     },
@@ -215,4 +328,7 @@ const EditWorkout = () => {
   );
 };
 
+EditWorkout.propTypes = {
+  user: PropTypes.object,
+};
 export default EditWorkout;

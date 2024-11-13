@@ -7,11 +7,14 @@ import { handleRemoveExercise } from "../utils/formHandlers";
 import { useAppContext } from "../context/appContext";
 
 const ExerciseForm = ({ exerciseItem, exerciseIndex, workoutIndex }) => {
-  const { setFormData, setDeletedExercises } = useAppContext();
+  const { setFormData, setDeletedExercises, formData } = useAppContext();
 
   const handleExerciseRemoval = (setFormData, workoutIndex, exerciseIndex) => {
-    if (exerciseItem._id) {
-      setDeletedExercises((prevState) => [...prevState, exerciseItem._id]);
+    if (exerciseItem.id) {
+      setDeletedExercises((prevState) => [...prevState, {
+        exerciseId: exerciseItem.id,
+        workoutId: formData.workouts[workoutIndex]?.id
+      }]);
     }
 
     handleRemoveExercise(setFormData, workoutIndex, exerciseIndex);

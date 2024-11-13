@@ -8,7 +8,7 @@ import { db } from "../firebase-config";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 
 const HomePage = ({ user }) => {
-  useSetTitle("Fit Plan");
+  useSetTitle("Workout Planner");
   useScrollToTop();
 
   const { isPending, error, data } = useQuery({
@@ -19,30 +19,41 @@ const HomePage = ({ user }) => {
         where("uid", "==", user?.uid),
         where("isArchived", "==", false),
         orderBy("createdAt", "desc")
-      )
-      const plansSnapshot = await getDocs(q)
-      const plans = []
+      );
+      const plansSnapshot = await getDocs(q);
+      const plans = [];
 
       // get all plans of current user
       for (const planDoc of plansSnapshot.docs) {
-        const planData = { id: planDoc.id, ...planDoc.data(), workouts: [] }
+        const planData = { id: planDoc.id, ...planDoc.data(), workouts: [] };
 
         // get workouts from workouts subcollection
-        const workoutsSnapshot = await getDocs(collection(planDoc.ref, "workouts"))
+        const workoutsSnapshot = await getDocs(
+          query(collection(planDoc.ref, "workouts"), orderBy("order", "asc"))
+        );
 
         for (const workoutDoc of workoutsSnapshot.docs) {
-          const workoutData = { id: workoutDoc.id, ...workoutDoc.data(), exercises: [] }
+          const workoutData = {
+            id: workoutDoc.id,
+            ...workoutDoc.data(),
+            exercises: [],
+          };
 
-          const exercisesSnapshot = await getDocs(collection(workoutDoc.ref, "exercises"))
-          workoutData.exercises = exercisesSnapshot.docs.map(exerciseDoc => ({
+          const exercisesSnapshot = await getDocs(
+            query(
+              collection(workoutDoc.ref, "exercises"),
+              orderBy("order", "asc")
+            )
+          );
+          workoutData.exercises = exercisesSnapshot.docs.map((exerciseDoc) => ({
             id: exerciseDoc.id,
-            ...exerciseDoc.data()
-          }))
-          planData.workouts.push(workoutData)
+            ...exerciseDoc.data(),
+          }));
+          planData.workouts.push(workoutData);
         }
-        plans.push(planData)
+        plans.push(planData);
       }
-      return plans
+      return plans;
     },
   });
 
@@ -84,6 +95,6 @@ const HomePage = ({ user }) => {
 };
 
 HomePage.propTypes = {
-  user: PropTypes.object.isRequired
-}
+  user: PropTypes.object,
+};
 export default HomePage;

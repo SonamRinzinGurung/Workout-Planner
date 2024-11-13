@@ -5,7 +5,17 @@ import { Plan } from "../components";
 import ReactLoading from "react-loading";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { collection, getDocs, orderBy, query, where, doc, updateDoc, serverTimestamp, deleteDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  orderBy,
+  query,
+  where,
+  doc,
+  updateDoc,
+  serverTimestamp,
+  deleteDoc,
+} from "firebase/firestore";
 import { db } from "../firebase-config";
 
 const ArchivedPlans = ({ user }) => {
@@ -21,38 +31,52 @@ const ArchivedPlans = ({ user }) => {
         where("uid", "==", user?.uid),
         where("isArchived", "==", true),
         orderBy("updatedAt", "desc")
-      )
-      const plansSnapshot = await getDocs(q)
-      const plans = []
+      );
+      const plansSnapshot = await getDocs(q);
+      const plans = [];
 
       // get all plans of current user
       for (const planDoc of plansSnapshot.docs) {
-        const planData = { id: planDoc.id, ...planDoc.data(), workouts: [] }
+        const planData = { id: planDoc.id, ...planDoc.data(), workouts: [] };
 
         // get workouts from workouts subcollection
-        const workoutsSnapshot = await getDocs(collection(planDoc.ref, "workouts"))
+        const workoutsSnapshot = await getDocs(
+          query(collection(planDoc.ref, "workouts"), orderBy("order", "asc"))
+        );
 
         for (const workoutDoc of workoutsSnapshot.docs) {
-          const workoutData = { id: workoutDoc.id, ...workoutDoc.data(), exercises: [] }
+          const workoutData = {
+            id: workoutDoc.id,
+            ...workoutDoc.data(),
+            exercises: [],
+          };
 
-          const exercisesSnapshot = await getDocs(collection(workoutDoc.ref, "exercises"))
-          workoutData.exercises = exercisesSnapshot.docs.map(exerciseDoc => ({
+          const exercisesSnapshot = await getDocs(
+            query(
+              collection(workoutDoc.ref, "exercises"),
+              orderBy("order", "asc")
+            )
+          );
+          workoutData.exercises = exercisesSnapshot.docs.map((exerciseDoc) => ({
             id: exerciseDoc.id,
-            ...exerciseDoc.data()
-          }))
-          planData.workouts.push(workoutData)
+            ...exerciseDoc.data(),
+          }));
+          planData.workouts.push(workoutData);
         }
-        plans.push(planData)
+        plans.push(planData);
       }
-      return plans
+      return plans;
     },
   });
 
   const { mutate: restorePlan } = useMutation({
     mutationFn: async (id) => {
       setIsLoading(true);
-      const docRef = doc(db, "workoutPlans", id)
-      return await updateDoc(docRef, { isArchived: false, updatedAt: serverTimestamp() });
+      const docRef = doc(db, "workoutPlans", id);
+      return await updateDoc(docRef, {
+        isArchived: false,
+        updatedAt: serverTimestamp(),
+      });
     },
     onSuccess: () => {
       setIsLoading(false);
@@ -68,18 +92,20 @@ const ArchivedPlans = ({ user }) => {
   const { mutate: deletePlan } = useMutation({
     mutationFn: async (id) => {
       setIsLoading(true);
-      const planRef = doc(db, "workoutPlans", id)
-      const workoutsSnapshot = await getDocs(collection(planRef, "workouts"))
+      const planRef = doc(db, "workoutPlans", id);
+      const workoutsSnapshot = await getDocs(collection(planRef, "workouts"));
 
       for (const workoutDoc of workoutsSnapshot.docs) {
-        const exerciseRef = await getDocs(collection(workoutDoc.ref, "exercises"))
-        await deleteDoc(workoutDoc.ref)
+        const exerciseRef = await getDocs(
+          collection(workoutDoc.ref, "exercises")
+        );
+        await deleteDoc(workoutDoc.ref);
 
         for (const exerciseDoc of exerciseRef.docs) {
-          await deleteDoc(exerciseDoc.ref)
+          await deleteDoc(exerciseDoc.ref);
         }
       }
-      await deleteDoc(planRef)
+      await deleteDoc(planRef);
       return id;
     },
     onSuccess: () => {
@@ -148,6 +174,6 @@ const ArchivedPlans = ({ user }) => {
 };
 
 ArchivedPlans.propTypes = {
-  user: PropTypes.object.isRequired
-}
+  user: PropTypes.object,
+};
 export default ArchivedPlans;

@@ -12,13 +12,20 @@ import { TbDragDrop2 } from "react-icons/tb";
 import { useAppContext } from "../context/appContext";
 
 const WorkoutForm = ({ workoutIndex, workoutItem }) => {
-    const { formData, setFormData, setDeletedWorkouts } = useAppContext();
+    const { formData, setFormData, setDeletedWorkouts, setDeletedExercises } =
+        useAppContext();
 
     const handleWorkoutRemoval = (setFormData, workoutIndex) => {
-      if (workoutItem._id) {
-          setDeletedWorkouts((prevState) => [...prevState, workoutItem._id]);
-      }
+        if (workoutItem.id) {
+            setDeletedWorkouts((prevState) => [...prevState, workoutItem.id]);
 
+            // Add all exercises to the deletedExercises array
+            workoutItem.exercises.forEach((exercise) => {
+                if (exercise.id) {
+                    setDeletedExercises((prevState) => [...prevState, { exerciseId: exercise.id, workoutId: workoutItem.id }]);
+                }
+            });
+        }
         handleRemoveWorkout(setFormData, workoutIndex);
     };
     return (
@@ -30,34 +37,34 @@ const WorkoutForm = ({ workoutIndex, workoutItem }) => {
                     key={workoutIndex}
                     className="flex flex-col gap-2 items-center shadow-md mb-4 p-6 rounded-md bg-emerald-100 dark:bg-gray-900"
                 >
-                  <div
-                      {...provided.dragHandleProps}
-                      className="rotate-90 ml-auto -mt-2 -mr-2"
-                  >
-                      <TbDragDrop2 size={25} />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                      <div className="flex items-center justify-center gap-2">
-                          <p className="font-subHead font-semibold text-center">
-                              Name of the Workout
-                          </p>
-                      </div>
-                      <input
-                          className="border border-gray-500 p-2 rounded-md font-mono text-xs text-center dark:bg-gray-900"
-                          type="text"
-                          name="title"
-                          placeholder="Workout Name"
-                          value={workoutItem.title}
-                          onChange={(event) =>
-                              handleWorkoutChange(
-                                  formData.workouts,
-                                  setFormData,
-                                  workoutIndex,
-                                  event
-                              )
-                          }
-                      />
-                  </div>
+                    <div
+                        {...provided.dragHandleProps}
+                        className="rotate-90 ml-auto -mt-2 -mr-2"
+                    >
+                        <TbDragDrop2 size={25} />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <div className="flex items-center justify-center gap-2">
+                            <p className="font-subHead font-semibold text-center">
+                                Name of the Workout
+                            </p>
+                        </div>
+                        <input
+                            className="border border-gray-500 p-2 rounded-md font-mono text-xs text-center dark:bg-gray-900"
+                            type="text"
+                            name="title"
+                            placeholder="Workout Name"
+                            value={workoutItem.title}
+                            onChange={(event) =>
+                                handleWorkoutChange(
+                                    formData.workouts,
+                                    setFormData,
+                                    workoutIndex,
+                                    event
+                                )
+                            }
+                        />
+                    </div>
 
                   <div className="flex flex-col items-center gap-2 p-2 rounded-md">
                       <div>
