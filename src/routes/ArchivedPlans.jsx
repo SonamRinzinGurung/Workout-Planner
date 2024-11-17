@@ -19,7 +19,7 @@ import {
 import { db } from "../firebase-config";
 
 const ArchivedPlans = ({ user }) => {
-  useSetTitle("Removed Plans");
+  useSetTitle("Archived Plans");
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
 

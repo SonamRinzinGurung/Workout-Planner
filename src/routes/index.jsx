@@ -8,6 +8,8 @@ import EditWorkout from "./EditWorkout";
 import ArchivedPlans from "./ArchivedPlans";
 import VerifyEmailNotice from "./VerifyEmailNotice";
 import EmailVerification from "./EmailVerification";
+import WorkoutPlanDetail from "./WorkoutPlanDetail";
+
 export {
   Layout,
   Login,
@@ -19,4 +21,5 @@ export {
   ArchivedPlans,
   VerifyEmailNotice,
   EmailVerification,
+  WorkoutPlanDetail,
 };

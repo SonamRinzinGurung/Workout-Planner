@@ -13,7 +13,7 @@ const Plan = ({
   id,
   name,
   workouts,
-  source,
+  source = "home",
   handleDelete,
   handleRestore,
   setFormData,
@@ -48,6 +48,9 @@ const Plan = ({
     onSuccess: () => {
       toast.success("Workout plan moved to archives");
       queryClient.invalidateQueries("workout-plan");
+      if (source === "detail") {
+        navigate("/archived-plans");
+      }
     },
     onError: (data) => {
       toast.error(data.response.data.msg);
@@ -115,7 +118,7 @@ const Plan = ({
         >
           <div className="absolute p-4 w-full bg-gray-200 shadow-md border border-gray-400 rounded-lg  flex flex-col items-center top-1 dark:bg-gray-800">
             <div className="flex flex-col w-10/12 gap-4">
-              {source === "home" && (
+              {(source === "home" || source === "detail") && (
                 <>
                   <Button
                     name="Edit"

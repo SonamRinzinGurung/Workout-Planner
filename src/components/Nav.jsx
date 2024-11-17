@@ -89,7 +89,7 @@ const Nav = ({ user, darkMode, handleLogout, toggleDark, toggleDrawer }) => {
                                     <NavLink
                                         key={plan.id}
                                         onClick={toggleDrawer}
-                                        to="/1"
+                                        to={`/${plan.id}`}
                                         className={({ isActive }) =>
                                             `py-4 px-10 ${isActive
                                                 ? "bg-primary text-gray-100"
