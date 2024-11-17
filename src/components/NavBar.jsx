@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import PropTypes from "prop-types";
 import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, Slide } from "react-toastify";
 import { Nav } from "../components";
 import '../index.css'
-import useAuth from "../hooks/useAuth";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase-config";
 import Drawer from 'react-modern-drawer'
@@ -11,31 +11,15 @@ import 'react-modern-drawer/dist/index.css'
 import logo from "../assets/logo.png";
 import { IoMenu, IoCloseOutline } from "react-icons/io5";
 
-const Header = () => {
+const NavBar = ({ darkMode, toggleDark, user }) => {
   const navigate = useNavigate();
-  let darkModeLocal = localStorage.getItem("darkMode");
-  darkModeLocal = darkModeLocal?.toLowerCase() === "true";
 
-  const { user, loading } = useAuth()
-  const [darkMode, setDarkMode] = useState(darkModeLocal || false);
+
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleDrawer = () => {
     setIsOpen((prevState) => !prevState)
   }
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [darkMode]);
-
-  const toggleDark = () => {
-    setDarkMode(!darkMode);
-    localStorage.setItem("darkMode", !darkMode);
-  };
 
   const handleLogout = () => {
     try {
@@ -47,9 +31,11 @@ const Header = () => {
     }
   };
 
-  if (loading) return null;
   return (
     <div className="overflow-hidden">
+
+      {user &&
+        <>
       <div className="md:hidden">
         <div className="flex justify-between w-full py-2">
 
@@ -74,8 +60,10 @@ const Header = () => {
           darkMode={darkMode}
           handleLogout={handleLogout}
           toggleDark={toggleDark}
-        />
+          />
       </div>
+        </>
+      }
       <Drawer
         open={isOpen}
         onClose={toggleDrawer}
@@ -111,4 +99,9 @@ const Header = () => {
   );
 };
 
-export default Header;
+NavBar.propTypes = {
+  darkMode: PropTypes.bool,
+  toggleDark: PropTypes.func,
+  user: PropTypes.object,
+}
+export default NavBar;

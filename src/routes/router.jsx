@@ -1,5 +1,5 @@
 import {
-  Root,
+  Layout,
   Login,
   HomePage,
   PageNotFound,
@@ -16,7 +16,7 @@ import { createBrowserRouter } from "react-router-dom";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: <Layout />,
     children: [
       {
         path: "/",
