@@ -1,13 +1,19 @@
-import { useState, useEffect, useRef } from "react";
+import { useRef } from "react";
 import PropTypes from "prop-types";
-import { Workout, Button, InputText } from ".";
+import {
+  Workout,
+  Button,
+  InputText,
+  PopOverOptionsMenu,
+  MobileBottomSheet,
+} from ".";
 import { useNavigate } from "react-router-dom";
-import { BsThreeDots } from "react-icons/bs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import ReactLoading from "react-loading";
 import { doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase-config";
+import { BiEditAlt, BiArchive } from "react-icons/bi";
+import useIsMobile from "../hooks/useIsMobile";
 
 const Plan = ({
   id,
@@ -22,28 +28,16 @@ const Plan = ({
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [modalState, setModalState] = useState(false);
   const modalRef = useRef(null);
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setModalState(false); // close the modal when clicked outside
-      }
-    }
-    // Bind the event listener
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [setModalState]);
+  const isMobile = useIsMobile();
 
   const { mutate: archivePlan, isPending } = useMutation({
     mutationFn: async (id) => {
-      setModalState(false);
-      const docRef = doc(db, "workoutPlans", id)
-      return await updateDoc(docRef, { isArchived: true, updatedAt: serverTimestamp() });
+      const docRef = doc(db, "workoutPlans", id);
+      return await updateDoc(docRef, {
+        isArchived: true,
+        updatedAt: serverTimestamp(),
+      });
     },
     onSuccess: () => {
       toast.success("Workout plan moved to archives");
@@ -64,11 +58,8 @@ const Plan = ({
     }));
   };
   return (
-    <div className="flex flex-col rounded-md"> 
-      <div
-        ref={modalRef}
-        className="relative flex flex-col items-center"
-      >
+    <div className="flex flex-col rounded-md">
+      <div ref={modalRef} className="relative flex flex-col items-center">
         {source === "create" && (
           <div className="flex flex-col items-center gap-1 my-4">
             <div>
@@ -84,87 +75,128 @@ const Plan = ({
           </div>
         )}
         {source !== "create" && (
-          <div className="flex justify-center items-center gap-4 bg-emerald-400 dark:bg-emerald-800 rounded-md rounded-b-none w-full py-2">
-
+          <div className="flex justify-between items-center gap-4 bg-emerald-400 dark:bg-emerald-800 rounded-md rounded-b-none w-full py-2 px-6">
             <div>
-              <p className="font-subHead font-semibold text-lg italic self-center">
-              {name}
+              <p className="font-subHead font-semibold text-xl md:text-2xl">
+                {name}
               </p>
-          </div>
+            </div>
 
-          <button
-            className="relative rounded-full p-1 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-800"
-            onClick={() => setModalState((prev) => !prev)}
-          >
-            {isPending || removeLoading ? (
-              <ReactLoading
-                height="28px"
-                width="28px"
-                type="balls"
-                color="#ffffff"
+            {isMobile ? (
+              <MobileBottomSheet
+                content={
+                  <div className="flex flex-col px-4 pb-6 pt-4 w-full gap-8">
+                    <div className="flex w-full items-center justify-between">
+                      <div className="text-xl font-medium">Options</div>
+                    </div>
+                    <div className="flex flex-col gap-4">
+                      {source === "archived" ? (
+                        <>
+                          <Button
+                            name="Restore"
+                            className="border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
+                            position={2}
+                            handleClick={() => {
+                              handleRestore(id);
+                            }}
+                            isPending={removeLoading}
+                          />
+                          <Button
+                            name="Delete"
+                            className="bg-red-600 text-gray-50 hover:bg-red-700"
+                            handleClick={() => {
+                              handleDelete(id);
+                            }}
+                            isPending={removeLoading}
+                          />
+                        </>
+                      ) : (
+                          <>
+                            <Button
+                              name="Edit"
+                              className={
+                                "border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
+                              }
+                              icon={<BiEditAlt />}
+                              position={1}
+                              handleClick={() => navigate(`/edit/${id}`)}
+                            />
+                            <Button
+                              name="Archive"
+                            className={
+                              "bg-red-600 text-gray-50 hover:bg-red-700"
+                            }
+                            icon={<BiArchive />}
+                            position={1}
+                            handleClick={() => archivePlan(id)}
+                            isPending={isPending}
+                          />
+                        </>
+                      )}
+                    </div>
+                  </div>
+                }
               />
             ) : (
-                <BsThreeDots size="25" />
+              <PopOverOptionsMenu
+                align="end"
+                positions={["bottom", "left", "right", "top"]}
+                content={
+                  <div className="flex flex-col p-6 w-56 shadow-sm rounded-lg bg-gray-100 dark:bg-gray-800 gap-4">
+                    {source === "archived" ? (
+                      <>
+                        <Button
+                          name="Restore"
+                          className="border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
+                          position={2}
+                          handleClick={() => {
+                            handleRestore(id);
+                          }}
+                          isPending={removeLoading}
+                        />
+                        <Button
+                          name="Delete"
+                          className="bg-red-600 text-gray-50 hover:bg-red-700"
+                          handleClick={() => {
+                            handleDelete(id);
+                          }}
+                          isPending={removeLoading}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          name="Edit"
+                          className={
+                            "border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
+                          }
+                          icon={<BiEditAlt />}
+                          position={1}
+                          handleClick={() => navigate(`/edit/${id}`)}
+                        />
+                        <Button
+                          name="Archive"
+                          className={"bg-red-600 text-gray-50 hover:bg-red-700"}
+                          icon={<BiArchive />}
+                          position={1}
+                          handleClick={() => archivePlan(id)}
+                          isPending={isPending}
+                        />
+                      </>
+                    )}
+                  </div>
+                }
+              />
             )}
-          </button>
           </div>
-
         )}
-        <div
-          className={`absolute top-full min-w-48  h-full flex justify-center items-center z-50 ${
-            modalState ? `opacity-100  visible` : `opacity-0 invisible`
-          }`}
-          style={{ transition: "opacity 0.4s" }}
-        >
-          <div className="absolute p-4 w-full bg-gray-200 shadow-md border border-gray-400 rounded-lg  flex flex-col items-center top-1 dark:bg-gray-800">
-            <div className="flex flex-col w-10/12 gap-4">
-              {(source === "home" || source === "detail") && (
-                <>
-                  <Button
-                    name="Edit"
-                    className={
-                      "border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
-                    }
-                    handleClick={() => navigate(`/edit/${id}`)}
-                  />
-                  <Button
-                    name="Archive"
-                    className={"bg-red-600 text-gray-50 hover:bg-red-700"}
-                    handleClick={() => archivePlan(id)}
-                    isPending={isPending}
-                  />
-                </>
-              )}
-
-              {source === "archived" && (
-                <>
-                  <Button
-                    name="Restore"
-                    className="border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
-                    position={2}
-                    handleClick={() => {
-                      handleRestore(id);
-                      setModalState(false);
-                    }}
-                    isPending={removeLoading}
-                  />
-                  <Button
-                    name="Delete"
-                    className="bg-red-600 text-gray-50 hover:bg-red-700"
-                    handleClick={() => {
-                      handleDelete(id);
-                      setModalState(false);
-                    }}
-                    isPending={removeLoading}
-                  />
-                </>
-              )}
-            </div>
-          </div>
-        </div>
       </div>
 
-      <div className={`flex flex-wrap gap-3 justify-center mb-2 px-2 py-6 ${source !== 'create' && 'border border-t-0 border-emerald-400 dark:border-emerald-800 border-x-2 rounded-md rounded-t-none bg-emerald-50 dark:bg-emerald-900'}`}>
+      <div
+        className={`flex flex-wrap gap-3 justify-center mb-2 px-2 py-6 ${source !== "create" &&
+          "border border-t-0 border-emerald-400 dark:border-emerald-800 border-x-2 rounded-md rounded-t-none bg-emerald-50 dark:bg-emerald-900"
+          }`}
+      >
         {workouts?.map((workout, index) => {
           return (
             <Workout key={index} {...workout} planId={id} source={source} />

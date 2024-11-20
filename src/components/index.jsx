@@ -14,6 +14,8 @@ import ExerciseForm from "./ExerciseForm";
 import MenuLinks from "./MenuLinks";
 import ExerciseGroupForm from "./ExerciseGroupForm";
 import Nav from "./Nav";
+import PopOverOptionsMenu from "./PopOverOptionsMenu";
+import MobileBottomSheet from "./MobileBottomSheet";
 
 export {
   NavBar,
@@ -31,5 +33,7 @@ export {
   ExerciseForm,
   MenuLinks,
   ExerciseGroupForm,
-  Nav
+  Nav,
+  PopOverOptionsMenu,
+  MobileBottomSheet
 };

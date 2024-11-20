@@ -2,12 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-.modalMenuLinks {
-  @apply w-full text-center hover:bg-gray-200 hover:shadow-md transition ease-in-out duration-300 dark:hover:bg-gray-800 py-3 border-b-2;
+:root {
+  --bg-color: white;
+  --text-color: black;
+  --bottom-sheet-bg-color: white;
+  --bottom-sheet-text-color: black;
 }
 
-.navLinks {
-  @apply p-4 hover:bg-primary hover:text-gray-100 hidden lg:block;
+.dark {
+  --bg-color: black;
+  --text-color: white;
+  --bottom-sheet-bg-color: rgb(42, 42, 42);
+  --bottom-sheet-text-color: white;
+}
+
+.modalMenuLinks {
+  @apply w-full text-center hover:bg-gray-200 hover:shadow-md transition ease-in-out duration-300 dark:hover:bg-gray-800 py-3 border-b-2;
 }
 
 /* For WebKit-based browsers */

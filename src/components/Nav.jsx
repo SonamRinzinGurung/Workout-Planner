@@ -80,7 +80,7 @@ const Nav = ({ user, darkMode, handleLogout, toggleDark, toggleDrawer }) => {
                         <button
                             onClick={toggleDrawer}
                         >Workout Plans</button>
-                        <button className="hover:text-gray-900" onClick={() => setShowDropdown((prev) => !prev)}>{showDropdown ? <MdExpandLess size={25} /> : <MdExpandMore size={25} />}</button>
+                        <button className="hover:text-gray-900 dark:hover:text-gray-100" onClick={() => setShowDropdown((prev) => !prev)}>{showDropdown ? <MdExpandLess size={25} /> : <MdExpandMore size={25} />}</button>
                     </NavLink>
                     {showDropdown && (
                         <div className="text-base flex flex-col ml-6">

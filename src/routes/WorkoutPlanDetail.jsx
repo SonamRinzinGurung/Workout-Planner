@@ -69,13 +69,13 @@ const WorkoutPlanDetail = ({ user }) => {
 
     return (
 
-        <div className="p-2 my-10 text-gray-900 dark:text-gray-100 flex flex-col ">
+        <div className="md:mt-20 mt-10 mb-10 text-gray-900 dark:text-gray-100 flex flex-col mx-auto px-10 max-w-4xl w-full gap-8">
             <div className="self-center">
-                <h1 className="font-bold font-heading text-2xl text-green-500">
+                <h1 className="font-bold font-heading text-3xl md:text-4xl ">
                     Workout Plan Details
                 </h1>
             </div>
-            <div className="flex flex-col gap-8 mt-4 lg:w-2/3 lg:mx-auto">
+            <div className="flex flex-col gap-8 mt-4">
                 <Plan {...data} source="detail" />
 
             </div>
