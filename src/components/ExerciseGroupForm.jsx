@@ -42,7 +42,9 @@ const ExerciseGroupForm = ({ workoutItem, workoutIndex }) => {
         <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId={workoutIndex.toString()} key={workoutIndex}>
                 {(provided) => (
-                    <div ref={provided.innerRef} {...provided.droppableProps}>
+                    <div ref={provided.innerRef} {...provided.droppableProps}
+                        className="flex flex-col gap-4"
+                    >
                         {workoutItem.exercises.map((exerciseItem, exerciseIndex) => (
                             <ExerciseForm
                                 key={exerciseIndex}

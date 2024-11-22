@@ -9,22 +9,23 @@ const InputTextExercise = ({
   workoutIndex,
   exerciseIndex,
   placeholder,
+  className,
+  type = "text",
 }) => {
 
   const { setFormData } = useAppContext();
 
   return (
-    <div>
       <input
-        className="border border-gray-500 p-2 rounded-md font-mono dark:bg-gray-900 text-sm"
+      className={`rounded-md p-2 dark:bg-gray-900 ${className}`} 
         name={name}
         placeholder={placeholder || capitalizeFirstLetter(name)}
         value={value}
         onChange={(event) =>
           handleExerciseChange(setFormData, workoutIndex, exerciseIndex, event)
         }
-      />
-    </div>
+      type={type}
+    />
   );
 };
 
@@ -34,5 +35,7 @@ InputTextExercise.propTypes = {
   workoutIndex: PropTypes.number.isRequired,
   exerciseIndex: PropTypes.number.isRequired,
   placeholder: PropTypes.string,
+  className: PropTypes.string,
+  type: PropTypes.string,
 };
 export default InputTextExercise;

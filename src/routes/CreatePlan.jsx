@@ -95,27 +95,27 @@ const CreatePlan = ({ user }) => {
   const memoizedValue = useMemo(() => ({ formData, setFormData }), [formData, setFormData])
 
   return (
-    <main className="my-10 dark:text-gray-100 text-gray-800">
-      <div className="mb-4 flex justify-center items-center gap-2">
-        <h1 className="text-center font-heading font-bold text-2xl text-green-500">
+    <main className="md:mt-20 mt-10 mb-10 flex flex-col dark:text-gray-100 text-gray-800 gap-8">
+      <div className="flex justify-center items-center gap-2">
+        <h1 className="font-heading font-bold text-3xl md:text-4xl text-center">
           Create Workout Plan
         </h1>
       </div>
-      <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-col items-center gap-10">
         <AppContext.Provider value={memoizedValue}>
           {conditionalComponent({ page })}
         </AppContext.Provider>
-        <div className="flex gap-10 mt-2">
+        <div className="flex gap-10">
           {page > 0 && (
             <Button
               handleClick={handleBack}
               name="Back"
-              className="border dark:hover:shadow-gray-700"
+              className="border dark:hover:shadow-gray-700 "
               icon={<GrNext className="rotate-180" />}
               position={1}
             />
           )}
-          {page === 0 && (
+          {page >= 0 && page < 2 && (
             <Button
               name="Next"
               handleClick={handleNext}
@@ -124,7 +124,7 @@ const CreatePlan = ({ user }) => {
               position={2}
             />
           )}
-          {page === 1 && (
+          {page === 2 && (
             <Button
               name="Submit"
               handleClick={handleSubmit}

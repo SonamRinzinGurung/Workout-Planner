@@ -1,20 +1,19 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import { useParams, useNavigate } from "react-router-dom";
 import useSetTitle from "../utils/useSetTitle";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import ReactLoading from "react-loading";
 import { Button, WorkoutForm, InputText } from "../components";
-import { MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
 import { delay } from "../utils/delayFetch";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { handleAddWorkout } from "../utils/formHandlers";
-import { IoAddCircle } from "react-icons/io5";
 import { reorderList } from "../utils/reorderList";
 import { formValidation } from "../utils/formValidator";
 import { AppContext } from "../context/appContext";
 import useScrollToTop from "../utils/useScrollToTop";
+import { FaPlus } from "react-icons/fa";
 import { db } from "../firebase-config";
 import {
   collection,
@@ -49,6 +48,7 @@ const EditWorkout = ({ user }) => {
   });
   const [deletedWorkouts, setDeletedWorkouts] = useState([]);
   const [deletedExercises, setDeletedExercises] = useState([]);
+  const [collapsed, setCollapsed] = useState(false);
 
   const memoizedValue = useMemo(
     () => ({ formData, setFormData, setDeletedExercises, setDeletedWorkouts }),
@@ -256,18 +256,18 @@ const EditWorkout = ({ user }) => {
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="mt-10 text-gray-900 dark:text-gray-100 flex flex-col items-center"
+              className="flex flex-col text-gray-900 dark:text-gray-100 items-center gap-4 w-4/5 md:w-3/5 mx-auto md:mt-20 mt-10 mb-10"
             >
-              <div className="mb-4">
-                <p className="text-center font-heading font-bold text-2xl text-green-500">
+              <div className="">
+                <p className="text-center font-heading font-bold text-3xl md:text-4xl">
                   Edit Workout
                 </p>
               </div>
 
               <div className="flex flex-col items-center gap-1 mb-4">
                 <div>
-                  <p className="font-subHead text-center">
-                    Name of the Workout Plan
+                  <p className="font-subHead text-center text-lg md:text-xl">
+                    Workout Plan Name
                   </p>
                 </div>
                 <div>
@@ -279,12 +279,23 @@ const EditWorkout = ({ user }) => {
                 </div>
               </div>
               <AppContext.Provider value={memoizedValue}>
-                <div className="dark:text-gray-100">
+                <div className="dark:text-gray-100 flex flex-col gap-4 w-full">
+                  {
+                    formData?.workouts.length !== 0 && (
+
+                      <button
+                        onClick={() => setCollapsed((prev) => !prev)}
+                        className="self-end bg-emerald-200 dark:bg-gray-800 py-1 px-2 rounded-md font-subHead font-semibold text-sm"
+                      >
+                        {collapsed ? "Expand Workouts" : "Reorder Workouts"}
+                      </button>
+                    )}
                   {formData.workouts.map((workoutItem, workoutIndex) => (
                     <WorkoutForm
                       key={workoutIndex}
                       workoutIndex={workoutIndex}
                       workoutItem={workoutItem}
+                      collapsed={collapsed}
                     />
                   ))}
                   {provided.placeholder}
@@ -296,7 +307,7 @@ const EditWorkout = ({ user }) => {
                   handleClick={() => handleAddWorkout(setFormData)}
                   className="bg-primary hover:bg-primaryDark text-gray-100 hover:text-gray-200 dark:text-gray-900 dark:hover:text-gray-800"
                   position={1}
-                  icon={<IoAddCircle className="w-5 h-5" />}
+                  icon={<FaPlus />}
                 />
               </div>
             </div>
@@ -309,15 +320,13 @@ const EditWorkout = ({ user }) => {
           handleClick={handleSubmit}
           className="bg-blue-500 hover:bg-blue-700 text-gray-100 dark:hover:shadow-gray-800 w-28"
           icon={
-            isLoading ? (
+            isLoading && (
               <ReactLoading
                 height="28px"
                 width="28px"
                 type="balls"
                 color="#ffffff"
               />
-            ) : (
-              <MdEdit />
             )
           }
           position={2}

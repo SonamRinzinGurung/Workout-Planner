@@ -31,7 +31,7 @@ const Layout = () => {
       <div>
         <NavBar darkMode={darkMode} toggleDark={toggleDark} user={user} />
       </div>
-      <div className="overflow-y-auto w-full custom-scrollbar">
+      <div className="overflow-y-scroll w-full custom-scrollbar">
         {!user && (
           <div className="flex justify-between w-full py-2">
 

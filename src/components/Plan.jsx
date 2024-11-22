@@ -1,12 +1,6 @@
 import { useRef } from "react";
 import PropTypes from "prop-types";
-import {
-  Workout,
-  Button,
-  InputText,
-  PopOverOptionsMenu,
-  MobileBottomSheet,
-} from ".";
+import { Workout, Button, PopOverOptionsMenu, MobileBottomSheet } from ".";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -22,7 +16,6 @@ const Plan = ({
   source = "home",
   handleDelete,
   handleRestore,
-  setFormData,
   removeLoading,
 }) => {
   const navigate = useNavigate();
@@ -51,27 +44,17 @@ const Plan = ({
     },
   });
 
-  const handleNameChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      name: e.target.value,
-    }));
-  };
   return (
     <div className="flex flex-col rounded-md">
       <div ref={modalRef} className="relative flex flex-col items-center">
         {source === "create" && (
-          <div className="flex flex-col items-center gap-1 my-4">
-            <div>
-              <p className="font-subHead text-center">Name the Workout Plan</p>
-            </div>
-            <div>
-              <InputText
-                name="plan name"
-                value={name}
-                handleChange={handleNameChange}
-              />
-            </div>
+          <div className="flex flex-col">
+            <p className="font-subHead text-center text-lg md:text-xl">
+              Workout Plan Name
+            </p>
+            <p className="font-subHead text-center text-lg md:text-xl font-semibold">
+              {"New routine"}
+            </p>
           </div>
         )}
         {source !== "create" && (

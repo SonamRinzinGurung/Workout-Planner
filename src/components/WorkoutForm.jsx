@@ -6,12 +6,13 @@ import {
     handleRemoveWorkout,
 } from "../utils/formHandlers";
 import { FaPlus } from "react-icons/fa";
-import { MdDeleteOutline } from "react-icons/md";
 import { Draggable } from "@hello-pangea/dnd";
-import { TbDragDrop2 } from "react-icons/tb";
+import { MdDragIndicator } from "react-icons/md";
+import { IoIosRemoveCircle } from "react-icons/io";
+
 import { useAppContext } from "../context/appContext";
 
-const WorkoutForm = ({ workoutIndex, workoutItem }) => {
+const WorkoutForm = ({ workoutIndex, workoutItem, collapsed }) => {
     const { formData, setFormData, setDeletedWorkouts, setDeletedExercises } =
         useAppContext();
 
@@ -22,7 +23,10 @@ const WorkoutForm = ({ workoutIndex, workoutItem }) => {
             // Add all exercises to the deletedExercises array
             workoutItem.exercises.forEach((exercise) => {
                 if (exercise.id) {
-                    setDeletedExercises((prevState) => [...prevState, { exerciseId: exercise.id, workoutId: workoutItem.id }]);
+                    setDeletedExercises((prevState) => [
+                        ...prevState,
+                        { exerciseId: exercise.id, workoutId: workoutItem.id },
+                    ]);
                 }
             });
         }
@@ -35,64 +39,70 @@ const WorkoutForm = ({ workoutIndex, workoutItem }) => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     key={workoutIndex}
-                    className="flex flex-col gap-2 items-center shadow-md mb-4 p-6 rounded-md bg-emerald-100 dark:bg-gray-900"
+                    className="flex flex-col gap-2 items-center shadow-md py-6 md:px-6 px-4 rounded-md bg-emerald-300 dark:bg-gray-900 w-full"
                 >
-                    <div
-                        {...provided.dragHandleProps}
-                        className="rotate-90 ml-auto -mt-2 -mr-2"
-                    >
-                        <TbDragDrop2 size={25} />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                        <div className="flex items-center justify-center gap-2">
-                            <p className="font-subHead font-semibold text-center">
-                                Name of the Workout
-                            </p>
+                    {!collapsed && (
+                        <div className="flex w-full items-center justify-end">
+                            <button
+                                onClick={() => handleWorkoutRemoval(setFormData, workoutIndex)}
+                                className="flex justify-center p-2 rounded-md text-red-400 hover:text-red-500"
+                            >
+                                <IoIosRemoveCircle className="text-center" size={30} />
+                            </button>
                         </div>
-                        <input
-                            className="border border-gray-500 p-2 rounded-md font-mono text-xs text-center dark:bg-gray-900"
-                            type="text"
-                            name="title"
-                            placeholder="Workout Name"
-                            value={workoutItem.title}
-                            onChange={(event) =>
-                                handleWorkoutChange(
-                                    formData.workouts,
-                                    setFormData,
-                                    workoutIndex,
-                                    event
-                                )
-                            }
-                        />
+                    )}
+                    <div className="flex gap-4 w-full">
+                        {collapsed && (
+                            <div {...provided.dragHandleProps} className="">
+                                <MdDragIndicator size={30} className="cursor-move" />
+                            </div>
+                        )}
+                        <div className="flex flex-col gap-1 w-full">
+                            <div className="">
+                                <p className="font-subHead font-semibold text-xl">
+                                    Name of the Workout
+                                </p>
+                            </div>
+                            <div className="w-full">
+                                <input
+                                    className="border border-gray-500 p-4 rounded-md font-mono dark:bg-gray-900 w-full"
+                                    type="text"
+                                    name="title"
+                                    placeholder="Workout Name"
+                                    value={workoutItem.title}
+                                    onChange={(event) =>
+                                        handleWorkoutChange(
+                                            formData.workouts,
+                                            setFormData,
+                                            workoutIndex,
+                                            event
+                                        )
+                                    }
+                                />
+                            </div>
+                        </div>
                     </div>
+                    {collapsed ? null : (
+                        <div className="flex flex-col gap-4 p-4 rounded-md w-full bg-emerald-50 dark:bg-gray-600 mt-4">
+                            <div>
+                                <p className="font-subHead font-semibold text-lg">
+                                    Exercise Details
+                                </p>
+                            </div>
+                            <ExerciseGroupForm
+                                workoutItem={workoutItem}
+                                workoutIndex={workoutIndex}
+                            />
 
-                  <div className="flex flex-col items-center gap-2 p-2 rounded-md">
-                      <div>
-                          <p className="font-subHead font-semibold text-center">
-                              Exercise Details
-                          </p>
-                      </div>
-                      <ExerciseGroupForm
-                          workoutItem={workoutItem}
-                          workoutIndex={workoutIndex}
-                      />
-
-                      <button
-                          onClick={() => handleAddExercise(setFormData, workoutIndex)}
-                          className="flex justify-center items-center gap-1 mt-2 p-2 rounded-md hover:shadow-md transition ease-in-out duration-300 bg-emerald-400 hover:bg-emerald-500 text-gray-100 hover:text-gray-200 dark:text-gray-900 dark:hover:text-gray-800"
-                      >
-                          <FaPlus />
-                          <p className="text-xs font-medium">Exercise</p>
-                      </button>
-                  </div>
-
-                  <button
-                      onClick={() => handleWorkoutRemoval(setFormData, workoutIndex)}
-                      className="flex justify-center p-2 rounded-md bg-red-400 hover:bg-red-500 hover:shadow-md transition ease-in-out duration-300 text-gray-100 hover:text-gray-200 dark:text-gray-900 dark:hover:text-gray-800"
-                  >
-                      <MdDeleteOutline className="text-center" />
-                      <p className="text-xs font-medium">Workout</p>
-                  </button>
+                            <button
+                                onClick={() => handleAddExercise(setFormData, workoutIndex)}
+                                className="flex justify-center items-center gap-1 p-2 rounded-md hover:shadow-md transition ease-in-out duration-300 bg-emerald-400 hover:bg-emerald-500 text-gray-100 hover:text-gray-200 dark:text-gray-900 dark:hover:text-gray-800"
+                            >
+                                <FaPlus />
+                                <p className="font-medium">Exercise</p>
+                            </button>
+                        </div>
+                    )}
               </div>
           )}
       </Draggable>
@@ -104,4 +114,5 @@ export default WorkoutForm;
 WorkoutForm.propTypes = {
     workoutIndex: PropTypes.number.isRequired,
     workoutItem: PropTypes.object.isRequired,
+    collapsed: PropTypes.bool.isRequired,
 };

@@ -121,7 +121,7 @@ const HomePage = ({ user }) => {
   return (
     <div className="md:mt-20 mt-10 mb-10 text-gray-900 dark:text-gray-100 flex flex-col mx-auto px-10 max-w-4xl w-full gap-8">
       <div className="self-center">
-        <h1 className="font-bold font-heading text-3xl md:text-4xl">
+        <h1 className="font-bold font-heading text-3xl md:text-4xl text-center">
           All Workout Plans
         </h1>
       </div>

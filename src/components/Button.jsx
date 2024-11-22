@@ -16,7 +16,7 @@ const Button = ({
       `${isPending && "opacity-30"}`
     }>
       <div
-        className={`flex p-2 gap-4 items-center ${icon ? "justify-start" : "justify-center"}`}
+        className={`flex p-2 gap-2 items-center ${icon ? "justify-start" : "justify-center"}`}
       >
         {position === 1 && icon}
         <p className="font-medium">{name}</p>
