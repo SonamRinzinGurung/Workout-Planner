@@ -264,19 +264,18 @@ const EditWorkout = ({ user }) => {
                 </p>
               </div>
 
-              <div className="flex flex-col items-center gap-1 mb-4">
+              <div className="flex flex-col items-center gap-1 mb-4 w-full">
                 <div>
-                  <p className="font-subHead text-center text-lg md:text-xl">
+                  <p className="font-subHead text-center text-xl md:text-2xl">
                     Workout Plan Name
                   </p>
                 </div>
-                <div>
                   <InputText
                     name="plan name"
                     value={formData?.name}
                     handleChange={handleNameChange}
-                  />
-                </div>
+                  className="border border-gray-500 p-2 rounded-md font-mono dark:bg-gray-900 text-center md:text-lg md:w-1/2 w-3/4 mx-auto h-14 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                />
               </div>
               <AppContext.Provider value={memoizedValue}>
                 <div className="dark:text-gray-100 flex flex-col gap-4 w-full">
@@ -285,7 +284,7 @@ const EditWorkout = ({ user }) => {
 
                       <button
                         onClick={() => setCollapsed((prev) => !prev)}
-                        className="self-end bg-emerald-200 dark:bg-gray-800 py-1 px-2 rounded-md font-subHead font-semibold text-sm"
+                        className="self-end bg-emerald-200 dark:bg-gray-800 p-2 rounded-md font-medium text-xs md:text-sm"
                       >
                         {collapsed ? "Expand Workouts" : "Reorder Workouts"}
                       </button>

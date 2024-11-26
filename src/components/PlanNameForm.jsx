@@ -12,14 +12,14 @@ const PlanNameForm = () => {
     return (
         <div className="flex flex-col items-center gap-4 w-full">
             <div>
-                <p className="font-subHead font-medium text-xl md:text-2xl">Name the Workout Plan</p>
+                <p className="font-subHead text-center font-medium text-xl md:text-2xl">Name the Workout Plan</p>
             </div>
             <div className="w-full flex">
                 <InputText
                     name="plan name"
                     value={formData.name}
                     handleChange={handleNameChange}
-                    className="border border-gray-500 p-2 rounded-md font-mono dark:bg-gray-900 text-center md:text-lg md:w-1/2 w-3/4 mx-auto h-14"
+                    className="border border-gray-500 p-2 rounded-md font-mono dark:bg-gray-900 text-center md:text-lg md:w-1/2 w-3/4 mx-auto h-14 focus:outline-none focus:ring-1 focus:ring-gray-500"
                 />
             </div>
         </div>)

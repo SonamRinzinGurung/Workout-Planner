@@ -42,3 +42,13 @@
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent; /* Track background */
 }
+
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner {
+  -moz-appearance: textfield;
+}

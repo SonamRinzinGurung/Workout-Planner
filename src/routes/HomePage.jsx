@@ -216,7 +216,7 @@ const HomePage = ({ user }) => {
                     {item.description}
                   </p>
                 </div>
-                <div className="flex items-center gap-1 bg-primary py-1 px-2 rounded-md dark:bg-primaryDark w-max">
+                <div className="flex items-center gap-1 bg-emerald-300 py-1 px-2 rounded-md dark:bg-emerald-900 w-max">
                   {" "}
                   <CgGym size={20} />
                   <p className="font-subHead font-medium">

@@ -48,7 +48,7 @@ const WorkoutGroupForm = () => {
 
                   <button
                     onClick={() => setCollapsed((prev) => !prev)}
-                    className="self-end bg-emerald-200 dark:bg-gray-800 py-1 px-2 rounded-md font-subHead font-semibold text-sm"
+                    className="self-end bg-emerald-200 dark:bg-gray-800 p-2 rounded-md text-xs md:text-sm font-medium"
                   >
                     {collapsed ? "Expand Workouts" : "Reorder Workouts"}
                   </button>

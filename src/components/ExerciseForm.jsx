@@ -97,6 +97,8 @@ const ExerciseForm = ({ exerciseItem, exerciseIndex, workoutIndex }) => {
                     workoutIndex={workoutIndex}
                     exerciseIndex={exerciseIndex}
                     className="w-full"
+                    type="number"
+
                   />
                   <InputTextExercise
                     name="reps"
@@ -104,23 +106,36 @@ const ExerciseForm = ({ exerciseItem, exerciseIndex, workoutIndex }) => {
                     workoutIndex={workoutIndex}
                     exerciseIndex={exerciseIndex}
                     className="w-full"
+                    type="number"
                   />
                 </div>
                 <div>
-                  <textarea
-                    className={`rounded-md p-2 w-full dark:bg-gray-900`}
-                    name="weight"
-                    placeholder="Description"
-                    value={exerciseItem.weight}
-                    onChange={(event) =>
-                      handleExerciseChange(
-                        setFormData,
-                        workoutIndex,
-                        exerciseIndex,
-                        event
-                      )
-                    }
-                  />
+                  <div className="relative w-full">
+                    <textarea
+                      type=""
+                      id="input-text"
+                      placeholder=""
+                      className="peer block w-full rounded-md bg-white dark:bg-gray-900 px-2 pb-2 pt-5 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                      name="weight"
+                      value={exerciseItem.weight}
+                      onChange={(event) =>
+                        handleExerciseChange(
+                          setFormData,
+                          workoutIndex,
+                          exerciseIndex,
+                          event
+                        )
+                      }
+                    />
+                    <label
+                      htmlFor="input-text"
+                      className="absolute left-2 top-0 text-gray-500 dark:text-gray-400 text-sm transition-all duration-200 peer-placeholder-shown:top-3  peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm peer-focus:text-gray-700 dark:peer-focus:text-gray-300"
+                    >
+                      Description
+                    </label>
+                  </div>
+
+
                 </div>
               </>
             )}

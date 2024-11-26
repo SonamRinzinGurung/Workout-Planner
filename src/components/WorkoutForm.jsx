@@ -52,11 +52,11 @@ const WorkoutForm = ({ workoutIndex, workoutItem, collapsed }) => {
                         </div>
                     )}
                     <div className="flex gap-4 w-full">
-                        {collapsed && (
                             <div {...provided.dragHandleProps} className="">
+                            {collapsed && (
                                 <MdDragIndicator size={30} className="cursor-move" />
-                            </div>
-                        )}
+                            )}
+                        </div>
                         <div className="flex flex-col gap-1 w-full">
                             <div className="">
                                 <p className="font-subHead font-semibold text-xl">
@@ -65,7 +65,7 @@ const WorkoutForm = ({ workoutIndex, workoutItem, collapsed }) => {
                             </div>
                             <div className="w-full">
                                 <input
-                                    className="border border-gray-500 p-4 rounded-md font-mono dark:bg-gray-900 w-full"
+                                    className="border border-gray-500 p-4 rounded-md font-mono dark:bg-gray-900 w-full focus:outline-none focus:ring-1 focus:ring-gray-500"
                                     type="text"
                                     name="title"
                                     placeholder="Workout Name"
