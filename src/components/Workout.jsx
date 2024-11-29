@@ -3,9 +3,9 @@ import { Exercise } from ".";
 
 const Workout = ({ title, exercises }) => {
   return (
-    <div className="p-4 relative border border-gray-500 dark:border-gray-100 hover:shadow-xl transition ease-in-out duration-300 hover:-translate-y-1 rounded-md w-60 lg:w-72 cursor-pointer bg-gray-100  dark:bg-gray-900">
+    <div className="p-4 rounded-md bg-lightColor dark:bg-darkColor w-full">
       <div>
-        <p className="font-subHead font-bold text-primary">{title}</p>
+        <p className="font-subHead font-bold">{title}</p>
       </div>
       <hr className="border-gray-500 dark:border-gray-100" />
       {exercises?.map((exercise, index) => {

@@ -61,15 +61,14 @@ const WorkoutPlanDetail = ({ user }) => {
         return (
             <ReactLoading
                 type="spinningBubbles"
-                color="#D5B263"
+                color="#8967b3"
                 className="mx-auto mt-16"
             />
         );
     }
 
     return (
-
-        <div className="md:mt-20 mt-10 mb-10 text-gray-900 dark:text-gray-100 flex flex-col mx-auto px-10 max-w-4xl w-full gap-8">
+        <div className="md:mt-20 mt-10 mb-10 text-gray-900 dark:text-gray-100 flex flex-col mx-auto px-4 max-w-4xl w-full gap-8">
             <div className="self-center">
                 <h1 className="font-bold font-heading text-3xl md:text-4xl text-center">
                     Workout Plan Details
@@ -77,13 +76,12 @@ const WorkoutPlanDetail = ({ user }) => {
             </div>
             <div className="flex flex-col gap-8 mt-4">
                 <Plan {...data} source="detail" />
-
             </div>
         </div>
-    )
-}
+    );
+};
 
 WorkoutPlanDetail.propTypes = {
     user: PropTypes.object,
-}
-export default WorkoutPlanDetail
+};
+export default WorkoutPlanDetail;

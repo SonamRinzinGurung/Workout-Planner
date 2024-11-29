@@ -123,14 +123,14 @@ const ArchivedPlans = ({ user }) => {
     return (
       <ReactLoading
         type="spinningBubbles"
-        color="#D5B263"
+        color="#8967b3"
         className="mx-auto mt-16"
       />
     );
   }
   if (error) {
     return (
-      <div className="dark:text-gray-100 mt-10">
+      <div className="text-gray-900 mt-10 dark:text-gray-100 mx-auto">
         <p className="font-subHead font-semibold text-2xl text-center">
           ERROR!! {error.message}
         </p>
@@ -139,8 +139,8 @@ const ArchivedPlans = ({ user }) => {
   }
   if (data.length == 0) {
     return (
-      <div className="text-gray-800 flexitems-center gap-2 mt-10 dark:text-gray-100">
-        <div className="p-2">
+      <div className="text-gray-900 mt-10 dark:text-gray-100 mx-auto">
+        <div className="p-2 w-full">
           <p className="font-heading font-bold text-2xl text-center">
             You haven&apos;t archived any Plans yet
           </p>
@@ -149,13 +149,13 @@ const ArchivedPlans = ({ user }) => {
     );
   }
   return (
-    <div className="p-2 my-10 text-gray-900 dark:text-gray-100 flex flex-col">
+    <div className="md:mt-20 mt-10 mb-10 text-gray-900 dark:text-gray-100 flex flex-col mx-auto px-4 max-w-4xl w-full gap-8">
       <div className="self-center">
-        <h1 className="font-bold font-heading text-2xl text-green-500">
+        <h1 className="font-bold font-heading text-3xl md:text-4xl text-center">
           Archived Workout Plan
         </h1>
       </div>
-      <div className="flex flex-col gap-8 mt-4 lg:w-2/3 lg:mx-auto">
+      <div className="flex flex-col gap-8">
         {data?.map((item) => {
           return (
             <Plan

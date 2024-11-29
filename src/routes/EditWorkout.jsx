@@ -232,7 +232,7 @@ const EditWorkout = ({ user }) => {
     return (
       <ReactLoading
         type="spinningBubbles"
-        color="#D5B263"
+        color="#8967b3"
         className="mx-auto mt-16"
       />
     );
@@ -256,7 +256,7 @@ const EditWorkout = ({ user }) => {
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="flex flex-col text-gray-900 dark:text-gray-100 items-center gap-4 w-4/5 md:w-3/5 mx-auto md:mt-20 mt-10 mb-10"
+              className="flex flex-col text-gray-900 dark:text-gray-100 items-center gap-4 w-11/12 md:w-4/5 mx-auto md:mt-20 mt-10 mb-10"
             >
               <div className="">
                 <p className="text-center font-heading font-bold text-3xl md:text-4xl">
@@ -284,7 +284,7 @@ const EditWorkout = ({ user }) => {
 
                       <button
                         onClick={() => setCollapsed((prev) => !prev)}
-                        className="self-end bg-emerald-200 dark:bg-gray-800 p-2 rounded-md font-medium text-xs md:text-sm"
+                        className="self-end bg-color1 text-white  p-2 rounded-md font-medium text-xs md:text-sm"
                       >
                         {collapsed ? "Expand Workouts" : "Reorder Workouts"}
                       </button>
@@ -300,11 +300,11 @@ const EditWorkout = ({ user }) => {
                   {provided.placeholder}
                 </div>
               </AppContext.Provider>
-              <div id="add-workout">
+              <div id="add-workout" className="">
                 <Button
                   name="Workout"
                   handleClick={() => handleAddWorkout(setFormData)}
-                  className="bg-primary hover:bg-primaryDark text-gray-100 hover:text-gray-200 dark:text-gray-900 dark:hover:text-gray-800"
+                  className="bg-color1 text-gray-100"
                   position={1}
                   icon={<FaPlus />}
                 />
@@ -315,9 +315,9 @@ const EditWorkout = ({ user }) => {
       </DragDropContext>
       <div className="text-center mt-4 mb-10">
         <Button
-          name="Save"
+          name="Save Edit"
           handleClick={handleSubmit}
-          className="bg-blue-500 hover:bg-blue-700 text-gray-100 dark:hover:shadow-gray-800 w-28"
+          className="bg-color2 text-gray-100 w-28"
           icon={
             isLoading && (
               <ReactLoading

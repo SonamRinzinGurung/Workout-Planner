@@ -4,7 +4,7 @@ import { useAppContext } from "../context/appContext";
 const ConfirmationPage = () => {
   const { formData, setFormData } = useAppContext();
   return (
-    <div>
+    <div className="w-full md:w-3/4">
       <Plan {...formData} source="create" setFormData={setFormData} />
     </div>
   );

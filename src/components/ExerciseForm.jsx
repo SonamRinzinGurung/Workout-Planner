@@ -34,7 +34,7 @@ const ExerciseForm = ({ exerciseItem, exerciseIndex, workoutIndex }) => {
     <Draggable draggableId={exerciseIndex.toString()} index={exerciseIndex}>
       {(provided) => (
         <div
-          className="flex flex-col gap-2 px-4 py-6 rounded-md shadow-md bg-emerald-200 dark:bg-gray-800"
+          className="flex flex-col gap-2 px-4 py-6 rounded-md bg-lightColor dark:bg-gray-800"
           key={exerciseIndex}
           ref={provided.innerRef}
           {...provided.draggableProps}
@@ -69,7 +69,7 @@ const ExerciseForm = ({ exerciseItem, exerciseIndex, workoutIndex }) => {
                 }
               >
                 <IoIosRemoveCircle
-                  className="text-red-400 hover:text-red-500 transition ease-in-out duration-300"
+                  className="text-red-600 hover:text-red-700 transition ease-in-out duration-300"
                   size={25}
                 />
               </button>

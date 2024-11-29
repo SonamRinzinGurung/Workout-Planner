@@ -41,14 +41,14 @@ const WorkoutGroupForm = () => {
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className=" flex flex-col dark:text-gray-100 items-center gap-4 w-4/5 md:w-3/5"
+              className=" flex flex-col dark:text-gray-100 items-center gap-4 w-11/12 md:w-4/5"
             >
               {
                 formData?.workouts.length !== 0 && (
 
                   <button
                     onClick={() => setCollapsed((prev) => !prev)}
-                    className="self-end bg-emerald-200 dark:bg-gray-800 p-2 rounded-md text-xs md:text-sm font-medium"
+                    className="self-end bg-color1 text-gray-100  p-2 rounded-md text-xs md:text-sm font-medium"
                   >
                     {collapsed ? "Expand Workouts" : "Reorder Workouts"}
                   </button>
@@ -72,7 +72,7 @@ const WorkoutGroupForm = () => {
         <Button
           name="Workout"
           handleClick={() => handleAddWorkout(setFormData)}
-          className="bg-primary hover:bg-primaryDark text-gray-100 hover:text-gray-200 dark:text-gray-900 dark:hover:text-gray-800"
+          className="bg-color1 text-gray-100"
           position={1}
           icon={<FaPlus />}
         />

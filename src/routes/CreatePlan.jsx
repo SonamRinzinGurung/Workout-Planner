@@ -110,7 +110,7 @@ const CreatePlan = ({ user }) => {
             <Button
               handleClick={handleBack}
               name="Back"
-              className="border dark:hover:shadow-gray-700 "
+              className="bg-white text-gray-900 shadow-sm dark:bg-darkColor dark:text-gray-100"
               icon={<GrNext className="rotate-180" />}
               position={1}
             />
@@ -119,16 +119,16 @@ const CreatePlan = ({ user }) => {
             <Button
               name="Next"
               handleClick={handleNext}
-              className="border dark:hover:shadow-gray-700"
+              className="bg-white text-gray-900 shadow-sm dark:bg-darkColor dark:text-gray-100"
               icon={<GrNext className="" />}
               position={2}
             />
           )}
           {page === 2 && (
             <Button
-              name="Submit"
+              name="Create"
               handleClick={handleSubmit}
-              className="bg-primary hover:bg-primaryDark text-gray-100 dark:hover:shadow-gray-800"
+              className="bg-color2 text-gray-100"
               icon={<AiOutlineSend />}
               isPending={isLoading}
               position={2}

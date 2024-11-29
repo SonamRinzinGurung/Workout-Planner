@@ -10,7 +10,6 @@ import { db } from "../firebase-config";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { MdExpandMore, MdExpandLess } from "react-icons/md";
 
-
 const Nav = ({ user, darkMode, handleLogout, toggleDark, toggleDrawer }) => {
     const [showDropdown, setShowDropdown] = useState(false);
 
@@ -61,78 +60,79 @@ const Nav = ({ user, darkMode, handleLogout, toggleDark, toggleDrawer }) => {
     });
 
     return (
-        <nav className="w-64 flex flex-col gap-8 items-center dark:text-gray-100 h-screen bg-gray-50 dark:bg-gray-900">
+        <nav className="w-64 flex flex-col gap-8 items-center dark:text-gray-100 h-full bg-white dark:bg-darkColor">
             <div className="mt-8">
                 <Link to={"/"}>
-                    <img src={logo} alt="logo" className="w-20" />
+                    <img src={logo} alt="logo" className="w-28" />
                 </Link>
             </div>
             <hr className="w-11/12" />
-            {user?.emailVerified && (
-                <div className="flex flex-col font-subHead text-lg tracking-wide w-full overflow-y-auto custom-scrollbar pb-24">
-                    <NavLink
-                        to="/"
-                        className={({ isActive }) =>
-                            `relative py-4 px-10 flex gap-8 ${isActive ? "bg-primary text-gray-100" : "hover:text-primary"
-                            }`
-                        }
+            <div className="flex flex-col font-subHead text-lg tracking-wide w-full overflow-y-auto custom-scrollbar pb-24">
+                <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                        `relative py-4 px-10 flex gap-8 ${isActive ? "bg-color1 text-gray-100" : "hover:text-color1"
+                        }`
+                    }
+                >
+                    <button onClick={toggleDrawer}>Workout Plans</button>
+                    <button
+                        className="hover:text-gray-900 dark:hover:text-gray-100"
+                        onClick={() => setShowDropdown((prev) => !prev)}
                     >
-                        <button
-                            onClick={toggleDrawer}
-                        >Workout Plans</button>
-                        <button className="hover:text-gray-900 dark:hover:text-gray-100" onClick={() => setShowDropdown((prev) => !prev)}>{showDropdown ? <MdExpandLess size={25} /> : <MdExpandMore size={25} />}</button>
-                    </NavLink>
-                    {showDropdown && (
-                        <div className="text-base flex flex-col ml-6">
-                            {data.map((plan) => {
-                                return (
-                                    <NavLink
-                                        key={plan.id}
-                                        onClick={toggleDrawer}
-                                        to={`/${plan.id}`}
-                                        className={({ isActive }) =>
-                                            `py-4 px-10 ${isActive
-                                                ? "bg-primary text-gray-100"
-                                                : "hover:text-primary"
-                                            }`
-                                        }
-                                    >
-                                        {plan.name}
-                    </NavLink>
-                                );
-                            })}
-                        </div>
-                    )}
-
-                    <NavLink
-                        onClick={toggleDrawer}
-                        to="/create"
-                        className={({ isActive }) =>
-                            `py-4 px-10 ${isActive ? "bg-primary text-gray-100" : "hover:text-primary"
-                            }`
-                        }
-                    >
-                        Create Plan
-                    </NavLink>
-                    <NavLink
-                        onClick={toggleDrawer}
-                        to="/archived-plans"
-                        className={({ isActive }) =>
-                            `py-4 px-10 ${isActive ? "bg-primary text-gray-100" : "hover:text-primary"
-                            }`
-                        }
-                    >
-                        Archives
-                    </NavLink>
-                </div>
-            )}
-
-            <div className="absolute bottom-4 left-4 flex flex-col gap-4 px-2 py-1 bg-[#fbf9f7] dark:bg-[#161616] rounded-md shrink-0 w-56 shadow-sm">
-                {user?.emailVerified && (
-                    <button onClick={handleLogout} className="flex gap-4 py-2 px-4">
-                        <CiLogout size={25} /> Logout
+                        {showDropdown ? (
+                            <MdExpandLess size={25} />
+                        ) : (
+                            <MdExpandMore size={25} />
+                        )}
                     </button>
+                </NavLink>
+                {showDropdown && (
+                    <div className="text-base flex flex-col ml-6">
+                        {data.map((plan) => {
+                            return (
+                                <NavLink
+                                    key={plan.id}
+                                    onClick={toggleDrawer}
+                                    to={`/${plan.id}`}
+                                    className={({ isActive }) =>
+                                        `py-4 px-10 ${isActive ? "bg-color1 text-gray-100" : "hover:text-color1"
+                                        }`
+                                    }
+                                >
+                                    {plan.name}
+                    </NavLink>
+                            );
+                        })}
+                    </div>
                 )}
+
+                <NavLink
+                    onClick={toggleDrawer}
+                    to="/create"
+                    className={({ isActive }) =>
+                        `py-4 px-10 ${isActive ? "bg-color1 text-gray-100" : "hover:text-color1"
+                        }`
+                    }
+                >
+                    Create Plan
+                </NavLink>
+                <NavLink
+                    onClick={toggleDrawer}
+                    to="/archived-plans"
+                    className={({ isActive }) =>
+                        `py-4 px-10 ${isActive ? "bg-color1 text-gray-100" : "hover:text-color1"
+                        }`
+                    }
+                >
+                    Archives
+                </NavLink>
+            </div>
+
+            <div className="mt-auto mb-4 flex flex-col gap-4 px-2 py-1 bg-[#fbf9f7] dark:bg-[#161616] rounded-md shrink-0 w-56 shadow-sm">
+                <button onClick={handleLogout} className="flex gap-4 py-2 px-4">
+                    <CiLogout size={25} /> Logout
+                </button>
                 <div
                     className="flex gap-4 py-2 px-4 cursor-pointer"
                     onClick={toggleDark}
@@ -145,7 +145,6 @@ const Nav = ({ user, darkMode, handleLogout, toggleDark, toggleDrawer }) => {
                     )}
                 </div>
             </div>
-            <div className="w-full h-4"></div>
         </nav>
     );
 };

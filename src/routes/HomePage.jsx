@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useIsMobile from "../hooks/useIsMobile";
 import { CgGym } from "react-icons/cg";
+import { CgDetailsMore } from "react-icons/cg";
 
 const HomePage = ({ user }) => {
   useSetTitle("Workout Planner");
@@ -101,14 +102,14 @@ const HomePage = ({ user }) => {
     return (
       <ReactLoading
         type="spinningBubbles"
-        color="#D5B263"
+        color="#8967b3"
         className="mx-auto mt-16"
       />
     );
   }
   if (error) {
     return (
-      <div className="dark:text-gray-100 mt-10">
+      <div className="text-gray-900 mt-10 dark:text-gray-100 mx-auto">
         <p className="font-subHead font-semibold text-2xl text-center">
           ERROR!! {error.message}
         </p>
@@ -119,7 +120,7 @@ const HomePage = ({ user }) => {
     return <Empty />;
   }
   return (
-    <div className="md:mt-20 mt-10 mb-10 text-gray-900 dark:text-gray-100 flex flex-col mx-auto px-10 max-w-4xl w-full gap-8">
+    <div className="md:mt-20 mt-10 mb-10 text-gray-900 dark:text-gray-100 flex flex-col mx-auto px-4 max-w-4xl w-full gap-8">
       <div className="self-center">
         <h1 className="font-bold font-heading text-3xl md:text-4xl text-center">
           All Workout Plans
@@ -130,12 +131,9 @@ const HomePage = ({ user }) => {
           return (
             <div
               key={item.id}
-              className="relative flex flex-col gap-4 rounded-md cursor-pointer transition-all h-40 overflow-hidden shadow-sm bg-emerald-50 dark:bg-emerald-700"
-              onClick={() => navigate(`/${item.id}`)}
-              role="button"
-              tabIndex="0"
+              className="relative flex flex-col gap-4 rounded-md h-40 overflow-hidden shadow-sm bg-white dark:bg-darkColorLight"
             >
-              <div className="flex items-center justify-between bg-emerald-400 dark:bg-emerald-800 px-6 py-2">
+              <div className="flex items-center justify-between bg-lightColor dark:bg-darkColor px-6 py-2">
                 <div className="text-xl md:text-2xl font-semibold font-subHead">
                   {item.name}
                 </div>
@@ -148,16 +146,22 @@ const HomePage = ({ user }) => {
                         </div>
                         <div className="flex flex-col gap-4">
                           <Button
+                            name="Open"
+                            className={
+                              "border dark:border-darkColorLight text-emerald-600 hover:text-emerald-800 dark:text-emerald-300 dark:hover:text-emerald-400"
+                            }
+                            icon={<CgDetailsMore />}
+                            position={1}
+                            handleClick={() => navigate(`/${item.id}`)}
+                          />
+                          <Button
                             name="Edit"
                             className={
-                              "border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
+                              "border dark:border-darkColorLight text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-400"
                             }
                             icon={<BiEditAlt />}
                             position={1}
-                            handleClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/edit/${item.id}`);
-                            }}
+                            handleClick={() => navigate(`/edit/${item.id}`)}
                           />
                           <Button
                             name="Archive"
@@ -166,10 +170,7 @@ const HomePage = ({ user }) => {
                             }
                             icon={<BiArchive />}
                             position={1}
-                            handleClick={(e) => {
-                              e.stopPropagation();
-                              archivePlan(item.id);
-                            }}
+                            handleClick={() => archivePlan(item.id)}
                             isPending={loading}
                           />
                         </div>
@@ -183,26 +184,29 @@ const HomePage = ({ user }) => {
                     content={
                       <div className="flex flex-col p-6 w-56 shadow-sm rounded-lg bg-gray-100 dark:bg-gray-800 gap-4">
                         <Button
+                          name="Open"
+                          className={
+                            "border dark:border-darkColorLight text-emerald-600 hover:text-emerald-800 dark:text-emerald-300 dark:hover:text-emerald-400"
+                          }
+                          icon={<CgDetailsMore />}
+                          position={1}
+                          handleClick={() => navigate(`/${item.id}`)}
+                        />
+                        <Button
                           name="Edit"
                           className={
-                            "border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
+                            "border dark:border-darkColorLight text-blue-600 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-400"
                           }
                           icon={<BiEditAlt />}
                           position={1}
-                          handleClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/edit/${item.id}`);
-                          }}
+                          handleClick={() => navigate(`/edit/${item.id}`)}
                         />
                         <Button
                           name="Archive"
                           className={"bg-red-600 text-gray-50 hover:bg-red-700"}
                           icon={<BiArchive />}
                           position={1}
-                          handleClick={(e) => {
-                            e.stopPropagation();
-                            archivePlan(item.id);
-                          }}
+                          handleClick={() => archivePlan(item.id)}
                           isPending={loading}
                         />
                       </div>
@@ -216,7 +220,7 @@ const HomePage = ({ user }) => {
                     {item.description}
                   </p>
                 </div>
-                <div className="flex items-center gap-1 bg-emerald-300 py-1 px-2 rounded-md dark:bg-emerald-900 w-max">
+                <div className="flex items-center gap-1 bg-lightColor p-2 rounded-md dark:bg-darkColor w-max">
                   {" "}
                   <CgGym size={20} />
                   <p className="font-subHead font-medium">

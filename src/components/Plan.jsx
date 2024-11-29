@@ -53,12 +53,12 @@ const Plan = ({
               Workout Plan Name
             </p>
             <p className="font-subHead text-center text-lg md:text-xl font-semibold">
-              {"New routine"}
+              {name}
             </p>
           </div>
         )}
         {source !== "create" && (
-          <div className="flex justify-between items-center gap-4 bg-emerald-400 dark:bg-emerald-800 rounded-md rounded-b-none w-full py-2 px-6">
+          <div className="flex justify-between items-center gap-4 bg-lightColor dark:bg-darkColor rounded-md rounded-b-none w-full py-2 px-6">
             <div>
               <p className="font-subHead font-semibold text-xl md:text-2xl">
                 {name}
@@ -77,7 +77,7 @@ const Plan = ({
                         <>
                           <Button
                             name="Restore"
-                            className="border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
+                            className="border dark:border-darkColorLight text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-400"
                             position={2}
                             handleClick={() => {
                               handleRestore(id);
@@ -98,7 +98,7 @@ const Plan = ({
                             <Button
                               name="Edit"
                               className={
-                                "border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
+                                "border dark:border-darkColorLight text-blue-600 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-400"
                               }
                               icon={<BiEditAlt />}
                               position={1}
@@ -130,7 +130,7 @@ const Plan = ({
                       <>
                         <Button
                           name="Restore"
-                          className="border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
+                          className="border dark:border-darkColorLight text-blue-600 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-400"
                           position={2}
                           handleClick={() => {
                             handleRestore(id);
@@ -151,7 +151,7 @@ const Plan = ({
                         <Button
                           name="Edit"
                           className={
-                            "border text-blue-600 dark:text-blue-300 dark:hover:text-blue-400"
+                            "border dark:border-darkColorLight text-blue-600 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-400"
                           }
                           icon={<BiEditAlt />}
                           position={1}
@@ -177,7 +177,7 @@ const Plan = ({
 
       <div
         className={`flex flex-wrap gap-3 justify-center mb-2 px-2 py-6 ${source !== "create" &&
-          "border border-t-0 border-emerald-400 dark:border-emerald-800 border-x-2 rounded-md rounded-t-none bg-emerald-50 dark:bg-emerald-900"
+          "rounded-md rounded-t-none bg-white dark:bg-darkColorLight"
           }`}
       >
         {workouts?.map((workout, index) => {

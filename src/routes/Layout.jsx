@@ -28,16 +28,17 @@ const Layout = () => {
 
   return (
     <div className="font-body flex flex-col md:flex-row h-screen relative w-full">
-      <div>
-        <NavBar darkMode={darkMode} toggleDark={toggleDark} user={user} />
-      </div>
+      {user?.emailVerified && (
+        <div>
+          <NavBar darkMode={darkMode} toggleDark={toggleDark} user={user} />
+        </div>
+      )}
       <div className="overflow-y-scroll w-full custom-scrollbar">
         {!user && (
           <div className="flex justify-between w-full py-2">
-
-            <div className="">
+            <div className="pl-2">
               <Link to={"/"}>
-                <img src={logo} alt="logo" className="w-20" />
+                <img src={logo} alt="logo" className="w-24" />
               </Link>
             </div>
 
