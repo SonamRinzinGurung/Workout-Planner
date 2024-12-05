@@ -4,7 +4,7 @@ import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { reorderList } from "../utils/reorderList";
 import { useAppContext } from "../context/appContext";
 
-const ExerciseGroupForm = ({ workoutItem, workoutIndex }) => {
+const ExerciseGroupForm = ({ workoutItem, workoutIndex, collapseExercises }) => {
     const { setFormData } = useAppContext();
 
     const onDragEnd = (result) => {
@@ -51,6 +51,7 @@ const ExerciseGroupForm = ({ workoutItem, workoutIndex }) => {
                                 exerciseItem={exerciseItem}
                                 exerciseIndex={exerciseIndex}
                                 workoutIndex={workoutIndex}
+                                collapseExercises={collapseExercises}
                 />
             ))}
                       {provided.placeholder}
@@ -66,4 +67,5 @@ export default ExerciseGroupForm;
 ExerciseGroupForm.propTypes = {
     workoutItem: PropTypes.object.isRequired,
     workoutIndex: PropTypes.number.isRequired,
+    collapseExercises: PropTypes.bool.isRequired,
 };

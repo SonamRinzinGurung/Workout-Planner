@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 import { ExerciseGroupForm } from ".";
 import {
     handleWorkoutChange,
@@ -15,6 +16,8 @@ import { useAppContext } from "../context/appContext";
 const WorkoutForm = ({ workoutIndex, workoutItem, collapsed }) => {
     const { formData, setFormData, setDeletedWorkouts, setDeletedExercises } =
         useAppContext();
+
+    const [collapseExercises, setCollapseExercises] = useState(false);
 
     const handleWorkoutRemoval = (setFormData, workoutIndex) => {
         if (workoutItem.id) {
@@ -52,7 +55,7 @@ const WorkoutForm = ({ workoutIndex, workoutItem, collapsed }) => {
                         </div>
                     )}
                     <div className="flex gap-4 w-full">
-                            <div {...provided.dragHandleProps} className="">
+                        <div {...provided.dragHandleProps} className="">
                             {collapsed && (
                                 <MdDragIndicator size={30} className="cursor-move" />
                             )}
@@ -84,14 +87,23 @@ const WorkoutForm = ({ workoutIndex, workoutItem, collapsed }) => {
                     </div>
                     {collapsed ? null : (
                         <div className="flex flex-col gap-4 p-4 rounded-md w-full bg-white dark:bg-gray-600 mt-4">
-                            <div>
+                            <div className="flex justify-between">
                                 <p className="font-subHead font-semibold text-lg">
                                     Exercise Details
                                 </p>
+                                <div className="bg-color2 text-gray-100  rounded-md ">
+                                    <button
+                                        onClick={() => setCollapseExercises((prev) => !prev)}
+                                        className="w-20 p-1 text-xs font-normal"
+                                    >
+                                        {collapseExercises ? "Expand all" : "Collapse all"}
+                                    </button>
+                                </div>
                             </div>
                             <ExerciseGroupForm
                                 workoutItem={workoutItem}
                                 workoutIndex={workoutIndex}
+                                collapseExercises={collapseExercises}
                             />
 
                             <button

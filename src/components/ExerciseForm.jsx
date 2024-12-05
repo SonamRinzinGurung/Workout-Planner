@@ -1,4 +1,3 @@
-import { useState } from "react";
 import PropTypes from "prop-types";
 import { InputTextExercise } from "../components";
 import { Draggable } from "@hello-pangea/dnd";
@@ -9,12 +8,9 @@ import {
 import { useAppContext } from "../context/appContext";
 import { MdDragIndicator } from "react-icons/md";
 import { IoIosRemoveCircle } from "react-icons/io";
-import { VscCollapseAll, VscExpandAll } from "react-icons/vsc";
 
-const ExerciseForm = ({ exerciseItem, exerciseIndex, workoutIndex }) => {
+const ExerciseForm = ({ exerciseItem, exerciseIndex, workoutIndex, collapseExercises }) => {
   const { setFormData, setDeletedExercises, formData } = useAppContext();
-
-  const [collapsed, setCollapsed] = useState(false);
 
   const handleExerciseRemoval = (setFormData, workoutIndex, exerciseIndex) => {
     if (exerciseItem.id) {
@@ -44,21 +40,7 @@ const ExerciseForm = ({ exerciseItem, exerciseIndex, workoutIndex }) => {
               <MdDragIndicator size={25} className="cursor-move -mt-3 -ml-3" />
             </div>
 
-            <div className="flex gap-4 md:gap-6">
-              {
-                !collapsed ?
-                  <VscCollapseAll
-                    size={25}
-                    onClick={() => setCollapsed((prev) => !prev)}
-                    className="cursor-pointer"
-                  /> :
-                  <VscExpandAll size={25}
-                    onClick={() => setCollapsed((prev) => !prev)}
-                    className="cursor-pointer"
-
-                  />
-              }
-
+            <div>
               <button
                 onClick={() =>
                   handleExerciseRemoval(
@@ -88,7 +70,7 @@ const ExerciseForm = ({ exerciseItem, exerciseIndex, workoutIndex }) => {
               />
             </div>
 
-            {collapsed ? null : (
+            {collapseExercises ? null : (
               <>
                 <div className="flex flex-col md:flex-row gap-2 w-full">
                   <InputTextExercise
@@ -150,5 +132,6 @@ ExerciseForm.propTypes = {
   exerciseItem: PropTypes.object.isRequired,
   exerciseIndex: PropTypes.number.isRequired,
   workoutIndex: PropTypes.number.isRequired,
+  collapseExercises: PropTypes.bool.isRequired,
 };
 export default ExerciseForm;
