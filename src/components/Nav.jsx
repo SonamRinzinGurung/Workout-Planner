@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
-import { CiLogout } from "react-icons/ci";
+import { CiLogout, CiUser } from "react-icons/ci";
 import "../index.css";
 import { useQuery } from "@tanstack/react-query";
 import { db } from "../firebase-config";
@@ -129,10 +129,13 @@ const Nav = ({ user, darkMode, handleLogout, toggleDark, toggleDrawer }) => {
                 </NavLink>
             </div>
 
-            <div className="mt-auto mb-4 flex flex-col gap-4 px-2 py-1 bg-[#fbf9f7] dark:bg-[#161616] rounded-md shrink-0 w-56 shadow-sm">
-                <button onClick={handleLogout} className="flex gap-4 py-2 px-4">
-                    <CiLogout size={25} /> Logout
-                </button>
+            <div className="mt-auto mb-4 flex flex-col gap-4 px-1 py-2 bg-[#fbf9f7] dark:bg-[#161616] rounded-md shrink-0 w-10/12 shadow-sm">
+                <Link to="/profile"
+                    className="flex gap-4 py-2 px-4 cursor-pointer"
+                >
+                    <CiUser size={25} />
+                    <p>Profile</p>
+                </Link>
                 <div
                     className="flex gap-4 py-2 px-4 cursor-pointer"
                     onClick={toggleDark}
@@ -144,6 +147,13 @@ const Nav = ({ user, darkMode, handleLogout, toggleDark, toggleDrawer }) => {
                         <p>Light Mode</p>
                     )}
                 </div>
+                <button onClick={handleLogout} className="flex gap-4 py-2 px-4">
+                    <CiLogout size={25} />
+                    <p>
+
+                        Logout
+                    </p>
+                </button>
             </div>
         </nav>
     );

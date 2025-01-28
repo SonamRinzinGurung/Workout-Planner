@@ -10,6 +10,7 @@ import {
   VerifyEmailNotice,
   EmailVerification,
   WorkoutPlanDetail,
+  Profile,
 } from "../routes";
 import { RouteProtector } from "../components";
 import { createBrowserRouter } from "react-router-dom";
@@ -73,6 +74,14 @@ const router = createBrowserRouter([
         element: (
           <RouteProtector>
             <WorkoutPlanDetail />
+          </RouteProtector>
+        ),
+      },
+      {
+        path: "/profile",
+        element: (
+          <RouteProtector>
+            <Profile />
           </RouteProtector>
         ),
       },

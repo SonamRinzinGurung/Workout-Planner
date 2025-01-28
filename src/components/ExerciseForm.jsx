@@ -30,14 +30,14 @@ const ExerciseForm = ({ exerciseItem, exerciseIndex, workoutIndex, collapseExerc
     <Draggable draggableId={exerciseIndex.toString()} index={exerciseIndex}>
       {(provided) => (
         <div
-          className="flex flex-col gap-2 px-4 py-6 rounded-md bg-lightColor dark:bg-gray-800"
+          className="flex flex-col gap-2 p-4 rounded-md bg-lightColor dark:bg-gray-800"
           key={exerciseIndex}
           ref={provided.innerRef}
           {...provided.draggableProps}
         >
           <div className="flex justify-between w-full">
             <div {...provided.dragHandleProps}>
-              <MdDragIndicator size={25} className="cursor-move -mt-3 -ml-3" />
+              <MdDragIndicator size={25} className="cursor-move -mt-1 -ml-3" />
             </div>
 
             <div>

@@ -9,6 +9,7 @@ import ArchivedPlans from "./ArchivedPlans";
 import VerifyEmailNotice from "./VerifyEmailNotice";
 import EmailVerification from "./EmailVerification";
 import WorkoutPlanDetail from "./WorkoutPlanDetail";
+import Profile from "./Profile";
 
 export {
   Layout,
@@ -22,4 +23,5 @@ export {
   VerifyEmailNotice,
   EmailVerification,
   WorkoutPlanDetail,
+  Profile,
 };
