@@ -14,6 +14,35 @@ Live Site - [FitPlan](https://workout-planner-kmst.onrender.com/)
 - TailwindCSS
 - React Beautiful DnD
 
+### Run it Locally
+1. Clone the repo
+   ```bash
+   git clone https://github.com/SonamRinzinGurung/Workout-Planner.git
+
+2. cd fit-plan
+   ```
+   cd workout-planner
+   
+3. Install dependencies
+   ```bash
+   npm install
+   
+4. Create a `.env` file in the root directory and add your Firebase configuration. You can get this from your Firebase console. For more details, refer to the [Firebase documentation](https://firebase.google.com/docs/web/setup#config-object).
+   ```bash
+    VITE_API_KEY=your_api_key
+    VITE_AUTH_DOMAIN=your_auth_domain
+    VITE_PROJECT_ID=your_project_id
+    VITE_STORAGE_BUCKET=your_storage_bucket
+    VITE_MESSAGING_SENDER_ID=your_messaging_sender_id
+    VITE_APP_ID=your_app_id
+    
+5. Start the development server
+    ```bash
+    npm run dev
+6. Open your browser and go to `http://localhost:5173/`
+7. You should see the app running.
+
+
 ### Author
 
-[Sonam Rinzin Gurung](https://github.com/SonamRinzinGurung)
+[Sonam Rinzin Gurung](https://sonamrinzingurung.github.io/)
