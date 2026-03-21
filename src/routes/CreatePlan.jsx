@@ -25,6 +25,7 @@ const CreatePlan = ({ user }) => {
   const [page, setPage] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
+    description: "",
     workouts: [
       {
         title: "",

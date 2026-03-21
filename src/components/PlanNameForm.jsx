@@ -9,6 +9,13 @@ const PlanNameForm = () => {
             name: e.target.value,
         }));
     };
+
+    const handleDescChange = (e) => {
+        setFormData((prevState) => ({
+            ...prevState,
+            description: e.target.value,
+        }));
+    };
     return (
         <div className="flex flex-col items-center gap-4 w-full">
             <div>
@@ -22,6 +29,7 @@ const PlanNameForm = () => {
                     className="border border-gray-500 p-2 rounded-md font-mono dark:bg-gray-900 text-center md:text-lg md:w-1/2 w-3/4 mx-auto h-14 focus:outline-none focus:ring-1 focus:ring-gray-500"
                 />
             </div>
+            <textarea className="border border-gray-500 p-2 rounded-md font-mono dark:bg-gray-900 text-center md:text-lg md:w-1/2 w-3/4 mx-auto focus:outline-none focus:ring-1 focus:ring-gray-500" name="description" id="" placeholder="Describe the Plan" rows={3} onChange={handleDescChange}></textarea>
         </div>)
 }
 

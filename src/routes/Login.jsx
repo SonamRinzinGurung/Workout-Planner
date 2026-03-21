@@ -84,6 +84,31 @@ function Login() {
       toast.error("Failed to login with Google")
     }
   }
+
+  const handleDemoLogin = async () => {
+    const demoCredentials = {
+      email: "kanyenorth2000@gmail.com",
+      password: "secret",
+    };
+
+    setFormValues(demoCredentials);
+    setIsPending(true);
+    try {
+      await signInWithEmailAndPassword(
+        auth,
+        demoCredentials.email,
+        demoCredentials.password
+      );
+      navigate("/");
+
+    } catch (error) {
+      const errorMessage = error.message;
+      toast.error(errorMessage);
+    } finally {
+      setIsPending(false);
+    }
+  }
+
   if (loading) return null;
 
   if (user) {
@@ -108,6 +133,7 @@ function Login() {
             type="password"
             handleChange={handleChange}
           />
+
           <Button
             name="Login"
             className={
@@ -118,6 +144,9 @@ function Login() {
           />
         </div>
       </form>
+      <div className="my-3 hover:bg-color1 hover:text-white text-color1 rounded-md transition-all">
+        <button className="font-semibold w-full p-2" onClick={handleDemoLogin}>Demo Login</button>
+      </div>
       <div className="my-2">
         <p>
           Don&apos;t have an account yet?{" "}
